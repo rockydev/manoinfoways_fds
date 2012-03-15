@@ -1,6 +1,4 @@
 package com.manoinfoways.ejb;
-// Generated Mar 14, 2012 4:42:37 PM by Hibernate Tools 3.4.0.CR1
-
 
 import java.util.Collection;
 import java.util.List;
@@ -17,9 +15,8 @@ import com.manoinfoways.model.HibernateUtil;
 import static org.hibernate.criterion.Example.create;
 
 /**
- * Home object for domain model class ClinicData.
+ * Bean for handling clinicdata table operations
  * @see com.manoinfoways.model.ClinicData
- * @author Hibernate Tools
  */
 public class ClinicDataBean {
 
@@ -67,7 +64,8 @@ public class ClinicDataBean {
         }
     }
     
-    public void attachClean(ClinicData instance) {
+    @SuppressWarnings("deprecation")
+	public void attachClean(ClinicData instance) {
         log.debug("attaching clean ClinicData instance");
         try {
         	Session session = sessionFactory.getCurrentSession();
