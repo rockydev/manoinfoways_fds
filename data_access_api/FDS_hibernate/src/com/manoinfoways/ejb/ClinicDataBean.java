@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -42,8 +43,8 @@ public class ClinicDataBean {
             Session session = sessionFactory.getCurrentSession();
             session.beginTransaction();
             session.persist(transientInstance);
-            session.getTransaction().commit();
             log.debug("persist successful");
+            session.getTransaction().commit();
         }
         catch (RuntimeException re) {
             log.error("persist failed", re);
@@ -54,8 +55,11 @@ public class ClinicDataBean {
     public void attachDirty(ClinicData instance) {
         log.debug("attaching dirty ClinicData instance");
         try {
-            sessionFactory.getCurrentSession().saveOrUpdate(instance);
+        	Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            session.saveOrUpdate(instance);
             log.debug("attach successful");
+            session.getTransaction().commit();
         }
         catch (RuntimeException re) {
             log.error("attach failed", re);
@@ -66,8 +70,11 @@ public class ClinicDataBean {
     public void attachClean(ClinicData instance) {
         log.debug("attaching clean ClinicData instance");
         try {
-            sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+        	Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            session.lock(instance, LockMode.NONE);
             log.debug("attach successful");
+            session.getTransaction().commit();
         }
         catch (RuntimeException re) {
             log.error("attach failed", re);
@@ -78,8 +85,11 @@ public class ClinicDataBean {
     public void delete(ClinicData persistentInstance) {
         log.debug("deleting ClinicData instance");
         try {
-            sessionFactory.getCurrentSession().delete(persistentInstance);
+        	Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            session.delete(persistentInstance);
             log.debug("delete successful");
+            session.getTransaction().commit();
         }
         catch (RuntimeException re) {
             log.error("delete failed", re);
@@ -92,7 +102,6 @@ public class ClinicDataBean {
         try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-
 			ClinicData result = (ClinicData) session.merge(detachedInstance);
 			log.debug("merge successful");
 			session.getTransaction().commit();
@@ -107,14 +116,16 @@ public class ClinicDataBean {
     public ClinicData findById( java.lang.String id) {
         log.debug("getting ClinicData instance with id: " + id);
         try {
-            ClinicData instance = (ClinicData) sessionFactory.getCurrentSession()
-                    .get("com.manoinfoways.model.ClinicData", id);
+        	Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            ClinicData instance = (ClinicData) session.get("com.manoinfoways.model.ClinicData", id);
             if (instance==null) {
                 log.debug("get successful, no instance found");
             }
             else {
                 log.debug("get successful, instance found");
             }
+            session.getTransaction().commit();
             return instance;
         }
         catch (RuntimeException re) {
@@ -123,14 +134,16 @@ public class ClinicDataBean {
         }
     }
     
-    public List<ClinicData> findByExample(ClinicData instance) {
+    @SuppressWarnings("unchecked")
+	public List<ClinicData> findByExample(ClinicData instance) {
         log.debug("finding ClinicData instance by example");
         try {
-            List<ClinicData> results = (List<ClinicData>) sessionFactory.getCurrentSession()
-                    .createCriteria("com.manoinfoways.model.ClinicData")
-                    .add( create(instance) )
-            .list();
+        	Session session = sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            List<ClinicData> results = (List<ClinicData>) session.createCriteria("com.manoinfoways.model.ClinicData")
+                    .add( create(instance) ).list();
             log.debug("find by example successful, result size: " + results.size());
+            session.getTransaction().commit();
             return results;
         }
         catch (RuntimeException re) {
@@ -141,26 +154,22 @@ public class ClinicDataBean {
     
     @SuppressWarnings("unchecked")
 	public Collection<ClinicData> getAllClinicData() {
-//		Session session = super.getSessionFactory().openSession();
-//		
-//		session.beginTransaction();
-//		Query query = session.createQuery("from ClinicData");
-//		
-//		Collection<ClinicData> list = query.list();
-//		
-//		session.getTransaction().commit();
-//		session.close();
-		return null;
-
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createQuery("from ClinicData");
+		Collection<ClinicData> list = query.list();
+		session.getTransaction().commit();
+		return list;
 	}
 
 
 	public void update(ClinicData clinicData) {
-//		super.merge(clinicData);
+		merge(clinicData);
 	}
 	
-	public ClinicData deleteClinicDataById(String clinicId) {
-		return null;
+	public void deleteClinicDataById(String clinicId) {
+		ClinicData clinicData = new ClinicData(clinicId);
+		delete(clinicData);
 	}
 }
 
