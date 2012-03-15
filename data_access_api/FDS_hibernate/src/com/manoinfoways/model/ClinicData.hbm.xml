@@ -30,31 +30,31 @@
             <key>
                 <column name="ClinicId" length="20" />
             </key>
-            <one-to-many class="com.manoinfoways.model.Voicefilesdata" />
+            <one-to-many class="com.manoinfoways.model.VoiceFilesData" />
         </set>
         <set name="doctordatas" table="doctordata" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ClinicId" length="20" />
             </key>
-            <one-to-many class="com.manoinfoways.model.Doctordata" />
+            <one-to-many class="com.manoinfoways.model.DoctorData" />
         </set>
         <set name="clinicrequirementses" table="clinicrequirements" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ClinicId" length="20" not-null="true" />
             </key>
-            <one-to-many class="com.manoinfoways.model.Clinicrequirements" />
+            <one-to-many class="com.manoinfoways.model.ClinicRequirements" />
         </set>
         <set name="clinicconnectiondetailses" table="clinicconnectiondetails" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ClinicId" length="20" not-null="true" />
             </key>
-            <one-to-many class="com.manoinfoways.model.Clinicconnectiondetails" />
+            <one-to-many class="com.manoinfoways.model.ClinicConnectionDetails" />
         </set>
         <set name="clinicmetadatas" table="clinicmetadata" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="ClinicId" length="20" />
             </key>
-            <one-to-many class="com.manoinfoways.model.Clinicmetadata" />
+            <one-to-many class="com.manoinfoways.model.ClinicMetadata" />
         </set>
     </class>
 </hibernate-mapping>

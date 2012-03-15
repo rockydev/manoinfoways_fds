@@ -12,12 +12,12 @@
   <property name="hibernate.search.autoregister_listeners">false</property>
   <property name="hibernate.current_session_context_class">thread</property>
   <mapping resource="com/manoinfoways/model/ClinicData.hbm.xml"/>
-  <mapping resource="com/manoinfoways/model/Transcriberdata.hbm.xml"/>
-  <mapping resource="com/manoinfoways/model/Doctordata.hbm.xml"/>
-  <mapping resource="com/manoinfoways/model/Voicefilesdata.hbm.xml"/>
-  <mapping resource="com/manoinfoways/model/Transcribertypedata.hbm.xml"/>
-  <mapping resource="com/manoinfoways/model/Clinicrequirements.hbm.xml"/>
-  <mapping resource="com/manoinfoways/model/Clinicconnectiondetails.hbm.xml"/>
-  <mapping resource="com/manoinfoways/model/Clinicmetadata.hbm.xml"/>
+  <mapping resource="com/manoinfoways/model/TranscriberData.hbm.xml"/>
+  <mapping resource="com/manoinfoways/model/DoctorData.hbm.xml"/>
+  <mapping resource="com/manoinfoways/model/VoicefilesData.hbm.xml"/>
+  <mapping resource="com/manoinfoways/model/TranscriberTypeData.hbm.xml"/>
+  <mapping resource="com/manoinfoways/model/ClinicRequirements.hbm.xml"/>
+  <mapping resource="com/manoinfoways/model/ClinicConnectionDetails.hbm.xml"/>
+  <mapping resource="com/manoinfoways/model/ClinicMetadata.hbm.xml"/>
  </session-factory>
 </hibernate-configuration>

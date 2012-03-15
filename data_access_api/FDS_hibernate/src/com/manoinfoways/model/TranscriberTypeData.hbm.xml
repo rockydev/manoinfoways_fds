@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 14, 2012 4:42:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.manoinfoways.model.TranscriberTypeData" table="transcribertypedata" catalog="manoinfowaysdb">
+        <id name="transcriberTypeId" type="string">
+            <column name="TranscriberTypeId" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="transcriberTypeName" type="string">
+            <column name="TranscriberTypeName" length="45" />
+        </property>
+        <set name="transcriberdatas" table="transcriberdata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TranscriberTypeId" length="20" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.TranscriberData" />
+        </set>
+    </class>
+</hibernate-mapping>

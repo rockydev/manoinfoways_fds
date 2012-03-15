@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 14, 2012 4:42:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.manoinfoways.model.TranscriberData" table="transcriberdata" catalog="manoinfowaysdb">
+        <id name="transcriberId" type="string">
+            <column name="TranscriberId" length="20" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="transcribertypedata" class="com.manoinfoways.model.TranscriberTypeData" fetch="select">
+            <column name="TranscriberTypeId" length="20" />
+        </many-to-one>
+        <property name="password" type="string">
+            <column name="Password" length="45" />
+        </property>
+        <property name="transcriberName" type="string">
+            <column name="TranscriberName" length="45" />
+        </property>
+        <property name="dateofJoining" type="timestamp">
+            <column name="DateofJoining" length="19" />
+        </property>
+        <property name="transcriberAddress" type="string">
+            <column name="TranscriberAddress" />
+        </property>
+        <property name="transcriberPermanentAddress" type="string">
+            <column name="TranscriberPermanentAddress" />
+        </property>
+        <property name="transcriberPhnNuber" type="java.lang.Integer">
+            <column name="TranscriberPhnNuber" />
+        </property>
+        <property name="transcriberMobile" type="java.lang.Integer">
+            <column name="TranscriberMobile" />
+        </property>
+        <property name="transcriberEmail" type="string">
+            <column name="TranscriberEmail" length="45" />
+        </property>
+        <property name="transcriberQualification" type="string">
+            <column name="TranscriberQualification" length="45" />
+        </property>
+        <property name="transcriberExperience" type="string">
+            <column name="TranscriberExperience" length="45" />
+        </property>
+        <property name="transcriberDob" type="timestamp">
+            <column name="TranscriberDOB" length="19" />
+        </property>
+        <property name="transcriberLoginTime" type="time">
+            <column name="TranscriberLoginTime" length="8" />
+        </property>
+        <set name="voicefilesdatas" table="voicefilesdata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TranscriberId" length="20" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.VoiceFilesData" />
+        </set>
+    </class>
+</hibernate-mapping>

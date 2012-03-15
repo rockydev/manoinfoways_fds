@@ -1,27 +1,26 @@
 package com.manoinfoways.ejb;
 
-import java.util.Collection;
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.manoinfoways.model.ClinicData;
+import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
 
-import static org.hibernate.criterion.Example.create;
-
 /**
- * Bean for handling clinicdata table operations
+ * Bean to handle DoctorData table operations.
  * 
- * @see com.manoinfoways.model.ClinicData
+ * @see com.manoinfoways.model.DoctorData
  */
-public class ClinicDataBean {
+public class DoctorDataBean {
 
-	private static final Log log = LogFactory.getLog(ClinicDataBean.class);
+	private static final Log log = LogFactory.getLog(DoctorDataBean.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -35,8 +34,8 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void persist(ClinicData transientInstance) {
-		log.debug("persisting ClinicData instance");
+	public void persist(DoctorData transientInstance) {
+		log.debug("persisting DoctorData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -49,8 +48,8 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void attachDirty(ClinicData instance) {
-		log.debug("attaching dirty ClinicData instance");
+	public void attachDirty(DoctorData instance) {
+		log.debug("attaching dirty DoctorData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -64,8 +63,8 @@ public class ClinicDataBean {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void attachClean(ClinicData instance) {
-		log.debug("attaching clean ClinicData instance");
+	public void attachClean(DoctorData instance) {
+		log.debug("attaching clean DoctorData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -78,8 +77,8 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void delete(ClinicData persistentInstance) {
-		log.debug("deleting ClinicData instance");
+	public void delete(DoctorData persistentInstance) {
+		log.debug("deleting DoctorData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -92,12 +91,12 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData merge(ClinicData detachedInstance) {
-		log.debug("merging ClinicData instance");
+	public DoctorData merge(DoctorData detachedInstance) {
+		log.debug("merging DoctorData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			ClinicData result = (ClinicData) session.merge(detachedInstance);
+			DoctorData result = (DoctorData) session.merge(detachedInstance);
 			log.debug("merge successful");
 			session.getTransaction().commit();
 			return result;
@@ -107,13 +106,13 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData findById(java.lang.String id) {
-		log.debug("getting ClinicData instance with id: " + id);
+	public DoctorData findById(java.lang.String id) {
+		log.debug("getting DoctorData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			ClinicData instance = (ClinicData) session.get(
-					"com.manoinfoways.model.ClinicData", id);
+			DoctorData instance = (DoctorData) session.get(
+					"com.manoinfoways.model.DoctorData", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -128,13 +127,13 @@ public class ClinicDataBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ClinicData> findByExample(ClinicData instance) {
-		log.debug("finding ClinicData instance by example");
+	public List<DoctorData> findByExample(DoctorData instance) {
+		log.debug("finding DoctorData instance by example");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			List<ClinicData> results = (List<ClinicData>) session
-					.createCriteria("com.manoinfoways.model.ClinicData")
+			List<DoctorData> results = (List<DoctorData>) session
+					.createCriteria("com.manoinfoways.model.DoctorData")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -146,22 +145,12 @@ public class ClinicDataBean {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Collection<ClinicData> getAllClinicData() {
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		Query query = session.createQuery("from ClinicData");
-		Collection<ClinicData> list = query.list();
-		session.getTransaction().commit();
-		return list;
+	public void update(DoctorData doctorData) {
+		merge(doctorData);
 	}
 
-	public void update(ClinicData clinicData) {
-		merge(clinicData);
-	}
-
-	public void deleteClinicDataById(String clinicId) {
-		ClinicData clinicData = new ClinicData(clinicId);
-		delete(clinicData);
+	public void deleteDoctorDataById(String doctorId) {
+		DoctorData doctorData = new DoctorData(doctorId);
+		delete(doctorData);
 	}
 }

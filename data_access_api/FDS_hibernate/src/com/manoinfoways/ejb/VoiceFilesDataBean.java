@@ -1,27 +1,26 @@
 package com.manoinfoways.ejb;
 
-import java.util.Collection;
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.HibernateUtil;
-
-import static org.hibernate.criterion.Example.create;
+import com.manoinfoways.model.VoiceFilesData;
 
 /**
- * Bean for handling clinicdata table operations
+ * Bean for handling VoiceFilesData table operations.
  * 
- * @see com.manoinfoways.model.ClinicData
+ * @see com.manoinfoways.model.VoiceFilesData
  */
-public class ClinicDataBean {
+public class VoiceFilesDataBean {
 
-	private static final Log log = LogFactory.getLog(ClinicDataBean.class);
+	private static final Log log = LogFactory.getLog(VoiceFilesDataBean.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -35,28 +34,26 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void persist(ClinicData transientInstance) {
-		log.debug("persisting ClinicData instance");
+	public void persist(VoiceFilesData transientInstance) {
+		log.debug("persisting VoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.persist(transientInstance);
 			log.debug("persist successful");
-			session.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
 			throw re;
 		}
 	}
 
-	public void attachDirty(ClinicData instance) {
-		log.debug("attaching dirty ClinicData instance");
+	public void attachDirty(VoiceFilesData instance) {
+		log.debug("attaching dirty VoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.saveOrUpdate(instance);
 			log.debug("attach successful");
-			session.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
@@ -64,42 +61,40 @@ public class ClinicDataBean {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void attachClean(ClinicData instance) {
-		log.debug("attaching clean ClinicData instance");
+	public void attachClean(VoiceFilesData instance) {
+		log.debug("attaching clean VoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.lock(instance, LockMode.NONE);
 			log.debug("attach successful");
-			session.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
-	public void delete(ClinicData persistentInstance) {
-		log.debug("deleting ClinicData instance");
+	public void delete(VoiceFilesData persistentInstance) {
+		log.debug("deleting VoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.delete(persistentInstance);
 			log.debug("delete successful");
-			session.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
 		}
 	}
 
-	public ClinicData merge(ClinicData detachedInstance) {
-		log.debug("merging ClinicData instance");
+	public VoiceFilesData merge(VoiceFilesData detachedInstance) {
+		log.debug("merging VoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			ClinicData result = (ClinicData) session.merge(detachedInstance);
+			VoiceFilesData result = (VoiceFilesData) session
+					.merge(detachedInstance);
 			log.debug("merge successful");
-			session.getTransaction().commit();
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
@@ -107,19 +102,18 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData findById(java.lang.String id) {
-		log.debug("getting ClinicData instance with id: " + id);
+	public VoiceFilesData findById(java.lang.String id) {
+		log.debug("getting VoiceFilesData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			ClinicData instance = (ClinicData) session.get(
-					"com.manoinfoways.model.ClinicData", id);
+			VoiceFilesData instance = (VoiceFilesData) session.get(
+					"com.manoinfoways.model.VoiceFilesData", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
 			}
-			session.getTransaction().commit();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -128,17 +122,16 @@ public class ClinicDataBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ClinicData> findByExample(ClinicData instance) {
-		log.debug("finding ClinicData instance by example");
+	public List<VoiceFilesData> findByExample(VoiceFilesData instance) {
+		log.debug("finding VoiceFilesData instance by example");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			List<ClinicData> results = (List<ClinicData>) session
-					.createCriteria("com.manoinfoways.model.ClinicData")
+			List<VoiceFilesData> results = (List<VoiceFilesData>) session
+					.createCriteria("com.manoinfoways.model.VoiceFilesData")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
-			session.getTransaction().commit();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -146,22 +139,12 @@ public class ClinicDataBean {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Collection<ClinicData> getAllClinicData() {
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		Query query = session.createQuery("from ClinicData");
-		Collection<ClinicData> list = query.list();
-		session.getTransaction().commit();
-		return list;
+	public void update(VoiceFilesData voiceFilesData) {
+		merge(voiceFilesData);
 	}
 
-	public void update(ClinicData clinicData) {
-		merge(clinicData);
-	}
-
-	public void deleteClinicDataById(String clinicId) {
-		ClinicData clinicData = new ClinicData(clinicId);
-		delete(clinicData);
+	public void deleteClinicDataById(String fileId) {
+		VoiceFilesData voiceFilesData = new VoiceFilesData(fileId);
+		delete(voiceFilesData);
 	}
 }

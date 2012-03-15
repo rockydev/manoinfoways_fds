@@ -1,27 +1,26 @@
 package com.manoinfoways.ejb;
 
-import java.util.Collection;
+import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.HibernateUtil;
-
-import static org.hibernate.criterion.Example.create;
+import com.manoinfoways.model.TranscriberTypeData;
 
 /**
- * Bean for handling clinicdata table operations
+ * Bean for handling TranscriberTypeData table operations.
  * 
- * @see com.manoinfoways.model.ClinicData
+ * @see com.manoinfoways.model.TranscriberTypeData
  */
-public class ClinicDataBean {
+public class TranscriberTypeDataBean {
 
-	private static final Log log = LogFactory.getLog(ClinicDataBean.class);
+	private static final Log log = LogFactory
+			.getLog(TranscriberTypeDataBean.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -35,8 +34,8 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void persist(ClinicData transientInstance) {
-		log.debug("persisting ClinicData instance");
+	public void persist(TranscriberTypeData transientInstance) {
+		log.debug("persisting TranscriberTypeData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -49,8 +48,8 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void attachDirty(ClinicData instance) {
-		log.debug("attaching dirty ClinicData instance");
+	public void attachDirty(TranscriberTypeData instance) {
+		log.debug("attaching dirty TranscriberTypeData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -64,8 +63,8 @@ public class ClinicDataBean {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void attachClean(ClinicData instance) {
-		log.debug("attaching clean ClinicData instance");
+	public void attachClean(TranscriberTypeData instance) {
+		log.debug("attaching clean TranscriberTypeData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -78,8 +77,8 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void delete(ClinicData persistentInstance) {
-		log.debug("deleting ClinicData instance");
+	public void delete(TranscriberTypeData persistentInstance) {
+		log.debug("deleting TranscriberTypeData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -92,12 +91,13 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData merge(ClinicData detachedInstance) {
-		log.debug("merging ClinicData instance");
+	public TranscriberTypeData merge(TranscriberTypeData detachedInstance) {
+		log.debug("merging TranscriberTypeData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			ClinicData result = (ClinicData) session.merge(detachedInstance);
+			TranscriberTypeData result = (TranscriberTypeData) session
+					.merge(detachedInstance);
 			log.debug("merge successful");
 			session.getTransaction().commit();
 			return result;
@@ -107,13 +107,13 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData findById(java.lang.String id) {
-		log.debug("getting ClinicData instance with id: " + id);
+	public TranscriberTypeData findById(java.lang.String id) {
+		log.debug("getting TranscriberTypeData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			ClinicData instance = (ClinicData) session.get(
-					"com.manoinfoways.model.ClinicData", id);
+			TranscriberTypeData instance = (TranscriberTypeData) session.get(
+					"com.manoinfoways.model.TranscriberTypeData", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -128,13 +128,14 @@ public class ClinicDataBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ClinicData> findByExample(ClinicData instance) {
-		log.debug("finding ClinicData instance by example");
+	public List<TranscriberTypeData> findByExample(TranscriberTypeData instance) {
+		log.debug("finding TranscriberTypeData instance by example");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			List<ClinicData> results = (List<ClinicData>) session
-					.createCriteria("com.manoinfoways.model.ClinicData")
+			List<TranscriberTypeData> results = (List<TranscriberTypeData>) session
+					.createCriteria(
+							"com.manoinfoways.model.TranscriberTypeData")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -146,22 +147,13 @@ public class ClinicDataBean {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Collection<ClinicData> getAllClinicData() {
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		Query query = session.createQuery("from ClinicData");
-		Collection<ClinicData> list = query.list();
-		session.getTransaction().commit();
-		return list;
+	public void update(TranscriberTypeData transcriberTypeData) {
+		merge(transcriberTypeData);
 	}
 
-	public void update(ClinicData clinicData) {
-		merge(clinicData);
-	}
-
-	public void deleteClinicDataById(String clinicId) {
-		ClinicData clinicData = new ClinicData(clinicId);
-		delete(clinicData);
+	public void deleteClinicDataById(String transcriberTypeId) {
+		TranscriberTypeData transcriberTypeData = new TranscriberTypeData(
+				transcriberTypeId);
+		delete(transcriberTypeData);
 	}
 }

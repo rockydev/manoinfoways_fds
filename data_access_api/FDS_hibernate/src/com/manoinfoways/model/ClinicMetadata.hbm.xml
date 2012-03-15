@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 14, 2012 4:42:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.manoinfoways.model.ClinicMetadata" table="clinicmetadata" catalog="manoinfowaysdb">
+        <id name="metaDataId" type="java.lang.Integer">
+            <column name="MetaDataId" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="clinicdata" class="com.manoinfoways.model.ClinicData" fetch="select">
+            <column name="ClinicId" length="20" />
+        </many-to-one>
+        <property name="transcriptionsInchargeName" type="string">
+            <column name="TranscriptionsInchargeName" length="45" />
+        </property>
+        <property name="transcriptionsInchargeEmail" type="string">
+            <column name="TranscriptionsInchargeEmail" length="45" />
+        </property>
+        <property name="transcriptionInchargePhnNo" type="string">
+            <column name="TranscriptionInchargePhnNo" length="20" />
+        </property>
+        <property name="trancriptionInchargeFaxNo" type="string">
+            <column name="TrancriptionInchargeFaxNo" length="20" />
+        </property>
+        <property name="transcriptionInchargeAddress" type="string">
+            <column name="TranscriptionInchargeAddress" length="65535" />
+        </property>
+        <property name="technicalPersonName" type="string">
+            <column name="TechnicalPersonName" length="45" />
+        </property>
+        <property name="technicalPersonEmail" type="string">
+            <column name="TechnicalPersonEmail" length="45" />
+        </property>
+        <property name="technicalPersonPhnNo" type="string">
+            <column name="TechnicalPersonPhnNo" length="20" />
+        </property>
+        <property name="technicalPersonFaxNo" type="string">
+            <column name="TechnicalPersonFaxNo" length="20" />
+        </property>
+        <property name="technicalPersonAddress" type="string">
+            <column name="TechnicalPersonAddress" length="65535" />
+        </property>
+        <property name="softwarePersonName" type="string">
+            <column name="SoftwarePersonName" length="45" />
+        </property>
+        <property name="softwarePersonEmail" type="string">
+            <column name="SoftwarePersonEmail" length="45" />
+        </property>
+        <property name="softwarePersonPhnNo" type="string">
+            <column name="SoftwarePersonPhnNo" length="20" />
+        </property>
+        <property name="softwarePersonCellNo" type="string">
+            <column name="SoftwarePersonCellNo" length="20" />
+        </property>
+        <property name="softwarePersonAddress" type="string">
+            <column name="SoftwarePersonAddress" length="65535" />
+        </property>
+        <property name="emailForPatientList" type="string">
+            <column name="EmailForPatientList" length="45" />
+        </property>
+        <property name="emailForInvoices" type="string">
+            <column name="EmailForInvoices" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>
