@@ -7,11 +7,14 @@
  		<delete file="war/WEB-INF/lib/FMUI.jar"></delete>
  	</target>
  	
+	<!-- Needed for building the jar required for external deployment -->
 	<target name="buildjar">
 		<jar destfile="war/WEB-INF/lib/FMUI.jar"
 			basedir="src"></jar>
 	</target>
 	
+	<!-- Needed for building the war required for external deployment. 
+	Also moves it to the tomcat_wars directory in workspace root-->
 	<target name="buildwar">
 		<war basedir="war" destfile="FMUI.war" webxml="war/WEB-INF/web.xml">
 			<exclude name="WEB-INF/**" />
