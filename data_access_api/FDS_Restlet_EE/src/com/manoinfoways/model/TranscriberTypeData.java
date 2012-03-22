@@ -11,7 +11,11 @@ import java.util.Set;
 public class TranscriberTypeData  implements java.io.Serializable {
 
 
-     private Integer transcriberTypeId;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8732256108605642162L;
+	private Integer transcriberTypeId;
      private String transcriberTypeName;
      private Set<TranscriberData> transcriberDatas = new HashSet<TranscriberData>(0);
 

@@ -14,7 +14,11 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 public class ClinicData  implements java.io.Serializable {
 
 
-     private Integer clinicId;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8328740454808540879L;
+	private Integer clinicId;
      private String clinicAbbr;
      private String clinicName;
      private String addressLine1;

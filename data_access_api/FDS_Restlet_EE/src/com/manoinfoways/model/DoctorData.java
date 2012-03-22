@@ -11,7 +11,11 @@ import java.util.Set;
 public class DoctorData  implements java.io.Serializable {
 
 
-     private Integer doctorId;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2346006881166955732L;
+	private Integer doctorId;
      private ClinicData clinicData;
      private String doctorName;
      private String doctorTollFreeId;

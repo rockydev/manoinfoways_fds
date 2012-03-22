@@ -9,7 +9,11 @@ package com.manoinfoways.model;
 public class ClinicMetadata  implements java.io.Serializable {
 
 
-     private Integer metaDataId;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5183229614995060700L;
+	private Integer metaDataId;
      private ClinicData clinicData;
      private String transcriptionsInchargeName;
      private String transcriptionsInchargeEmail;

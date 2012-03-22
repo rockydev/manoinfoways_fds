@@ -11,7 +11,11 @@ import java.util.Date;
 public class VoiceFilesData  implements java.io.Serializable {
 
 
-     private int fileId;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -9207778448457428599L;
+	private int fileId;
      private TranscriberData transcriberData;
      private DoctorData doctorData;
      private ClinicData clinicData;

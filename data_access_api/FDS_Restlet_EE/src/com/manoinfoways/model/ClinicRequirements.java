@@ -9,7 +9,11 @@ package com.manoinfoways.model;
 public class ClinicRequirements  implements java.io.Serializable {
 
 
-     private Integer clinicRequirementId;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7854678149152475312L;
+	private Integer clinicRequirementId;
      private ClinicData clinicData;
      private String clinicRequirement;
 
