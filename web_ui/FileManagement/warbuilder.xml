@@ -22,7 +22,7 @@
 	</target>
  
 	<target name="deploy">
-		<copy file="TestGWT.war" todir="../../tomcat_wars/" />
+		<copy file="FMUI.war" todir="../../tomcat_wars/" />
 
 	</target>
  
