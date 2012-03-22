@@ -62,7 +62,7 @@ public class ClinicDataResource extends ServerResource {
 
 		String clinicId = (String) getRequest().getAttributes().get("clinicId");
 		if (clinicId != null) {
-			ClinicData clinicData = clinicDataBean.findById(clinicId);
+			ClinicData clinicData = clinicDataBean.findById(Integer.parseInt(clinicId));
 			if (clinicData != null) {
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicData.class);
@@ -82,6 +82,7 @@ public class ClinicDataResource extends ServerResource {
 			}
 		} else {
 			xmlWriter.dataElement("status", "0");
+			xmlConverter.alias("record", ClinicData.class);
 			out = xmlConverter.createObjectOutputStream(xmlWriter.getWriter(),
 					"data");
 			for (ClinicData clinicData : (List<ClinicData>) clinicDataBean
@@ -223,7 +224,7 @@ public class ClinicDataResource extends ServerResource {
 				xmlWriter.dataElement("status", "0");
 				xmlWriter.startElement("data");
 				xmlWriter.startElement("record");
-				xmlWriter.dataElement("clinicId", deletedInstance.getClinicId());
+				xmlWriter.dataElement("clinicId", new Integer(deletedInstance.getClinicId()).toString());
 				xmlWriter.endElement("record");
 				xmlWriter.endElement("data");
 				

@@ -106,7 +106,7 @@ public class DoctorDataBean {
 		}
 	}
 
-	public DoctorData findById(java.lang.String id) {
+	public DoctorData findById(java.lang.Integer id) {
 		log.debug("getting DoctorData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -149,8 +149,9 @@ public class DoctorDataBean {
 		merge(doctorData);
 	}
 
-	public void deleteDoctorDataById(String doctorId) {
-		DoctorData doctorData = new DoctorData(doctorId);
+	public void deleteDoctorDataById(int doctorId) {
+		DoctorData doctorData = new DoctorData();
+		doctorData.setDoctorId(doctorId);
 		delete(doctorData);
 	}
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 14, 2012 4:42:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.DoctorData" table="doctordata" catalog="manoinfowaysdb">
-        <id name="doctorId" type="string">
-            <column name="DoctorId" length="20" />
-            <generator class="assigned" />
+        <id name="doctorId" type="java.lang.Integer">
+            <column name="DoctorId" />
+            <generator class="identity" />
         </id>
         <many-to-one name="clinicdata" class="com.manoinfoways.model.ClinicData" fetch="select">
-            <column name="ClinicId" length="20" />
+            <column name="ClinicId" />
         </many-to-one>
         <property name="doctorName" type="string">
             <column name="DoctorName" length="45" />
@@ -25,7 +25,7 @@
         </property>
         <set name="voicefilesdatas" table="voicefilesdata" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="DoctorId" length="20" />
+                <column name="DoctorId" />
             </key>
             <one-to-many class="com.manoinfoways.model.VoiceFilesData" />
         </set>

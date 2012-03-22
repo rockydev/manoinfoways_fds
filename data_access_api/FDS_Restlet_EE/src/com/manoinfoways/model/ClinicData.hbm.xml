@@ -1,18 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 14, 2012 4:42:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.ClinicData" table="clinicdata" catalog="manoinfowaysdb">
-        <id name="clinicId" type="string">
-            <column name="ClinicId" length="20" />
-            <generator class="assigned" />
+        <id name="clinicId" type="java.lang.Integer">
+            <column name="ClinicId" />
+            <generator class="identity" />
         </id>
-        
         <property name="clinicAbbr" type="string">
-            <column name="ClinicAbbr" length="45" />
+            <column name="ClinicAbbr" length="45" not-null="true" />
         </property>
-        
         <property name="clinicName" type="string">
             <column name="ClinicName" length="45" />
         </property>
@@ -33,31 +31,31 @@
         </property>
         <set name="voicefilesdatas" table="voicefilesdata" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="ClinicId" length="20" />
+                <column name="ClinicId" />
             </key>
             <one-to-many class="com.manoinfoways.model.VoiceFilesData" />
         </set>
         <set name="doctordatas" table="doctordata" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="ClinicId" length="20" />
+                <column name="ClinicId" />
             </key>
             <one-to-many class="com.manoinfoways.model.DoctorData" />
         </set>
         <set name="clinicrequirementses" table="clinicrequirements" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="ClinicId" length="20" not-null="true" />
+                <column name="ClinicId" not-null="true" />
             </key>
             <one-to-many class="com.manoinfoways.model.ClinicRequirements" />
         </set>
         <set name="clinicconnectiondetailses" table="clinicconnectiondetails" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="ClinicId" length="20" not-null="true" />
+                <column name="ClinicId" not-null="true" />
             </key>
             <one-to-many class="com.manoinfoways.model.ClinicConnectionDetails" />
         </set>
         <set name="clinicmetadatas" table="clinicmetadata" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="ClinicId" length="20" />
+                <column name="ClinicId" />
             </key>
             <one-to-many class="com.manoinfoways.model.ClinicMetadata" />
         </set>

@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 14, 2012 4:42:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.VoiceFilesData" table="voicefilesdata" catalog="manoinfowaysdb">
-        <id name="fileId" type="string">
-            <column name="FileId" length="45" />
+        <id name="fileId" type="int">
+            <column name="FileId" />
             <generator class="assigned" />
         </id>
         <many-to-one name="transcriberdata" class="com.manoinfoways.model.TranscriberData" fetch="select">
-            <column name="TranscriberId" length="20" />
+            <column name="TranscriberId" />
         </many-to-one>
         <many-to-one name="doctordata" class="com.manoinfoways.model.DoctorData" fetch="select">
-            <column name="DoctorId" length="20" />
+            <column name="DoctorId" />
         </many-to-one>
         <many-to-one name="clinicdata" class="com.manoinfoways.model.ClinicData" fetch="select">
-            <column name="ClinicId" length="20" />
+            <column name="ClinicId" />
         </many-to-one>
         <property name="dateOfDictation" type="timestamp">
             <column name="DateOfDictation" length="19" />

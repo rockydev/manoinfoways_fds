@@ -35,7 +35,7 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData persist(ClinicData transientInstance) throws Exception {
+	public ClinicData persist(ClinicData transientInstance) {
 		log.debug("persisting ClinicData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -44,11 +44,10 @@ public class ClinicDataBean {
 			log.debug("persist successful");
 			session.getTransaction().commit();
 			return transientInstance;
-		} catch (Exception ex) {
-			log.error("persist failed", ex);
-			throw ex;
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
 		}
-		
 	}
 
 	public void attachDirty(ClinicData instance) {
@@ -110,7 +109,7 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData findById(java.lang.String id) {
+	public ClinicData findById(java.lang.Integer id) {
 		log.debug("getting ClinicData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();

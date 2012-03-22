@@ -107,7 +107,7 @@ public class TranscriberDataBean {
 		}
 	}
 
-	public TranscriberData findById(java.lang.String id) {
+	public TranscriberData findById(java.lang.Integer id) {
 		log.debug("getting TranscriberData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -150,8 +150,9 @@ public class TranscriberDataBean {
 		merge(transcriberData);
 	}
 
-	public void deleteClinicDataById(String transcriberId) {
-		TranscriberData transcriberData = new TranscriberData(transcriberId);
+	public void deleteClinicDataById(int transcriberId) {
+		TranscriberData transcriberData = new TranscriberData();
+		transcriberData.setTranscriberId(transcriberId);
 		delete(transcriberData);
 	}
 }

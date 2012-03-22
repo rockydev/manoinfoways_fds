@@ -102,7 +102,7 @@ public class VoiceFilesDataBean {
 		}
 	}
 
-	public VoiceFilesData findById(java.lang.String id) {
+	public VoiceFilesData findById(java.lang.Integer id) {
 		log.debug("getting VoiceFilesData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -143,8 +143,9 @@ public class VoiceFilesDataBean {
 		merge(voiceFilesData);
 	}
 
-	public void deleteClinicDataById(String fileId) {
-		VoiceFilesData voiceFilesData = new VoiceFilesData(fileId);
+	public void deleteClinicDataById(int fileId) {
+		VoiceFilesData voiceFilesData = new VoiceFilesData();
+		voiceFilesData.setFileId(fileId);
 		delete(voiceFilesData);
 	}
 }
