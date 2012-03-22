@@ -29,7 +29,6 @@ public class AdminHome implements EntryPoint {
 			
 			@Override
 			public void onSubmitValues(SubmitValuesEvent event) {
-				// TODO Auto-generated method stub
 				vLayoutDefaultLayoutAlign.removeChild(loginForm);
 				vLayoutDefaultLayoutAlign.addMember(new AdminUI());
 				vLayoutDefaultLayoutAlign.redraw();
