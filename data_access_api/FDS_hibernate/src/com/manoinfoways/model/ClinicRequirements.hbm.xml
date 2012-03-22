@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 14, 2012 4:42:37 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.ClinicRequirements" table="clinicrequirements" catalog="manoinfowaysdb">
         <id name="clinicRequirementId" type="java.lang.Integer">
@@ -9,52 +9,10 @@
             <generator class="identity" />
         </id>
         <many-to-one name="clinicdata" class="com.manoinfoways.model.ClinicData" fetch="select">
-            <column name="ClinicId" length="20" not-null="true" />
+            <column name="ClinicId" not-null="true" />
         </many-to-one>
-        <property name="clinicRequirement1" type="string">
-            <column name="ClinicRequirement1" length="45" />
-        </property>
-        <property name="clinicRequirement2" type="string">
-            <column name="ClinicRequirement2" length="45" />
-        </property>
-        <property name="clinicRequirement3" type="string">
-            <column name="ClinicRequirement3" length="45" />
-        </property>
-        <property name="clinicRequirement4" type="string">
-            <column name="ClinicRequirement4" length="45" />
-        </property>
-        <property name="clinicRequirement5" type="string">
-            <column name="ClinicRequirement5" length="45" />
-        </property>
-        <property name="clinicRequirement6" type="string">
-            <column name="ClinicRequirement6" length="45" />
-        </property>
-        <property name="clinicRequirement7" type="string">
-            <column name="ClinicRequirement7" length="45" />
-        </property>
-        <property name="clinicRequirement8" type="string">
-            <column name="ClinicRequirement8" length="45" />
-        </property>
-        <property name="clinicRequirement9" type="string">
-            <column name="ClinicRequirement9" length="45" />
-        </property>
-        <property name="clinicRequirement10" type="string">
-            <column name="ClinicRequirement10" length="45" />
-        </property>
-        <property name="clinicRequirement11" type="string">
-            <column name="ClinicRequirement11" length="45" />
-        </property>
-        <property name="clinicRequirement12" type="string">
-            <column name="ClinicRequirement12" length="45" />
-        </property>
-        <property name="clinicRequirement13" type="string">
-            <column name="ClinicRequirement13" length="45" />
-        </property>
-        <property name="clinicRequirement14" type="string">
-            <column name="ClinicRequirement14" length="45" />
-        </property>
-        <property name="clinicRequirement15" type="string">
-            <column name="ClinicRequirement15" length="45" />
+        <property name="clinicRequirement" type="string">
+            <column name="ClinicRequirement" length="45" />
         </property>
     </class>
 </hibernate-mapping>

@@ -107,7 +107,7 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData findById(java.lang.String id) {
+	public ClinicData findById(java.lang.Integer id) {
 		log.debug("getting ClinicData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
