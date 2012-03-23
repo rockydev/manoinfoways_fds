@@ -1,6 +1,16 @@
 package com.project.fms.admin.widgets;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.google.gwt.user.client.ui.TextArea;
+import com.smartgwt.client.data.DSCallback;
+import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.DSResponse;
+import com.smartgwt.client.data.Record;
+import com.smartgwt.client.util.BooleanCallback;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -13,7 +23,10 @@ import com.smartgwt.client.widgets.tab.TabSet;
 
 public class AddClinicUI extends VLayout{
 	
+	private String clinicId;
+	
 	public AddClinicUI(){
+		
 		
 		setMargin(10);
 		setMembersMargin(10);
@@ -45,9 +58,6 @@ public class AddClinicUI extends VLayout{
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-//				clinicDataFormWidget.clinicDataDs.addData(record)
-//				clinicDataFormWidget.getItem(name)
 				clinicDataFormWidget.clinicDataDs.addData(new ClinicData(
 					((TextItem) clinicDataFormWidget.getItem("clinicAbbr")).getValueAsString(),
 					((TextItem) clinicDataFormWidget.getItem("clinicName")).getValueAsString(),
@@ -55,7 +65,18 @@ public class AddClinicUI extends VLayout{
 					((TextAreaItem) clinicDataFormWidget.getItem("addressLine2")).getValueAsString(),
 					((TextItem) clinicDataFormWidget.getItem("location")).getValueAsString(),
 					((TextItem) clinicDataFormWidget.getItem("country")).getValueAsString(),
-					((TextItem) clinicDataFormWidget.getItem("zipcode")).getValueAsString()));
+					((TextItem) clinicDataFormWidget.getItem("zipcode")).getValueAsString()),
+					new DSCallback() {
+						
+						@Override
+						public void execute(DSResponse response, Object rawData, DSRequest request) {
+							if (response.getStatus() >= 0)
+			            	{
+								clinicId = response.getData()[0].getAttributeAsString("clinicId");
+			            	}
+							
+						}
+					});
 			}
 		});
 		addMember(submitButton);

@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.StringWriter;
 import java.util.List;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.ext.xml.XmlWriter;
 import org.restlet.resource.Delete;
@@ -121,12 +122,13 @@ public class ClinicDataResource extends ServerResource {
 				xmlConverter.alias("data", ClinicData.class);
 				persistedInstance = clinicDataBean.persist((ClinicData) xmlConverter.unmarshal(new DomReader(dataNode)));
 				
-				xmlWriter.dataElement("status", "0");
-				xmlConverter.alias("record", ClinicData.class);
-				out = xmlConverter.createObjectOutputStream(
-						xmlWriter.getWriter(), "data");
-				out.writeObject(persistedInstance);
-				out.close();
+					xmlWriter.dataElement("status", "0");
+					xmlConverter.alias("record", ClinicData.class);
+					out = xmlConverter.createObjectOutputStream(
+							xmlWriter.getWriter(), "data");
+					out.writeObject(persistedInstance);
+					out.close();
+				
 			}
 			else //Sending error message
 			{

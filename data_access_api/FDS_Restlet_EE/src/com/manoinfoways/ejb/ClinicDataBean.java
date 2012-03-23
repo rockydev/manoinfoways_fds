@@ -166,4 +166,23 @@ public class ClinicDataBean {
 		ClinicData clinicData = new ClinicData(clinicId);
 		delete(clinicData);
 	}
+	
+	public boolean isClinicAbbrPresent(String clinicAbbr)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Query query = session.createQuery("from ClinicData clinicData where clinicData.clinicAbbr = " + clinicAbbr);
+		Collection<ClinicData> list = query.list();
+		session.getTransaction().commit();
+		
+		if (list.isEmpty())
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+		
+	}
 }

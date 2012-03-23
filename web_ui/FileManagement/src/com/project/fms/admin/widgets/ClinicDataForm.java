@@ -4,6 +4,7 @@ package com.project.fms.admin.widgets;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.OperationBinding;
+import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSOperationType;
@@ -36,7 +37,7 @@ public class ClinicDataForm extends DynamicForm{
             }  
             @Override  
             protected void transformResponse(DSResponse response, DSRequest request, Object data) {  
-//            	SC.say(response.getData());
+            	
                 super.transformResponse(response, request, data);  
             }  
         }; 
@@ -117,43 +118,5 @@ public class ClinicDataForm extends DynamicForm{
 //		clinicZipCode.setRequired(true);
 		setFields(clinicAbbr, clinicName, addressLine1, addressLine2, country, location, zipcode);
 	}
-
-//	public void submit()
-//	{
-//		saveData();
-//	}
-//	
-//	public void saveData()
-//	{
-////		this.clinicDataDs.addData(new ClinicData(getAttributeAsString("clinicAbbr"),
-////				getAttributeAsString("clinicName"), 
-////				getAttributeAsString("addressLine1"), 
-////				getAttributeAsString("addressLine2"), 
-////				getAttributeAsString("location"), 
-////				getAttributeAsString("country"), 
-////				getAttributeAsString("zipcode")));
-//		
-////		String clinicAbbr = (String) getItem("clinicAbbr").getValue();
-////		String clinicName = (String) getItem("clinicName").getValue();
-////		String addressLine1 = (String) getItem("addressLine1").getValue();
-////		String addressLine2 = (String) getItem("addressLine2").getValue();
-////		String location = (String) getItem("location").getValue();
-////		String country = (String) getItem("country").getValue();
-////		String zipcode = (String) getItem("zipcode").getValue();
-//		
-////		this.clinicDataDs.addData(new ClinicData(clinicAbbr, clinicName, addressLine1, addressLine2, location, country, zipcode));
-//
-////		this.clinicDataDs.addData(new ClinicData(
-////				(String) getItem("clinicAbbr").getValue(),
-////				(String) getItem("clinicName").getValue(),
-////				(String) getItem("addressLine1").getValue(),
-////				(String) getItem("addressLine2").getValue(),
-////				(String) getItem("location").getValue(),
-////				(String) getItem("country").getValue(),
-////				(String) getItem("zipcode").getValue()));
-//		
-////		this.clinicDataDs.addData(new ClinicData());
-////		this.clinicDataDs.addData(new ClinicData("asd","ad","ada","ada","ad","ads","123"));
-//	}
 	
 }
