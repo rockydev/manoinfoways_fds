@@ -164,4 +164,17 @@ public class ClinicDataBean {
 		ClinicData clinicData = new ClinicData(clinicId);
 		delete(clinicData);
 	}
+	
+	public Collection<ClinicData> getClinicAbbrs()
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		@SuppressWarnings("unchecked")
+		Collection<ClinicData> clinicAbbrs = session.createQuery( 
+				"select new ClinicData(clinicId, clinicAbbr) from ClinicData as clinicData order by clinicData.clinicAbbr")
+				.list();
+		
+		session.getTransaction().commit();
+		return clinicAbbrs;
+	}
 }

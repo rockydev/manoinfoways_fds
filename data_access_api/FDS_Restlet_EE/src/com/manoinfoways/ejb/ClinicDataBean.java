@@ -1,7 +1,10 @@
 package com.manoinfoways.ejb;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.Collection;
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
@@ -11,8 +14,6 @@ import org.hibernate.SessionFactory;
 
 import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.HibernateUtil;
-
-import static org.hibernate.criterion.Example.create;
 
 /**
  * Bean for handling clinicdata table operations
@@ -167,22 +168,21 @@ public class ClinicDataBean {
 		delete(clinicData);
 	}
 	
-	public boolean isClinicAbbrPresent(String clinicAbbr)
+	/**
+	 * Method to return all the cliniAbbrs as a List of ClinicData objects 
+	 * containing only the clinicId and clinicAbbr
+	 * @return
+	 */
+	public Collection<ClinicData> getClinicAbbrs()
 	{
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		Query query = session.createQuery("from ClinicData clinicData where clinicData.clinicAbbr = " + clinicAbbr);
-		Collection<ClinicData> list = query.list();
+		@SuppressWarnings("unchecked")
+		Collection<ClinicData> clinicAbbrs = session.createQuery( 
+				"select new ClinicData(clinicId, clinicAbbr) from ClinicData as clinicData order by clinicData.clinicAbbr")
+				.list();
+		
 		session.getTransaction().commit();
-		
-		if (list.isEmpty())
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-		
+		return clinicAbbrs;
 	}
 }

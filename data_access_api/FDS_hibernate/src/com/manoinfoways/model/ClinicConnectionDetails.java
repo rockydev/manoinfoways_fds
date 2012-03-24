@@ -10,7 +10,11 @@ import java.util.Date;
 public class ClinicConnectionDetails  implements java.io.Serializable {
 
 
-     private Integer clinicConnectionId;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -532887974602375136L;
+	private Integer clinicConnectionId;
      private ClinicData clinicData;
      private String clinicConnectionType;
      private String userName;
