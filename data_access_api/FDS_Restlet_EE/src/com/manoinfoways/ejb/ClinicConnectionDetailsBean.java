@@ -2,14 +2,20 @@ package com.manoinfoways.ejb;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import com.manoinfoways.model.ClinicConnectionDetails;
+import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.HibernateUtil;
 
 /**
@@ -34,7 +40,7 @@ public class ClinicConnectionDetailsBean {
 		}
 	}
 
-	public void persist(ClinicConnectionDetails transientInstance) {
+	public ClinicConnectionDetails persist(ClinicConnectionDetails transientInstance) {
 		log.debug("persisting ClinicConnectionDetails instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -42,6 +48,7 @@ public class ClinicConnectionDetailsBean {
 			session.persist(transientInstance);
 			log.debug("persist successful");
 			session.getTransaction().commit();
+			return transientInstance;
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
 			throw re;
@@ -55,6 +62,7 @@ public class ClinicConnectionDetailsBean {
 			session.beginTransaction();
 			session.saveOrUpdate(instance);
 			log.debug("attach successful");
+			session.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
@@ -69,19 +77,22 @@ public class ClinicConnectionDetailsBean {
 			session.beginTransaction();
 			session.lock(instance, LockMode.NONE);
 			log.debug("attach successful");
+			session.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
 		}
 	}
 
-	public void delete(ClinicConnectionDetails persistentInstance) {
+	public ClinicConnectionDetails delete(ClinicConnectionDetails persistentInstance) {
 		log.debug("deleting ClinicConnectionDetails instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.delete(persistentInstance);
 			log.debug("delete successful");
+			session.getTransaction().commit();
+			return persistentInstance;
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
@@ -97,6 +108,7 @@ public class ClinicConnectionDetailsBean {
 			ClinicConnectionDetails result = (ClinicConnectionDetails) session
 					.merge(detachedInstance);
 			log.debug("merge successful");
+			session.getTransaction().commit();
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
@@ -116,6 +128,7 @@ public class ClinicConnectionDetailsBean {
 			} else {
 				log.debug("get successful, instance found");
 			}
+			session.getTransaction().commit();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -136,6 +149,7 @@ public class ClinicConnectionDetailsBean {
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
+			session.getTransaction().commit();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -152,5 +166,30 @@ public class ClinicConnectionDetailsBean {
 		clinicConnectionDetails
 				.setClinicConnectionId(clinicConnectionDetailsId);
 		delete(clinicConnectionDetails);
+	}
+	
+	public List<ClinicConnectionDetails> findByClinicId(java.lang.Integer clinicId)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+//		return (ClinicConnectionDetails) findByExample(new ClinicConnectionDetails(new ClinicData(clinicId))).get(0);
+		Set<ClinicConnectionDetails> result = ((ClinicData) session
+//				.createQuery("from ClinicConnectionDetails as clinicConn where clinicConn.clinicData.clinicId = :clinicId")
+				.createCriteria(ClinicData.class)
+				.add(Restrictions.idEq(clinicId))
+				.uniqueResult()).getClinicconnectiondetailses();
+//				.setShort("clinicId", clinicId.shortValue())
+//				.uniqueResult();
+		
+		ArrayList<ClinicConnectionDetails> connDetailsList = new ArrayList<ClinicConnectionDetails>();
+		
+		Iterator<ClinicConnectionDetails> setIter = result.iterator();
+		while(setIter.hasNext())
+		{
+			connDetailsList.add(setIter.next());
+		}
+		
+		session.getTransaction().commit();
+		return connDetailsList;
 	}
 }

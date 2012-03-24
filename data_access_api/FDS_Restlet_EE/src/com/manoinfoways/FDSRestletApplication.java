@@ -11,6 +11,7 @@ import org.restlet.data.MediaType;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 
+import com.manoinfoways.restlet.ClinicConnectionDetailsResource;
 import com.manoinfoways.restlet.ClinicDataResource;
 
 /**
@@ -39,14 +40,13 @@ public class FDSRestletApplication extends Application {
 			@Override
 			public void handle(Request request, Response response) {
 				String message = new ClinicDataResource().getClinicAbbrs();
-				System.out.println(request.getMethod());
 				response.setEntity(message, MediaType.APPLICATION_XML);
 			}
 		};
-
-		// Defines only one route
-
+		
+		
 		router.attach("/clinics/allabbrs", allClinicAbbrs);
+		router.attach("/clinics/{clinicId}/conndetails",ClinicConnectionDetailsResource.class);
 		router.attach("/clinics", ClinicDataResource.class);
 
 		return router;

@@ -44,7 +44,12 @@ public class ClinicData  implements java.io.Serializable {
 
     public ClinicData() {
     }
-
+    
+    public ClinicData(int clinicId)
+    {
+    	this.clinicId = clinicId;
+    }
+    
 	public ClinicData(int clinicId, String clinicAbbr)
 	{
 		this.clinicId = clinicId;
@@ -161,7 +166,17 @@ public class ClinicData  implements java.io.Serializable {
         this.clinicMetadatas = clinicMetadatas;
     }
 
-
+//    public boolean equals(Object obj)
+//    {
+//    	ClinicData data = (ClinicData) obj;
+//    	if (this.clinicId == data.getClinicId())
+//    	{
+//    		if (this.clinicAbbr == null || this.clinicAbbr.equalsIgnoreCase(data.getClinicAbbr())) {
+//    			return true;
+//    		}
+//    	}
+//    	return false;
+//    }
 
 
 }
