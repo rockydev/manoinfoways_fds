@@ -26,32 +26,6 @@ public class ClinicConnectionDetailsForm extends DynamicForm{
 		folderDate.setTitle("Folder Date"); 
 		folderDate.setUseTextField(true);
 		
-		clinicConnectionType.setWidth(300);
-		userName.setWidth(300);
-		password.setWidth(300);
-		sysUserName.setWidth(300);
-		sysPassword.setWidth(300);
-		sysType.setWidth(300);
-		mailFtpVoiceFilesType.setWidth(300);
-		recorder.setWidth(300);
-		voiceFilesType.setWidth(300);
-		voiceFilesPath.setWidth(300);
-		transcriptsPath.setWidth(300);
-		
-		clinicConnectionType.setRequired(true);
-		userName.setRequired(true);
-		password.setRequired(true);
-		sysUserName.setRequired(true);
-		sysPassword.setRequired(true);
-		sysType.setRequired(true);
-		mailFtpVoiceFilesType.setRequired(true);
-		recorder.setRequired(true);
-		voiceFilesType.setRequired(true);
-		voiceFilesPath.setRequired(true);
-		transcriptsPath.setRequired(true);
-		folderDate.setRequired(true);
-		
-        
 		folderDate.setRequired(true);
 		setFields(clinicConnectionType, userName, password, sysUserName, sysPassword, sysType, mailFtpVoiceFilesType, recorder, 
 				voiceFilesType, voiceFilesPath, transcriptsPath, folderDate);

@@ -10,10 +10,11 @@ import com.smartgwt.client.widgets.tab.TabSet;
 public class AdminUI extends Canvas {
 	public AdminUI() {
 		setWidth("80%");
+		setHeight("80%");
 
 		final TabSet tabSet = new TabSet();
 		tabSet.setTabBarPosition(Side.TOP);
-		tabSet.setHeight(475);
+		
 		
 		Tab tTab0 = new Tab("Add Clinic");
 		AddClinicUI addClinicWidget = new AddClinicUI();
@@ -48,6 +49,7 @@ public class AdminUI extends Canvas {
 		
 		VLayout vLayout = new VLayout();
 		vLayout.setWidth100();  
+		vLayout.setHeight100();
 		vLayout.setDefaultLayoutAlign(Alignment.CENTER);
 		vLayout.setMembersMargin(15);
 		vLayout.addMember(tabSet);
