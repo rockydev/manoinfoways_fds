@@ -172,14 +172,10 @@ public class ClinicConnectionDetailsBean {
 	{
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-//		return (ClinicConnectionDetails) findByExample(new ClinicConnectionDetails(new ClinicData(clinicId))).get(0);
 		Set<ClinicConnectionDetails> result = ((ClinicData) session
-//				.createQuery("from ClinicConnectionDetails as clinicConn where clinicConn.clinicData.clinicId = :clinicId")
 				.createCriteria(ClinicData.class)
 				.add(Restrictions.idEq(clinicId))
 				.uniqueResult()).getClinicconnectiondetailses();
-//				.setShort("clinicId", clinicId.shortValue())
-//				.uniqueResult();
 		
 		ArrayList<ClinicConnectionDetails> connDetailsList = new ArrayList<ClinicConnectionDetails>();
 		

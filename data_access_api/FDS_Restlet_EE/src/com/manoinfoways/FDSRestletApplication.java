@@ -13,6 +13,8 @@ import org.restlet.routing.Template;
 
 import com.manoinfoways.restlet.ClinicConnectionDetailsResource;
 import com.manoinfoways.restlet.ClinicDataResource;
+import com.manoinfoways.restlet.ClinicMetadataResource;
+import com.manoinfoways.restlet.ClinicRequirementsResource;
 
 /**
  * @author rockydev
@@ -47,6 +49,8 @@ public class FDSRestletApplication extends Application {
 		
 		router.attach("/clinics/allabbrs", allClinicAbbrs);
 		router.attach("/clinics/{clinicId}/conndetails",ClinicConnectionDetailsResource.class);
+		router.attach("/clinics/{clinicId}/metadata", ClinicMetadataResource.class);
+		router.attach("/clinics/{clinicId}/reqs", ClinicRequirementsResource.class);
 		router.attach("/clinics", ClinicDataResource.class);
 
 		return router;

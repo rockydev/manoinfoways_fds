@@ -19,11 +19,11 @@ public class ClinicRequirements  implements java.io.Serializable {
 
     public ClinicRequirements() {
     }
-
 	
     public ClinicRequirements(ClinicData clinicData) {
         this.clinicData = clinicData;
     }
+    
     public ClinicRequirements(ClinicData clinicData, String clinicRequirement) {
        this.clinicData = clinicData;
        this.clinicRequirement = clinicRequirement;
