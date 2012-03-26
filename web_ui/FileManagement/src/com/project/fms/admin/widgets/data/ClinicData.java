@@ -1,4 +1,4 @@
-package com.project.fms.admin.widgets;
+package com.project.fms.admin.widgets.data;
 
 import com.smartgwt.client.data.Record;
   
@@ -19,8 +19,11 @@ public class ClinicData extends Record {
         setZipcode(zipcode);
     }  
   
+    public ClinicData(String clinicId) {
+		setClinicId(clinicId);
+	}
     
-    public void setClinicName(String clinicName) {
+	public void setClinicName(String clinicName) {
 		setAttribute("clinicName", clinicName);
 		
 	}
@@ -57,7 +60,7 @@ public class ClinicData extends Record {
         setAttribute("location", location);  
     }  
   
-    public String getlocation() {  
+    public String getLocation() {  
         return getAttributeAsString("location");  
     }  
     

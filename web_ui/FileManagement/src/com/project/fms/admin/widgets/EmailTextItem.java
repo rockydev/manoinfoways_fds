@@ -1,7 +1,6 @@
 package com.project.fms.admin.widgets;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.validator.RegExpValidator;
 
