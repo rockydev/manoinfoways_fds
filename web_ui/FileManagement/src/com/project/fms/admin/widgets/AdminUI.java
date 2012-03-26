@@ -16,7 +16,7 @@ public class AdminUI extends Canvas {
 		tabSet.setTabBarPosition(Side.TOP);
 		
 		
-		Tab tTab0 = new Tab("Add Clinic");
+		Tab tTab0 = new Tab("Clinic Information");
 		AddClinicUI addClinicWidget = new AddClinicUI();
 		tTab0.setPane(addClinicWidget);
 
@@ -28,13 +28,13 @@ public class AdminUI extends Canvas {
 		EditDoctorUI editDoc = new EditDoctorUI();
 		tTab2.setPane(editDoc);
 		
-		Tab tTab3 = new Tab("Add new Transcriber");
-		AddTranscriberUI addTranscriber = new AddTranscriberUI();
-		tTab3.setPane(addTranscriber);
+//		Tab tTab3 = new Tab("Transcriber Information");
+//		TranscriberInformationWidget transcriberInformationWidget = new TranscriberInformationWidget();
+//		tTab3.setPane(transcriberInformationWidget);
 		
-		Tab tTab4 = new Tab("Edit Transcriber Info");
-		EditTranscriberUI editTranscriber = new EditTranscriberUI();
-		tTab4.setPane(editTranscriber);
+//		Tab tTab4 = new Tab("Edit Transcriber Info");
+//		EditTranscriberUI editTranscriber = new EditTranscriberUI();
+//		tTab4.setPane(editTranscriber);
 		
 		Tab tTab5 = new Tab("Edit Clinic Info");
 		EditClinic editClinicObj = new EditClinic();
@@ -43,8 +43,8 @@ public class AdminUI extends Canvas {
 		tabSet.addTab(tTab0);
 		tabSet.addTab(tTab1);
 		tabSet.addTab(tTab2);
-		tabSet.addTab(tTab3);
-		tabSet.addTab(tTab4);
+//		tabSet.addTab(tTab3);
+//		tabSet.addTab(tTab4);
 		tabSet.addTab(tTab5);
 		
 		VLayout vLayout = new VLayout();
