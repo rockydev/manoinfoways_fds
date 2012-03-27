@@ -50,14 +50,19 @@ public class AddClinicUI extends VLayout {
 		// clinicManagersWidget.setValuesManager(formValuesManager);
 		clinicManagersTab.setPane(clinicManagersWidget);
 
-		Tab clinicRequirementsTab = new Tab("Clinic Requirements Information");
+		
+		//Commented Adding Requirements Tab
+		
+//		Tab clinicRequirementsTab = new Tab("Clinic Requirements Information");
 
-		ClinicRequirementsForm clinicRequirementsWidget = new ClinicRequirementsForm();
+//		ClinicRequirementsForm clinicRequirementsWidget = new ClinicRequirementsForm();
 		// clinicRequirementsWidget.setValuesManager(formValuesManager);
-		clinicRequirementsTab.setPane(clinicRequirementsWidget);
+//		clinicRequirementsTab.setPane(clinicRequirementsWidget);
 
 		clinicTabSet.setTabs(clinicDataTab, clinicConnectionTab,
-				clinicManagersTab, clinicRequirementsTab);
+				clinicManagersTab);
+//		clinicTabSet.setTabs(clinicDataTab, clinicConnectionTab,
+//				clinicManagersTab, clinicRequirementsTab);
 
 		addMember(clinicTabSet);
 

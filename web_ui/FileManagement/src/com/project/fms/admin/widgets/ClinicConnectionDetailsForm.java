@@ -10,6 +10,7 @@ import com.smartgwt.client.types.DSProtocol;
 import com.smartgwt.client.types.ExportFormat;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.DateItem;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
 
 public class ClinicConnectionDetailsForm extends DynamicForm{
 	
@@ -52,7 +53,9 @@ public class ClinicConnectionDetailsForm extends DynamicForm{
 		MyTextItem sysUserName = new MyTextItem("systemLoginUserName", "System Username");
 		MyTextItem sysPassword = new MyTextItem("systemLoginPassword", "System Password");
 		MyTextItem sysType = new MyTextItem("typeOfSoftware", "Type of Software");
-		MyTextItem mailFtpVoiceFilesType = new MyTextItem("mailOrFtpforVoiceFiles", "Mail or FTP for Voice Files");
+		SelectItem mailOrFtpforVoiceFiles = new SelectItem("mailOrFtpforVoiceFiles", "Mail/FTP for Voice Files");
+		mailOrFtpforVoiceFiles.setValueMap("Mail", "FTP");
+		mailOrFtpforVoiceFiles.setRequired(true);
 		MyTextItem recorder = new MyTextItem("recorderUsed", "Recorder Used");
 		MyTextItem voiceFilesType = new MyTextItem("typeOfVoiceFiles", "Type of Voice Files");
 		MyTextItem voiceFilesPath = new MyTextItem("voiceFilesPath", "Voice Files Path");
@@ -63,7 +66,7 @@ public class ClinicConnectionDetailsForm extends DynamicForm{
 		folderDate.setUseTextField(true);
 		
 		folderDate.setRequired(true);
-		setFields(clinicConnectionType, userName, password, sysUserName, sysPassword, sysType, mailFtpVoiceFilesType, recorder, 
+		setFields(clinicConnectionType, userName, password, sysUserName, sysPassword, sysType, mailOrFtpforVoiceFiles, recorder, 
 				voiceFilesType, voiceFilesPath, transcriptsPath, folderDate);
 		
 		

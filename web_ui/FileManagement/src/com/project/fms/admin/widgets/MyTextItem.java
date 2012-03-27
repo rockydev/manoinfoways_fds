@@ -9,6 +9,7 @@ public class MyTextItem extends TextItem{
 		super();
 		super.setWidth(250);
 		super.setRequired(true);
+		super.setValue("");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -16,6 +17,7 @@ public class MyTextItem extends TextItem{
 		super(jsObj);
 		super.setWidth(250);
 		super.setRequired(true);
+		super.setValue("");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -23,6 +25,7 @@ public class MyTextItem extends TextItem{
 		super(name, title);
 		super.setWidth(250);
 		super.setRequired(true);
+		super.setValue("");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -30,6 +33,7 @@ public class MyTextItem extends TextItem{
 		super(name);
 		super.setWidth(250);
 		super.setRequired(true);
+		super.setValue("");
 		// TODO Auto-generated constructor stub
 	}
 
