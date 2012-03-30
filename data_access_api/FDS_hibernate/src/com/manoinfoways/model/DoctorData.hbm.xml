@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 30, 2012 7:20:31 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.DoctorData" table="doctordata" catalog="manoinfowaysdb">
         <id name="doctorId" type="java.lang.Integer">
@@ -11,6 +11,9 @@
         <many-to-one name="clinicdata" class="com.manoinfoways.model.ClinicData" fetch="select">
             <column name="ClinicId" />
         </many-to-one>
+        <property name="doctorAbbr" type="string">
+            <column name="DoctorAbbr" length="20" not-null="true" unique="true" />
+        </property>
         <property name="doctorName" type="string">
             <column name="DoctorName" length="45" />
         </property>
@@ -23,11 +26,17 @@
         <property name="doctorComputerTagsIp" type="string">
             <column name="DoctorComputerTagsIP" length="45" />
         </property>
-        <set name="voicefilesdatas" table="voicefilesdata" inverse="true" lazy="true" fetch="select">
+        <set name="voicefilesassignmentdatas" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="DoctorId" />
             </key>
-            <one-to-many class="com.manoinfoways.model.VoiceFilesData" />
+            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
+        </set>
+        <set name="inboundvoicefilesdatas" table="inboundvoicefilesdata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DoctorId" not-null="true" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.InboundVoiceFilesData" />
         </set>
     </class>
 </hibernate-mapping>

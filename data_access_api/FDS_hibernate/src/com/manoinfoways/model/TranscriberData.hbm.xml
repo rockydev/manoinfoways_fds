@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 30, 2012 7:20:31 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.TranscriberData" table="transcriberdata" catalog="manoinfowaysdb">
         <id name="transcriberId" type="java.lang.Integer">
@@ -17,8 +17,8 @@
         <property name="transcriberName" type="string">
             <column name="TranscriberName" length="45" />
         </property>
-        <property name="dateofJoining" type="timestamp">
-            <column name="DateofJoining" length="19" />
+        <property name="dateofJoining" type="date">
+            <column name="DateofJoining" length="10" />
         </property>
         <property name="transcriberAddress" type="string">
             <column name="TranscriberAddress" />
@@ -26,11 +26,11 @@
         <property name="transcriberPermanentAddress" type="string">
             <column name="TranscriberPermanentAddress" />
         </property>
-        <property name="transcriberPhnNuber" type="java.lang.Integer">
-            <column name="TranscriberPhnNuber" />
+        <property name="transcriberPhnNuber" type="string">
+            <column name="TranscriberPhnNuber" length="45" />
         </property>
-        <property name="transcriberMobile" type="java.lang.Integer">
-            <column name="TranscriberMobile" />
+        <property name="transcriberMobile" type="string">
+            <column name="TranscriberMobile" length="45" />
         </property>
         <property name="transcriberEmail" type="string">
             <column name="TranscriberEmail" length="45" />
@@ -41,17 +41,41 @@
         <property name="transcriberExperience" type="string">
             <column name="TranscriberExperience" length="45" />
         </property>
-        <property name="transcriberDob" type="timestamp">
-            <column name="TranscriberDOB" length="19" />
+        <property name="transcriberDob" type="date">
+            <column name="TranscriberDOB" length="10" />
         </property>
         <property name="transcriberLoginTime" type="time">
             <column name="TranscriberLoginTime" length="8" />
         </property>
-        <set name="voicefilesdatas" table="voicefilesdata" inverse="true" lazy="true" fetch="select">
+        <set name="voicefilesassignmentdatasForTranscriberId" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="TranscriberId" />
             </key>
-            <one-to-many class="com.manoinfoways.model.VoiceFilesData" />
+            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
+        </set>
+        <set name="voicefilesassignmentdatasForEditorId" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="EditorId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
+        </set>
+        <set name="filetransactiondatas" table="filetransactiondata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TranscriberId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.FileTransactionData" />
+        </set>
+        <set name="voicefilesassignmentdatasForProoferId" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ProoferId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
+        </set>
+        <set name="voicefilesassignmentdatasForQaid" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="QAId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
         </set>
     </class>
 </hibernate-mapping>

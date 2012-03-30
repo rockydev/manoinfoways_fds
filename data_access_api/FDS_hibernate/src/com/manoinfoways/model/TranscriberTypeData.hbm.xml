@@ -1,16 +1,22 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 30, 2012 7:20:31 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.TranscriberTypeData" table="transcribertypedata" catalog="manoinfowaysdb">
-        <id name="transcriberTypeId" type="java.lang.Integer">
+        <id name="transcriberTypeId" type="int">
             <column name="TranscriberTypeId" />
-            <generator class="identity" />
+            <generator class="assigned" />
         </id>
         <property name="transcriberTypeName" type="string">
             <column name="TranscriberTypeName" length="45" />
         </property>
+        <set name="filetransactiondatas" table="filetransactiondata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TranscriberTypeId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.FileTransactionData" />
+        </set>
         <set name="transcriberdatas" table="transcriberdata" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="TranscriberTypeId" />

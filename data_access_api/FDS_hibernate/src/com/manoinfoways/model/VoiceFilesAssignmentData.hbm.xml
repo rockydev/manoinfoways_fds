@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 30, 2012 7:20:31 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.manoinfoways.model.VoiceFilesAssignmentData" table="voicefilesassignmentdata" catalog="manoinfowaysdb">
+        <id name="fileAssignmentId" type="java.lang.Integer">
+            <column name="FileAssignmentId" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="transcriberdataByTranscriberId" class="com.manoinfoways.model.TranscriberData" fetch="select">
+            <column name="TranscriberId" />
+        </many-to-one>
+        <many-to-one name="inboundvoicefilesdata" class="com.manoinfoways.model.InboundVoiceFilesData" fetch="select">
+            <column name="FileId" not-null="true" />
+        </many-to-one>
+        <many-to-one name="transcriberdataByEditorId" class="com.manoinfoways.model.TranscriberData" fetch="select">
+            <column name="EditorId" />
+        </many-to-one>
+        <many-to-one name="transcriberdataByProoferId" class="com.manoinfoways.model.TranscriberData" fetch="select">
+            <column name="ProoferId" />
+        </many-to-one>
+        <many-to-one name="doctordata" class="com.manoinfoways.model.DoctorData" fetch="select">
+            <column name="DoctorId" />
+        </many-to-one>
+        <many-to-one name="transcriberdataByQaid" class="com.manoinfoways.model.TranscriberData" fetch="select">
+            <column name="QAId" />
+        </many-to-one>
+        <set name="filetransactiondatas" table="filetransactiondata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FileAssignmentId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.FileTransactionData" />
+        </set>
+    </class>
+</hibernate-mapping>

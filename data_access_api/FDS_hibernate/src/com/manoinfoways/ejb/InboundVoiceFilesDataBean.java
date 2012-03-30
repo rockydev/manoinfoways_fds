@@ -11,16 +11,16 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.manoinfoways.model.HibernateUtil;
-import com.manoinfoways.model.VoiceFilesData;
+import com.manoinfoways.model.InboundVoiceFilesData;
 
 /**
- * Bean for handling VoiceFilesData table operations.
+ * Bean for handling InboundVoiceFilesData table operations.
  * 
- * @see com.manoinfoways.model.VoiceFilesData
+ * @see com.manoinfoways.model.InboundVoiceFilesData
  */
-public class VoiceFilesDataBean {
+public class InboundVoiceFilesDataBean {
 
-	private static final Log log = LogFactory.getLog(VoiceFilesDataBean.class);
+	private static final Log log = LogFactory.getLog(InboundVoiceFilesDataBean.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -34,8 +34,8 @@ public class VoiceFilesDataBean {
 		}
 	}
 
-	public void persist(VoiceFilesData transientInstance) {
-		log.debug("persisting VoiceFilesData instance");
+	public void persist(InboundVoiceFilesData transientInstance) {
+		log.debug("persisting InboundVoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -47,8 +47,8 @@ public class VoiceFilesDataBean {
 		}
 	}
 
-	public void attachDirty(VoiceFilesData instance) {
-		log.debug("attaching dirty VoiceFilesData instance");
+	public void attachDirty(InboundVoiceFilesData instance) {
+		log.debug("attaching dirty InboundVoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -61,8 +61,8 @@ public class VoiceFilesDataBean {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void attachClean(VoiceFilesData instance) {
-		log.debug("attaching clean VoiceFilesData instance");
+	public void attachClean(InboundVoiceFilesData instance) {
+		log.debug("attaching clean InboundVoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -74,8 +74,8 @@ public class VoiceFilesDataBean {
 		}
 	}
 
-	public void delete(VoiceFilesData persistentInstance) {
-		log.debug("deleting VoiceFilesData instance");
+	public void delete(InboundVoiceFilesData persistentInstance) {
+		log.debug("deleting InboundVoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -87,12 +87,12 @@ public class VoiceFilesDataBean {
 		}
 	}
 
-	public VoiceFilesData merge(VoiceFilesData detachedInstance) {
-		log.debug("merging VoiceFilesData instance");
+	public InboundVoiceFilesData merge(InboundVoiceFilesData detachedInstance) {
+		log.debug("merging InboundVoiceFilesData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			VoiceFilesData result = (VoiceFilesData) session
+			InboundVoiceFilesData result = (InboundVoiceFilesData) session
 					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -102,13 +102,13 @@ public class VoiceFilesDataBean {
 		}
 	}
 
-	public VoiceFilesData findById(java.lang.Integer id) {
-		log.debug("getting VoiceFilesData instance with id: " + id);
+	public InboundVoiceFilesData findById(java.lang.Integer id) {
+		log.debug("getting InboundVoiceFilesData instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			VoiceFilesData instance = (VoiceFilesData) session.get(
-					"com.manoinfoways.model.VoiceFilesData", id);
+			InboundVoiceFilesData instance = (InboundVoiceFilesData) session.get(
+					"com.manoinfoways.model.InboundVoiceFilesData", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -122,13 +122,13 @@ public class VoiceFilesDataBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<VoiceFilesData> findByExample(VoiceFilesData instance) {
-		log.debug("finding VoiceFilesData instance by example");
+	public List<InboundVoiceFilesData> findByExample(InboundVoiceFilesData instance) {
+		log.debug("finding InboundVoiceFilesData instance by example");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			List<VoiceFilesData> results = (List<VoiceFilesData>) session
-					.createCriteria("com.manoinfoways.model.VoiceFilesData")
+			List<InboundVoiceFilesData> results = (List<InboundVoiceFilesData>) session
+					.createCriteria("com.manoinfoways.model.InboundVoiceFilesData")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -139,12 +139,12 @@ public class VoiceFilesDataBean {
 		}
 	}
 
-	public void update(VoiceFilesData voiceFilesData) {
+	public void update(InboundVoiceFilesData voiceFilesData) {
 		merge(voiceFilesData);
 	}
 
 	public void deleteClinicDataById(int fileId) {
-		VoiceFilesData voiceFilesData = new VoiceFilesData();
+		InboundVoiceFilesData voiceFilesData = new InboundVoiceFilesData();
 		voiceFilesData.setFileId(fileId);
 		delete(voiceFilesData);
 	}
