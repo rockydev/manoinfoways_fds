@@ -41,7 +41,7 @@ public class ClinicData implements java.io.Serializable {
 	public ClinicData() {
 	}
 	
-	public ClinicData(int clinicId, String clinicAbbr) {
+	public ClinicData(Integer clinicId, String clinicAbbr) {
 		this.clinicId = clinicId;
 		this.clinicAbbr = clinicAbbr;
 	}
@@ -63,6 +63,10 @@ public class ClinicData implements java.io.Serializable {
 		this.country = country;
 		this.location = location;
 		this.zipcode = zipcode;
+	}
+
+	public ClinicData(int clinicId) {
+		this.clinicId = clinicId;
 	}
 
 	public Integer getClinicId() {

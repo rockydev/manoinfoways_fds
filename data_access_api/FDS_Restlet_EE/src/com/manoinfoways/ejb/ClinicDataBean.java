@@ -1,19 +1,22 @@
 package com.manoinfoways.ejb;
 
+import static org.hibernate.criterion.Example.create;
+
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 
 import com.manoinfoways.model.ClinicData;
+import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
-
-import static org.hibernate.criterion.Example.create;
 
 /**
  * Bean for handling clinicdata table operations
@@ -84,8 +87,8 @@ public class ClinicDataBean {
 
 	public ClinicData delete(ClinicData persistentInstance) {
 		log.debug("deleting ClinicData instance");
+		Session session = sessionFactory.getCurrentSession();
 		try {
-			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.delete(persistentInstance);
 			log.debug("delete successful");
@@ -93,6 +96,7 @@ public class ClinicDataBean {
 			return persistentInstance;
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
+			session.getTransaction().rollback();
 			throw re;
 		}
 	}
@@ -156,8 +160,8 @@ public class ClinicDataBean {
 	public Collection<ClinicData> getAllClinicData() {
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		Query query = session.createQuery("from ClinicData");
-		Collection<ClinicData> list = query.list();
+		Collection<ClinicData> list = session.createCriteria(ClinicData.class)
+				.addOrder(Order.asc("clinicAbbr")).list();
 		session.getTransaction().commit();
 		return list;
 	}
@@ -166,21 +170,29 @@ public class ClinicDataBean {
 		merge(clinicData);
 	}
 
-	public void deleteClinicDataById(String clinicId) {
-		ClinicData clinicData = new ClinicData(clinicId);
-		delete(clinicData);
+	public ClinicData deleteClinicDataById(int clinicId) {
+		return delete(findById(clinicId));
 	}
-	
-	public Collection<ClinicData> getClinicAbbrs()
-	{
+
+	@SuppressWarnings("unchecked")
+	public Collection<ClinicData> getClinicAbbrs() {
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		@SuppressWarnings("unchecked")
-		Collection<ClinicData> clinicAbbrs = session.createQuery( 
-				"select new ClinicData(clinicId, clinicAbbr) from ClinicData as clinicData order by clinicData.clinicAbbr")
+		Collection<ClinicData> clinicAbbrs = session
+				.createQuery(
+						"select new ClinicData(clinicId, clinicAbbr) " +
+						"from ClinicData as clinicData " +
+						"order by clinicData.clinicAbbr")
 				.list();
-		
 		session.getTransaction().commit();
 		return clinicAbbrs;
+	}
+
+	public Set<DoctorData> getDoctors(int clinicId) {
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Set<DoctorData> doctors = findById(clinicId).getDoctordatas();
+		Hibernate.initialize(doctors);
+		return doctors;
 	}
 }

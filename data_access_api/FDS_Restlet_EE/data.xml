@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transaction transactionNum="2">
+	<operations>
+		<request>
+			<data>
+				<doctorAbbr>dads</doctorAbbr>
+				<doctorName>sadsa</doctorName>
+				<doctorTollFreeId>saa</doctorTollFreeId>
+				<doctorResourceId>sadda</doctorResourceId>
+				<doctorComputerTagsIp>1213</doctorComputerTagsIp>
+			</data>
+			<dataSource>isc_RestDataSource_2</dataSource>
+			<operationType>add</operationType>
+			<componentId>isc_ListGrid_0</componentId>
+			<oldValues></oldValues>
+		</request>
+		<request>
+			<data>
+				<doctorId>13</doctorId>
+				<doctorName>sat</doctorName>
+			</data>
+			<oldValues>
+				<doctorId>13</doctorId>
+				<doctorAbbr>asdada</doctorAbbr>
+				<doctorName>sa</doctorName>
+				<doctorTollFreeId>asd1</doctorTollFreeId>
+				<doctorResourceId>a</doctorResourceId>
+				<doctorComputerTagsIp>12</doctorComputerTagsIp>
+			</oldValues>
+			<dataSource>isc_RestDataSource_2</dataSource>
+			<operationType>update</operationType>
+			<componentId>isc_ListGrid_0</componentId>
+		</request>
+	</operations>
+</transaction>

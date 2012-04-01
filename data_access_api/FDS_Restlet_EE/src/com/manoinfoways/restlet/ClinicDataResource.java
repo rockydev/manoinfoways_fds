@@ -95,10 +95,14 @@ public class ClinicDataResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicData.class);
+				ClinicData clinic = (ClinicData) xmlConverter
+						.unmarshal(new DomReader(dataNode));
+				
+				//Ensuring that the clinicAbbr is always upper case
+				clinic.setClinicAbbr(clinic.getClinicAbbr().toUpperCase());
+				
 				persistedInstance = clinicDataBean
-						.persist((ClinicData) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
-
+						.persist(clinic);
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicData.class);
 				out = xmlConverter.createObjectOutputStream(
@@ -141,10 +145,14 @@ public class ClinicDataResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicData.class);
+				ClinicData clinic = (ClinicData) xmlConverter
+						.unmarshal(new DomReader(dataNode));
+				
+				//Ensuring that the clinicAbbr is always upper case
+				clinic.setClinicAbbr(clinic.getClinicAbbr().toUpperCase());
+				
 				detachedInstance = clinicDataBean
-						.merge((ClinicData) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
-
+						.persist(clinic);
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicData.class);
 				out = xmlConverter.createObjectOutputStream(
@@ -185,14 +193,13 @@ public class ClinicDataResource extends ServerResource {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicData.class);
 				deletedInstance = clinicDataBean
-						.delete((ClinicData) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+						.deleteClinicDataById(new Integer(rep.getNode("//request/data/clinicId").getTextContent()));
 
 				xmlWriter.dataElement("status", "0");
 				xmlWriter.startElement("data");
 				xmlWriter.startElement("record");
-				xmlWriter.dataElement("clinicId",
-						new Integer(deletedInstance.getClinicId()).toString());
+				xmlWriter.dataElement("clinicAbbr",
+						new Integer(deletedInstance.getClinicAbbr()).toString());
 				xmlWriter.endElement("record");
 				xmlWriter.endElement("data");
 
