@@ -2,14 +2,15 @@ package com.project.fms.admin.widgets.data;
 
 import com.smartgwt.client.data.Record;
   
-  
+@SuppressWarnings("unused")
 public class ClinicData extends Record {  
   
     public ClinicData() {  
     }  
   
     public ClinicData(String clinicAbbr, String clinicName, String addressLine1, 
-    		String addressLine2, String location, String country, String zipcode) {  
+    		String addressLine2, String location, String country, String zipcode, 
+    		ClinicConnectionDetailsData connDetails, ClinicMetadataData metadata) {  
         setClinicAbbr(clinicAbbr);  
         setClinicName(clinicName);
         setAddressLine1(addressLine1);
@@ -17,12 +18,33 @@ public class ClinicData extends Record {
         setLocation(location);
         setCountry(country);  
         setZipcode(zipcode);
+        setClinicConnectionDetailsData(connDetails);
+        setClinicMetadataData(metadata);
     }  
-  
-    public ClinicData(String clinicId) {
+
+	public ClinicData(String clinicId) {
 		setClinicId(clinicId);
 	}
     
+	private void setClinicConnectionDetailsData(
+			ClinicConnectionDetailsData connDetails) {
+    	setAttribute("clinicConnectionDetails",connDetails);
+	}
+	
+	private ClinicConnectionDetailsData getClinicConnectionDetailsData()
+	{
+		return (ClinicConnectionDetailsData) getAttributeAsObject("clinicConnectionDetails");
+	}
+	
+	private void setClinicMetadataData(ClinicMetadataData metadata) {
+		setAttribute("clinicMetadata", metadata);
+	}
+	
+	private ClinicMetadataData getClinicMetadataData()
+	{
+		return (ClinicMetadataData) getAttributeAsObject("clinicMetadata");
+	}
+	
 	public void setClinicName(String clinicName) {
 		setAttribute("clinicName", clinicName);
 		

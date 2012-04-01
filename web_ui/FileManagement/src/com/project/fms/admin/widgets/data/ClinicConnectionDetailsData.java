@@ -20,13 +20,33 @@ public class ClinicConnectionDetailsData extends Record{
 		setClinicConnectionId(clinicConnectionId);
 	}
 	
-	public ClinicConnectionDetailsData(ClinicData clinicData,
-			String clinicConnectionType, String userName, String password,
+//	public ClinicConnectionDetailsData(ClinicData clinicData,
+//			String clinicConnectionType, String userName, String password,
+//			String systemLoginUserName, String systemLoginPassword,
+//			String typeOfSoftware, String mailOrFtpforVoiceFiles,
+//			String recorderUsed, String typeOfVoiceFiles,
+//			String voiceFilesPath, String transcriptsPath, String date) {
+//		setClinicdata(clinicData);
+//		setClinicConnectionType(clinicConnectionType);
+//		setUserName(userName);
+//		setPassword(password);
+//		setSystemLoginUserName(systemLoginUserName);
+//		setSystemLoginPassword(systemLoginPassword);
+//		setTypeOfSoftware(typeOfSoftware);
+//		setMailOrFtpforVoiceFiles(mailOrFtpforVoiceFiles);
+//		setRecorderUsed(recorderUsed);
+//		setTypeOfVoiceFiles(typeOfVoiceFiles);
+//		setVoiceFilesPath(voiceFilesPath);
+//		setTranscriptsPath(transcriptsPath);
+//		setFolderDate(date);
+//	}
+	
+	public ClinicConnectionDetailsData(String clinicConnectionType, 
+			String userName, String password,
 			String systemLoginUserName, String systemLoginPassword,
 			String typeOfSoftware, String mailOrFtpforVoiceFiles,
 			String recorderUsed, String typeOfVoiceFiles,
 			String voiceFilesPath, String transcriptsPath, String date) {
-		setClinicdata(clinicData);
 		setClinicConnectionType(clinicConnectionType);
 		setUserName(userName);
 		setPassword(password);
@@ -41,21 +61,12 @@ public class ClinicConnectionDetailsData extends Record{
 		setFolderDate(date);
 	}
 	
-	
 	public String getClinicConnectionId() {
 		return getAttributeAsString("clinicConnectionId");
 	}
 
 	public void setClinicConnectionId(String clinicConnectionId) {
 		setAttribute("clinicConnectionId",clinicConnectionId);
-	}
-
-	public ClinicData getClinicdata() {
-		return (ClinicData) getAttributeAsObject("clinicData");
-	}
-
-	public void setClinicdata(ClinicData clinicData) {
-		setAttribute("clinicData",clinicData);
 	}
 
 	public String getClinicConnectionType() {

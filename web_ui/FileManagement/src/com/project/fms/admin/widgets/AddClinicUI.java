@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.project.fms.admin.widgets.data.ClinicConnectionDetailsData;
 import com.project.fms.admin.widgets.data.ClinicData;
+import com.project.fms.admin.widgets.data.ClinicMetadataData;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
@@ -15,6 +16,7 @@ import com.smartgwt.client.widgets.form.ValuesManager;
 import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.TextAreaItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
@@ -50,19 +52,20 @@ public class AddClinicUI extends VLayout {
 		// clinicManagersWidget.setValuesManager(formValuesManager);
 		clinicManagersTab.setPane(clinicManagersWidget);
 
-		
-		//Commented Adding Requirements Tab
-		
-//		Tab clinicRequirementsTab = new Tab("Clinic Requirements Information");
+		// Commented Adding Requirements Tab
 
-//		ClinicRequirementsForm clinicRequirementsWidget = new ClinicRequirementsForm();
+		// Tab clinicRequirementsTab = new
+		// Tab("Clinic Requirements Information");
+
+		// ClinicRequirementsForm clinicRequirementsWidget = new
+		// ClinicRequirementsForm();
 		// clinicRequirementsWidget.setValuesManager(formValuesManager);
-//		clinicRequirementsTab.setPane(clinicRequirementsWidget);
+		// clinicRequirementsTab.setPane(clinicRequirementsWidget);
 
 		clinicTabSet.setTabs(clinicDataTab, clinicConnectionTab,
 				clinicManagersTab);
-//		clinicTabSet.setTabs(clinicDataTab, clinicConnectionTab,
-//				clinicManagersTab, clinicRequirementsTab);
+		// clinicTabSet.setTabs(clinicDataTab, clinicConnectionTab,
+		// clinicManagersTab, clinicRequirementsTab);
 
 		addMember(clinicTabSet);
 
@@ -89,35 +92,116 @@ public class AddClinicUI extends VLayout {
 
 				// Submitting Clinic Data values
 
-				clinicDataFormWidget.clinicDataDs.addData(
-						new ClinicData(
-								((TextItem) clinicDataFormWidget
-										.getItem("clinicAbbr"))
-										.getValueAsString().toUpperCase(),
-								((TextItem) clinicDataFormWidget
-										.getItem("clinicName"))
-										.getValueAsString(),
-								((TextAreaItem) clinicDataFormWidget
-										.getItem("addressLine1"))
-										.getValueAsString(),
-								((TextAreaItem) clinicDataFormWidget
-										.getItem("addressLine2"))
-										.getValueAsString(),
-								((TextItem) clinicDataFormWidget
-										.getItem("location"))
-										.getValueAsString(),
-								((TextItem) clinicDataFormWidget
-										.getItem("country")).getValueAsString(),
-								((TextItem) clinicDataFormWidget
-										.getItem("zipcode")).getValueAsString()),
+				ClinicConnectionDetailsData connDetailsData = new ClinicConnectionDetailsData(
+						((TextItem) clinicConnectionFormWidget
+								.getItem("clinicConnectionType"))
+								.getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("userName")).getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("password")).getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("systemLoginUserName"))
+								.getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("systemLoginPassword"))
+								.getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("typeOfSoftware")).getValueAsString(),
+						((SelectItem) clinicConnectionFormWidget
+								.getItem("mailOrFtpforVoiceFiles"))
+								.getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("recorderUsed")).getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("typeOfVoiceFiles"))
+								.getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("voiceFilesPath")).getValueAsString(),
+						((TextItem) clinicConnectionFormWidget
+								.getItem("transcriptsPath")).getValueAsString(),
+						convertDateToString(((DateItem) clinicConnectionFormWidget
+								.getItem("folderDate")).getValueAsDate()));
+
+				ClinicMetadataData metadata = new ClinicMetadataData(
+						((TextItem) clinicManagersWidget
+								.getItem("transcriptionsInchargeName"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("transcriptionsInchargeEmail"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("transcriptionInchargePhnNo"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("trancriptionInchargeFaxNo"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("transcriptionInchargeAddress"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("technicalPersonName"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("technicalPersonEmail"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("technicalPersonPhnNo"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("technicalPersonFaxNo"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("technicalPersonAddress"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("softwarePersonName"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("softwarePersonEmail"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("softwarePersonPhnNo"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("softwarePersonCellNo"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("softwarePersonAddress"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("emailForPatientList"))
+								.getValueAsString(),
+						((TextItem) clinicManagersWidget
+								.getItem("emailForInvoices"))
+								.getValueAsString());
+
+				ClinicData clinicData = new ClinicData(
+						((TextItem) clinicDataFormWidget.getItem("clinicAbbr"))
+								.getValueAsString().toUpperCase(),
+						((TextItem) clinicDataFormWidget.getItem("clinicName"))
+								.getValueAsString(),
+						((TextAreaItem) clinicDataFormWidget
+								.getItem("addressLine1")).getValueAsString(),
+						((TextAreaItem) clinicDataFormWidget
+								.getItem("addressLine2")).getValueAsString(),
+						((TextItem) clinicDataFormWidget.getItem("location"))
+								.getValueAsString(),
+						((TextItem) clinicDataFormWidget.getItem("country"))
+								.getValueAsString(),
+						((TextItem) clinicDataFormWidget.getItem("zipcode"))
+								.getValueAsString(), connDetailsData, metadata);
+
+				clinicDataFormWidget.clinicDataDs.addData(clinicData,
 						new DSCallback() {
 
 							@Override
 							public void execute(DSResponse response,
 									Object rawData, DSRequest request) {
 								if (response.getStatus() >= 0) {
-									storeConnectionDetails(response.getData()[0]
-											.getAttribute("clinicId"));
+									// storeConnectionDetails(response.getData()[0]
+									// .getAttribute("clinicId"));
+									SC.say("Success");
 								} else {
 									SC.say("Error storing Clinic Data!");
 								}
@@ -142,7 +226,6 @@ public class AddClinicUI extends VLayout {
 		clinicConnectionFormWidget.connDetailsDs
 				.addData(
 						new ClinicConnectionDetailsData(
-								new ClinicData(clinicId),
 								((TextItem) clinicConnectionFormWidget
 										.getItem("clinicConnectionType"))
 										.getValueAsString(),
