@@ -2,19 +2,14 @@ package com.manoinfoways.ejb;
 
 import static org.hibernate.criterion.Example.create;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 
-import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.ClinicRequirements;
 import com.manoinfoways.model.HibernateUtil;
 
@@ -40,7 +35,7 @@ public class ClinicRequirementsBean {
 		}
 	}
 
-	public ClinicRequirements persist(ClinicRequirements transientInstance) {
+	public void persist(ClinicRequirements transientInstance) {
 		log.debug("persisting ClinicRequirements instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -48,7 +43,6 @@ public class ClinicRequirementsBean {
 			session.persist(transientInstance);
 			log.debug("persist successful");
 			session.getTransaction().commit();
-			return transientInstance;
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
 			throw re;
@@ -84,7 +78,7 @@ public class ClinicRequirementsBean {
 		}
 	}
 
-	public ClinicRequirements delete(ClinicRequirements persistentInstance) {
+	public void delete(ClinicRequirements persistentInstance) {
 		log.debug("deleting ClinicRequirements instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -92,7 +86,6 @@ public class ClinicRequirementsBean {
 			session.delete(persistentInstance);
 			log.debug("delete successful");
 			session.getTransaction().commit();
-			return persistentInstance;
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
@@ -158,31 +151,9 @@ public class ClinicRequirementsBean {
 		merge(clinicRequirements);
 	}
 
-	public void deleteClinicRequirementsById(int clinicRequirementsId) {
+	public void deleteClinicConnectionDetailsById(int clinicRequirementsId) {
 		ClinicRequirements clincRequirements = new ClinicRequirements();
 		clincRequirements.setClinicRequirementId(clinicRequirementsId);
 		delete(clincRequirements);
 	}
-	
-	public List<ClinicRequirements> findByClinicId(java.lang.Integer clinicId)
-	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		Set<ClinicRequirements> result = ((ClinicData) session
-				.createCriteria(ClinicData.class)
-				.add(Restrictions.idEq(clinicId))
-				.uniqueResult()).getClinicrequirementses();
-		
-		ArrayList<ClinicRequirements> metadataList = new ArrayList<ClinicRequirements>();
-		
-		Iterator<ClinicRequirements> setIter = result.iterator();
-		while(setIter.hasNext())
-		{
-			metadataList.add(setIter.next());
-		}
-		
-		session.getTransaction().commit();
-		return metadataList;
-	}
-	
 }

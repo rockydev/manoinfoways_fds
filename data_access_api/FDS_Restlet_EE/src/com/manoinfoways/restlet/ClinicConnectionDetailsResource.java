@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import com.manoinfoways.ejb.ClinicConnectionDetailsBean;
+import com.manoinfoways.ejb.ClinicDataBean;
 import com.manoinfoways.model.ClinicConnectionDetails;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -66,17 +67,13 @@ public class ClinicConnectionDetailsResource extends ServerResource {
 
 			if (clinicId != null && clinicId != "") {
 				xmlWriter.dataElement("status", "0");
-				xmlConverter.alias("record", ClinicConnectionDetails.class);
 				try {
+					xmlConverter.alias("record", ClinicConnectionDetails.class);
 					out = xmlConverter.createObjectOutputStream(
 							xmlWriter.getWriter(), "data");
-
-					List<ClinicConnectionDetails> connDetailsList = clinicConnectionDetailsBean
-							.findByClinicId(Integer.parseInt(clinicId));
-
-					for (ClinicConnectionDetails connDetails : connDetailsList) {
-						out.writeObject(connDetails);
-					}
+					ClinicConnectionDetails connDetails = new ClinicDataBean()
+							.findById(Integer.parseInt(clinicId)).getClinicconnectiondetails();
+					out.writeObject(connDetails);
 					out.close();
 				} catch (IOException e) {
 					System.out.println("Error: " + e.getLocalizedMessage());
@@ -119,15 +116,15 @@ public class ClinicConnectionDetailsResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicConnectionDetails.class);
-				persistedInstance = clinicConnectionDetailsBean
-						.persist((ClinicConnectionDetails) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+//				persistedInstance = clinicConnectionDetailsBean
+//						.persist((ClinicConnectionDetails) xmlConverter
+//								.unmarshal(new DomReader(dataNode)));
 
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicConnectionDetails.class);
 				out = xmlConverter.createObjectOutputStream(
 						xmlWriter.getWriter(), "data");
-				out.writeObject(persistedInstance);
+//				out.writeObject(persistedInstance);
 				out.close();
 
 			} else // Sending error message
@@ -210,15 +207,15 @@ public class ClinicConnectionDetailsResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicConnectionDetails.class);
-				deletedInstance = clinicConnectionDetailsBean
-						.delete((ClinicConnectionDetails) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+//				deletedInstance = clinicConnectionDetailsBean
+//						.delete((ClinicConnectionDetails) xmlConverter
+//								.unmarshal(new DomReader(dataNode)));
 
 				xmlWriter.dataElement("status", "0");
 				xmlWriter.startElement("data");
 				xmlWriter.startElement("record");
-				xmlWriter.dataElement("clinicConnectionId", new Integer(
-						deletedInstance.getClinicConnectionId()).toString());
+//				xmlWriter.dataElement("clinicConnectionId", new Integer(
+//						deletedInstance.getClinicConnectionId()).toString());
 				xmlWriter.endElement("record");
 				xmlWriter.endElement("data");
 

@@ -18,7 +18,9 @@ import org.restlet.resource.ServerResource;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import com.manoinfoways.ejb.ClinicDataBean;
 import com.manoinfoways.ejb.ClinicMetadataBean;
+import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.ClinicMetadata;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -71,12 +73,10 @@ public class ClinicMetadataResource extends ServerResource {
 					out = xmlConverter.createObjectOutputStream(
 							xmlWriter.getWriter(), "data");
 
-					List<ClinicMetadata> connDetailsList = clinicMetadataBean
-							.findByClinicId(Integer.parseInt(clinicId));
+					ClinicMetadata metadata = new ClinicDataBean()
+							.findById(Integer.parseInt(clinicId)).getClinicmetadata();
 
-					for (ClinicMetadata connDetails : connDetailsList) {
-						out.writeObject(connDetails);
-					}
+					out.writeObject(metadata);
 					out.close();
 				} catch (IOException e) {
 					System.out.println("Error: " + e.getLocalizedMessage());
@@ -119,15 +119,15 @@ public class ClinicMetadataResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicMetadata.class);
-				persistedInstance = clinicMetadataBean
-						.persist((ClinicMetadata) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+//				persistedInstance = clinicMetadataBean
+//						.persist((ClinicMetadata) xmlConverter
+//								.unmarshal(new DomReader(dataNode)));
 
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicMetadata.class);
 				out = xmlConverter.createObjectOutputStream(
 						xmlWriter.getWriter(), "data");
-				out.writeObject(persistedInstance);
+//				out.writeObject(persistedInstance);
 				out.close();
 
 			} else // Sending error message
@@ -210,15 +210,15 @@ public class ClinicMetadataResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicMetadata.class);
-				deletedInstance = clinicMetadataBean
-						.delete((ClinicMetadata) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+//				deletedInstance = clinicMetadataBean
+//						.delete((ClinicMetadata) xmlConverter
+//								.unmarshal(new DomReader(dataNode)));
 
 				xmlWriter.dataElement("status", "0");
 				xmlWriter.startElement("data");
 				xmlWriter.startElement("record");
-				xmlWriter.dataElement("metadataId", new Integer(
-						deletedInstance.getMetaDataId()).toString());
+//				xmlWriter.dataElement("metadataId", new Integer(
+//						deletedInstance.getMetaDataId()).toString());
 				xmlWriter.endElement("record");
 				xmlWriter.endElement("data");
 

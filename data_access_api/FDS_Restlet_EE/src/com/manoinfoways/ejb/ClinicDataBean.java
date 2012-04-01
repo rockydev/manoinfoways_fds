@@ -1,12 +1,10 @@
 package com.manoinfoways.ejb;
 
-import static org.hibernate.criterion.Example.create;
-
 import java.util.Collection;
 import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,6 +12,8 @@ import org.hibernate.SessionFactory;
 
 import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.HibernateUtil;
+
+import static org.hibernate.criterion.Example.create;
 
 /**
  * Bean for handling clinicdata table operations
@@ -41,6 +41,8 @@ public class ClinicDataBean {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
+			session.persist(transientInstance.getClinicconnectiondetails());
+			session.persist(transientInstance.getClinicmetadata());
 			session.persist(transientInstance);
 			log.debug("persist successful");
 			session.getTransaction().commit();
@@ -121,6 +123,7 @@ public class ClinicDataBean {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
+				Hibernate.initialize(instance.getClinicconnectiondetails());
 			}
 			session.getTransaction().commit();
 			return instance;
@@ -168,11 +171,6 @@ public class ClinicDataBean {
 		delete(clinicData);
 	}
 	
-	/**
-	 * Method to return all the cliniAbbrs as a List of ClinicData objects 
-	 * containing only the clinicId and clinicAbbr
-	 * @return
-	 */
 	public Collection<ClinicData> getClinicAbbrs()
 	{
 		Session session = sessionFactory.getCurrentSession();

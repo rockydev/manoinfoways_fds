@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 30, 2012 7:20:31 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.ClinicConnectionDetails" table="clinicconnectiondetails" catalog="manoinfowaysdb">
         <id name="clinicConnectionId" type="java.lang.Integer">
             <column name="ClinicConnectionId" />
             <generator class="identity" />
         </id>
-        <many-to-one name="clinicdata" class="com.manoinfoways.model.ClinicData" fetch="select">
-            <column name="ClinicId" not-null="true" />
-        </many-to-one>
         <property name="clinicConnectionType" type="string">
             <column name="ClinicConnectionType" length="45" />
         </property>
@@ -30,7 +27,7 @@
             <column name="TypeOfSoftware" length="45" />
         </property>
         <property name="mailOrFtpforVoiceFiles" type="string">
-            <column name="MailOrFTPForVoiceFiles" length="45" />
+            <column name="MailOrFTPForVoiceFiles" length="15" />
         </property>
         <property name="recorderUsed" type="string">
             <column name="RecorderUsed" length="45" />
@@ -44,8 +41,14 @@
         <property name="transcriptsPath" type="string">
             <column name="TranscriptsPath" length="45" />
         </property>
-        <property name="folderDate" type="timestamp">
-            <column name="FolderDate" length="19" />
+        <property name="folderDate" type="date">
+            <column name="FolderDate" length="10" />
         </property>
+        <set name="clinicdatas" table="clinicdata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ClinicConnectionDetailsId" unique="true" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.ClinicData" />
+        </set>
     </class>
 </hibernate-mapping>
