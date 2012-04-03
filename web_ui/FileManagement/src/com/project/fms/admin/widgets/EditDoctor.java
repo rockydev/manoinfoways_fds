@@ -1,5 +1,6 @@
 package com.project.fms.admin.widgets;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -59,7 +60,7 @@ public class EditDoctor extends Canvas {
 				"doctorResourceId");
 		ListGridField doctorTagAndIPField = new ListGridField(
 				"doctorComputerTagsIp");
-
+		
 		SelectItem clinicAbbrSelect = new SelectItem("clinicAbbr",
 				"Select Clinic");
 		clinicAbbrSelect.setDisplayField("clinicAbbr");
