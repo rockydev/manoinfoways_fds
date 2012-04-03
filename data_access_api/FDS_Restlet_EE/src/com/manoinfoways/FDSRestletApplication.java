@@ -11,11 +11,13 @@ import org.restlet.data.MediaType;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 
+import com.manoinfoways.model.TranscriberTypeData;
 import com.manoinfoways.restlet.ClinicConnectionDetailsResource;
 import com.manoinfoways.restlet.ClinicDataResource;
 import com.manoinfoways.restlet.ClinicMetadataResource;
 import com.manoinfoways.restlet.ClinicRequirementsResource;
 import com.manoinfoways.restlet.DoctorDataResource;
+import com.manoinfoways.restlet.TranscriberTypeDataResource;
 
 /**
  * @author rockydev
@@ -73,6 +75,7 @@ public class FDSRestletApplication extends Application {
 		router.attach("/clinics/{clinicId}/doctors/allabbrs", allDoctorAbbrs);
 		router.attach("/clinics/{clinicId}/doctors", DoctorDataResource.class);
 		router.attach("/clinics", ClinicDataResource.class);
+		router.attach("/transcribers/types",TranscriberTypeDataResource.class);
 
 		return router;
 	}

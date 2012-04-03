@@ -2,13 +2,16 @@ package com.manoinfoways.ejb;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.util.Collection;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 
+import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.HibernateUtil;
 import com.manoinfoways.model.TranscriberTypeData;
 
@@ -77,7 +80,7 @@ public class TranscriberTypeDataBean {
 		}
 	}
 
-	public void delete(TranscriberTypeData persistentInstance) {
+	public TranscriberTypeData delete(TranscriberTypeData persistentInstance) {
 		log.debug("deleting TranscriberTypeData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -85,6 +88,7 @@ public class TranscriberTypeDataBean {
 			session.delete(persistentInstance);
 			log.debug("delete successful");
 			session.getTransaction().commit();
+			return persistentInstance;
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
@@ -151,9 +155,17 @@ public class TranscriberTypeDataBean {
 		merge(transcriberTypeData);
 	}
 
-	public void deleteClinicDataById(int transcriberTypeId) {
-		TranscriberTypeData transcriberTypeData = new TranscriberTypeData();
-		transcriberTypeData.setTranscriberTypeId(transcriberTypeId);
-		delete(transcriberTypeData);
+	public TranscriberTypeData deleteClinicDataById(int transcriberTypeId) {
+		return delete(findById(transcriberTypeId));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<TranscriberTypeData> getAllTranscriberTypes() {
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Collection<TranscriberTypeData> list = session.createCriteria(TranscriberTypeData.class)
+				.addOrder(Order.asc("transcriberTypeId")).list();
+		session.getTransaction().commit();
+		return list;
 	}
 }

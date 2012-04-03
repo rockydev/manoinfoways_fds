@@ -6,32 +6,13 @@ package com.manoinfoways.restlet;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.dom4j.Attribute;
-import org.dom4j.Branch;
-import org.dom4j.CDATA;
-import org.dom4j.Comment;
-import org.dom4j.Entity;
-import org.dom4j.InvalidXPathException;
-import org.dom4j.Namespace;
-import org.dom4j.ProcessingInstruction;
-import org.dom4j.QName;
-import org.dom4j.Text;
-import org.dom4j.Visitor;
-import org.dom4j.XPath;
-import org.dom4j.dom.DOMDocument;
-import org.dom4j.dom.DOMDocumentType;
-import org.dom4j.dom.DOMElement;
 import org.restlet.data.MediaType;
 import org.restlet.ext.xml.DomRepresentation;
-import org.restlet.ext.xml.NodeList;
 import org.restlet.ext.xml.XmlWriter;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
@@ -40,7 +21,6 @@ import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import com.manoinfoways.ejb.DoctorDataBean;
@@ -58,6 +38,8 @@ public class DoctorDataResource extends ServerResource {
 
 	private static DoctorDataBean doctorDataBean;
 	private static XStream xmlConverter;
+	
+	private XmlWriter globalWriter = null;
 
 	/**
 	 * 
@@ -123,12 +105,20 @@ public class DoctorDataResource extends ServerResource {
 		}
 
 		StringWriter xml = new StringWriter();
-		XmlWriter xmlWriter = new XmlWriter(xml);
-
 		ObjectOutputStream out;
+		XmlWriter xmlWriter = null;
+		
+		if (this.globalWriter == null)
+		{
+			xmlWriter = new XmlWriter(xml);
 
-		xmlWriter.startDocument();
-		xmlWriter.setDataFormat(true);
+			xmlWriter.startDocument();
+			xmlWriter.setDataFormat(true);
+		}
+		else
+		{
+			xmlWriter = this.globalWriter;
+		}
 
 		xmlWriter.startElement("response");
 
@@ -163,10 +153,18 @@ public class DoctorDataResource extends ServerResource {
 			xmlWriter.dataElement("status", "-1");
 			xmlWriter.dataElement("data", ex.getLocalizedMessage());
 		}
-		xmlWriter.endElement("response");
-		xmlWriter.endDocument();
 
-		return xml.toString();
+		xmlWriter.endElement("response");
+		
+		if (this.globalWriter == null)
+		{
+			xmlWriter.endDocument();
+			return xml.toString();
+		}
+		else
+		{
+			return "";
+		}
 	}
 
 	@Put("xml")
@@ -175,13 +173,22 @@ public class DoctorDataResource extends ServerResource {
 		if (rep.getNode("//transaction") != null) {
 			return handleMultipleRequests(rep);
 		}
+		
 		StringWriter xml = new StringWriter();
-		XmlWriter xmlWriter = new XmlWriter(xml);
-
 		ObjectOutputStream out;
+		XmlWriter xmlWriter = null;
+		
+		if (this.globalWriter == null)
+		{
+			xmlWriter = new XmlWriter(xml);
 
-		xmlWriter.startDocument();
-		xmlWriter.setDataFormat(true);
+			xmlWriter.startDocument();
+			xmlWriter.setDataFormat(true);
+		}
+		else
+		{
+			xmlWriter = this.globalWriter;
+		}
 
 		xmlWriter.startElement("response");
 
@@ -218,17 +225,35 @@ public class DoctorDataResource extends ServerResource {
 			xmlWriter.dataElement("data", ex.getMessage());
 			ex.printStackTrace();
 		}
+		
 		xmlWriter.endElement("response");
-		xmlWriter.endDocument();
-		return xml.toString();
+		
+		if (this.globalWriter == null)
+		{
+			xmlWriter.endDocument();
+			return xml.toString();
+		}
+		else
+		{
+			return "";
+		}
 
 	}
-
+	
 	private String handleMultipleRequests(DomRepresentation rep)
 			throws IOException, SAXException, ParserConfigurationException {
 
-		String returnXML = "";
-
+		StringWriter xml = new StringWriter();
+		XmlWriter xmlWriter = new XmlWriter(xml);
+		
+		//Setting the global writer, for generating queued responses
+		this.globalWriter = xmlWriter;
+		
+		xmlWriter.startDocument();
+		xmlWriter.setDataFormat(true);
+		
+		xmlWriter.startElement("responses");
+		
 		for (int index = 1; index <= rep.getNodes(
 				"//transaction/operations/request").getLength(); index++) {
 			System.out.println("Index: "
@@ -246,20 +271,27 @@ public class DoctorDataResource extends ServerResource {
 			doc.appendChild(doc.importNode(rep.getNode(baseXpath), true));
 			if (rep.getNode(baseXpath + "/operationType").getTextContent()
 					.equalsIgnoreCase("add")) {
-				returnXML += addDoctor(new DomRepresentation(
+				addDoctor(new DomRepresentation(
 						MediaType.TEXT_XML, doc));
 			} else if (rep.getNode(baseXpath + "/operationType")
 					.getTextContent().equalsIgnoreCase("update")) {
-				returnXML += updateDoctor(new DomRepresentation(
+				updateDoctor(new DomRepresentation(
 						MediaType.TEXT_XML, doc));
 			} else if (rep.getNode(baseXpath + "/operationType")
 					.getTextContent().equalsIgnoreCase("remove")) {
-				returnXML += deleteDoctor(new DomRepresentation(
+				deleteDoctor(new DomRepresentation(
 						MediaType.TEXT_XML, doc));
 			}
 		}
-
-		return returnXML;
+		
+		xmlWriter.endElement("responses");
+		xmlWriter.endDocument();
+		
+		//Setting the global writer back to null
+		this.globalWriter = null;
+		
+		return xml.toString();
+		
 	}
 
 	/**
@@ -302,13 +334,22 @@ public class DoctorDataResource extends ServerResource {
 	@Delete("xml")
 	public String deleteDoctor(DomRepresentation rep) throws IOException,
 			SAXException {
+		
 		StringWriter xml = new StringWriter();
-		XmlWriter xmlWriter = new XmlWriter(xml);
-		
 		ObjectOutputStream out;
+		XmlWriter xmlWriter = null;
 		
-		xmlWriter.startDocument();
-		xmlWriter.setDataFormat(true);
+		if (this.globalWriter == null)
+		{
+			xmlWriter = new XmlWriter(xml);
+
+			xmlWriter.startDocument();
+			xmlWriter.setDataFormat(true);
+		}
+		else
+		{
+			xmlWriter = this.globalWriter;
+		}
 
 		xmlWriter.startElement("response");
 
@@ -340,10 +381,19 @@ public class DoctorDataResource extends ServerResource {
 			xmlWriter.dataElement("data", ex.getLocalizedMessage());
 			ex.printStackTrace();
 		}
-		xmlWriter.endElement("response");
-		xmlWriter.endDocument();
 
-		return xml.toString();
+
+		xmlWriter.endElement("response");
+		
+		if (this.globalWriter == null)
+		{
+			xmlWriter.endDocument();
+			return xml.toString();
+		}
+		else
+		{
+			return "";
+		}
 	}
 
 	public String getDoctorAbbrs(String clinicId) {
