@@ -8,18 +8,20 @@ import com.project.fms.admin.widgets.data.ClinicMetadataData;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
+import com.smartgwt.client.types.SelectionType;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.ValuesManager;
 import com.smartgwt.client.widgets.form.fields.DateItem;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextAreaItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
-import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
+import com.smartgwt.client.widgets.toolbar.ToolStrip;
 
 public class AddClinicUI extends VLayout {
 
@@ -27,18 +29,41 @@ public class AddClinicUI extends VLayout {
 
 	private ClinicManagersDataForm clinicManagersWidget;
 
+	private ClinicDataForm clinicDataFormWidget;
+
+	private Tab clinicDataTab;
+
 	public AddClinicUI() {
 
 		setMargin(10);
 		setMembersMargin(10);
+
+		ToolStrip toolStrip = new ToolStrip();
+
+		IButton addButton = new IButton("Add");
+		IButton editButton = new IButton("Edit");
+
+		addButton.setActionType(SelectionType.RADIO);
+		editButton.setActionType(SelectionType.RADIO);
+
+		addButton.setRadioGroup("selectClinicOperation");
+		editButton.setRadioGroup("selectClinicOperation");
+
+		addButton.setShowRollOver(false);
+		editButton.setShowRollOver(false);
+		toolStrip.addMember(addButton);
+		toolStrip.addMember(editButton);
+
+		addMember(toolStrip);
+
 		final ValuesManager formValuesManager = new ValuesManager();
 
 		final TabSet clinicTabSet = new TabSet();
 		clinicTabSet.setWidth100();
 		clinicTabSet.setHeight("80%");
 
-		Tab clinicDataTab = new Tab("Clinic Data");
-		final ClinicDataForm clinicDataFormWidget = new ClinicDataForm();
+		clinicDataTab = new Tab("Clinic Data");
+		clinicDataFormWidget = new ClinicDataForm("add");
 		// clinicDataFormWidget.setValuesManager(formValuesManager);
 		clinicDataTab.setPane(clinicDataFormWidget);
 
@@ -96,10 +121,10 @@ public class AddClinicUI extends VLayout {
 						((TextItem) clinicConnectionFormWidget
 								.getItem("clinicConnectionType"))
 								.getValueAsString(),
-						((TextItem) clinicConnectionFormWidget
-								.getItem("userName")).getValueAsString(),
-						((TextItem) clinicConnectionFormWidget
-								.getItem("password")).getValueAsString(),
+						((TextItem) clinicConnectionFormWidget.getItem("userName"))
+								.getValueAsString(),
+						((TextItem) clinicConnectionFormWidget.getItem("password"))
+								.getValueAsString(),
 						((TextItem) clinicConnectionFormWidget
 								.getItem("systemLoginUserName"))
 								.getValueAsString(),
@@ -199,8 +224,6 @@ public class AddClinicUI extends VLayout {
 							public void execute(DSResponse response,
 									Object rawData, DSRequest request) {
 								if (response.getStatus() >= 0) {
-									// storeConnectionDetails(response.getData()[0]
-									// .getAttribute("clinicId"));
 									SC.say("Success");
 								} else {
 									SC.say("Error storing Clinic Data!");
@@ -211,68 +234,37 @@ public class AddClinicUI extends VLayout {
 			}
 		});
 		addMember(submitButton);
-	}
+		addButton.addClickHandler(new ClickHandler() {
 
-	// Submitting Clinic Connection Details
-	private void storeConnectionDetails(String clinicId) {
-		// Setting the ADD url as per the REST route
-		// "/fds/clinics/{clinicId}/conndetails"
-		clinicConnectionFormWidget.connDetailsDs.setAddDataURL("/fds/clinics/"
-				+ clinicId + "/conndetails");
+			@Override
+			public void onClick(ClickEvent event) {
+				clinicDataFormWidget.clearValues();
+				clinicConnectionFormWidget.clearValues();
+				clinicManagersWidget.clearValues();
+				clinicTabSet.removeTab(0);
+				clinicDataFormWidget = new ClinicDataForm("add");
+				clinicDataTab = new Tab("Clinic Data");
+				clinicDataTab.setPane(clinicDataFormWidget);
+				clinicTabSet.addTab(clinicDataTab, 0);
+				clinicTabSet.selectTab(0);
+			}
+		});
+		editButton.addClickHandler(new ClickHandler() {
 
-		clinicConnectionFormWidget
-				.setDataSource(clinicConnectionFormWidget.connDetailsDs);
+			@Override
+			public void onClick(ClickEvent event) {
+				clinicDataFormWidget.clearValues();
+				clinicConnectionFormWidget.clearValues();
+				clinicManagersWidget.clearValues();
 
-		clinicConnectionFormWidget.connDetailsDs
-				.addData(
-						new ClinicConnectionDetailsData(
-								((TextItem) clinicConnectionFormWidget
-										.getItem("clinicConnectionType"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("userName"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("password"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("systemLoginUserName"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("systemLoginPassword"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("typeOfSoftware"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("mailOrFtpforVoiceFiles"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("recorderUsed"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("typeOfVoiceFiles"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("voiceFilesPath"))
-										.getValueAsString(),
-								((TextItem) clinicConnectionFormWidget
-										.getItem("transcriptsPath"))
-										.getValueAsString(),
-								convertDateToString(((DateItem) clinicConnectionFormWidget
-										.getItem("folderDate"))
-										.getValueAsDate())), new DSCallback() {
-
-							@Override
-							public void execute(DSResponse response,
-									Object rawData, DSRequest request) {
-								if (response.getStatus() >= 0) {
-									SC.say("Success");
-								} else {
-									SC.say("Failure");
-								}
-							}
-						});
+				clinicTabSet.removeTab(0);
+				clinicDataFormWidget = new ClinicDataForm("edit");
+				clinicDataTab = new Tab("Clinic Data");
+				clinicDataTab.setPane(clinicDataFormWidget);
+				clinicTabSet.addTab(clinicDataTab, 0);
+				clinicTabSet.selectTab(0);
+			}
+		});
 	}
 
 	@SuppressWarnings("deprecation")
