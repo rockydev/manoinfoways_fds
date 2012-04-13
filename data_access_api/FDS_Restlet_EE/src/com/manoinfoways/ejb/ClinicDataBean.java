@@ -8,12 +8,16 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
+import com.manoinfoways.model.ClinicConnectionDetails;
 import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
@@ -128,6 +132,7 @@ public class ClinicDataBean {
 			} else {
 				log.debug("get successful, instance found");
 				Hibernate.initialize(instance.getClinicconnectiondetails());
+				Hibernate.initialize(instance.getClinicmetadata());
 			}
 			session.getTransaction().commit();
 			return instance;
@@ -173,7 +178,7 @@ public class ClinicDataBean {
 	public ClinicData deleteClinicDataById(int clinicId) {
 		return delete(findById(clinicId));
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public Collection<ClinicData> getClinicAbbrs() {
 		Session session = sessionFactory.getCurrentSession();
@@ -187,12 +192,19 @@ public class ClinicDataBean {
 		session.getTransaction().commit();
 		return clinicAbbrs;
 	}
-
-	public Set<DoctorData> getDoctors(int clinicId) {
+	
+	public ClinicConnectionDetails getClinicConnectionDetails(int clinicId)
+	{
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		Set<DoctorData> doctors = findById(clinicId).getDoctordatas();
-		Hibernate.initialize(doctors);
-		return doctors;
+		ClinicConnectionDetails connDetails = (ClinicConnectionDetails) session.createCriteria(ClinicData.class)
+				.add(Restrictions.eq("clinicdata.clinicId", clinicId))
+				.setFetchMode("clinicConnectionDetails", FetchMode.EAGER)
+				.createCriteria("clinicConnectionDetails")
+				.list().get(0);
+		session.getTransaction().commit();
+		return connDetails;
 	}
+	
+	
 }

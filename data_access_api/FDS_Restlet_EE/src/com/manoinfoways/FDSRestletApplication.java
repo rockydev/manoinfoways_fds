@@ -11,11 +11,7 @@ import org.restlet.data.MediaType;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 
-import com.manoinfoways.model.TranscriberTypeData;
-import com.manoinfoways.restlet.ClinicConnectionDetailsResource;
 import com.manoinfoways.restlet.ClinicDataResource;
-import com.manoinfoways.restlet.ClinicMetadataResource;
-import com.manoinfoways.restlet.ClinicRequirementsResource;
 import com.manoinfoways.restlet.DoctorDataResource;
 import com.manoinfoways.restlet.TranscriberTypeDataResource;
 
@@ -65,7 +61,24 @@ public class FDSRestletApplication extends Application {
 				response.setEntity(message, MediaType.APPLICATION_XML);
 			}
 		};
+		
+		/*
+		 * Restlet to handle "/clinics/{clinicId}" route which
+		 * return all the doctorAbbrs for the given clinicId within the db as a
+		 * list of DcotorData objects which contain only the doctorId and
+		 * doctorAbbr fields
+		 */
+		Restlet getClinicData = new Restlet(getContext()) {
 
+			@Override
+			public void handle(Request request, Response response) {
+				String message = new ClinicDataResource()
+						.getClinicData(new Integer((String) request.getAttributes().get(
+								"clinicId")));
+				response.setEntity(message, MediaType.APPLICATION_XML);
+			}
+		};
+		
 		router.attach("/clinics/allabbrs", allClinicAbbrs);
 		// router.attach("/clinics/{clinicId}/conndetails",ClinicConnectionDetailsResource.class);
 		// router.attach("/clinics/{clinicId}/metadata",
@@ -74,6 +87,7 @@ public class FDSRestletApplication extends Application {
 		// ClinicRequirementsResource.class);
 		router.attach("/clinics/{clinicId}/doctors/allabbrs", allDoctorAbbrs);
 		router.attach("/clinics/{clinicId}/doctors", DoctorDataResource.class);
+		router.attach("/clinics/{clinicId}",getClinicData);
 		router.attach("/clinics", ClinicDataResource.class);
 		router.attach("/transcribers/types",TranscriberTypeDataResource.class);
 

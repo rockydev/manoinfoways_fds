@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
@@ -29,6 +30,8 @@ public class ClinicConnectionDetails implements java.io.Serializable {
 	private String typeOfVoiceFiles;
 	private String voiceFilesPath;
 	private String transcriptsPath;
+	
+	@XStreamAlias("folderDate")
 	private Date folderDate;
 	
 	@XStreamOmitField

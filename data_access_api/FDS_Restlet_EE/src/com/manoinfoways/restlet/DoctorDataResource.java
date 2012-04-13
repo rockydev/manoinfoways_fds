@@ -40,6 +40,7 @@ public class DoctorDataResource extends ServerResource {
 	private static XStream xmlConverter;
 	
 	private XmlWriter globalWriter = null;
+	private String queueStatus = "0";
 
 	/**
 	 * 
@@ -209,6 +210,12 @@ public class DoctorDataResource extends ServerResource {
 
 				detachedInstance = doctorDataBean.update(doctor);
 				xmlWriter.dataElement("status", "0");
+				
+				if (this.globalWriter != null)
+				{
+					xmlWriter.dataElement("queueStatus", queueStatus);
+				}
+				
 				xmlConverter.alias("record", DoctorData.class);
 				out = xmlConverter.createObjectOutputStream(
 						xmlWriter.getWriter(), "data");
@@ -217,6 +224,13 @@ public class DoctorDataResource extends ServerResource {
 			} else // Sending error message
 			{
 				xmlWriter.dataElement("status", "-1");
+				
+				if (this.globalWriter != null)
+				{
+					queueStatus = "-1";
+					xmlWriter.dataElement("queueStatus", queueStatus);
+				}
+				
 				xmlWriter.dataElement("data",
 						"Unable to update the Clinic data! Please retry!");
 			}
