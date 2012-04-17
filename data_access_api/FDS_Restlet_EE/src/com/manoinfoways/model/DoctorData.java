@@ -28,6 +28,10 @@ public class DoctorData implements java.io.Serializable {
 	private String doctorComputerTagsIp;
 	
 	@XStreamOmitField
+	private Set<TranscriberDoctorPriority> transcriberDoctorPriorities = new HashSet<TranscriberDoctorPriority>(
+			0);
+	
+	@XStreamOmitField
 	private Set<VoiceFilesAssignmentData> voiceFilesAssignmentDatas = new HashSet<VoiceFilesAssignmentData>(
 			0);
 	
@@ -137,6 +141,15 @@ public class DoctorData implements java.io.Serializable {
 
 	public void setDoctorComputerTagsIp(String doctorComputerTagsIp) {
 		this.doctorComputerTagsIp = doctorComputerTagsIp;
+	}
+	
+	public Set<TranscriberDoctorPriority> getTranscriberdoctorpriorities() {
+		return this.transcriberDoctorPriorities;
+	}
+
+	public void setTranscriberdoctorpriorities(
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities) {
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
 	}
 
 	public Set<VoiceFilesAssignmentData> getVoicefilesassignmentdatas() {

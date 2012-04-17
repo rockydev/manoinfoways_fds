@@ -38,6 +38,8 @@ public class TranscriberData implements java.io.Serializable {
 			0);
 	private Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForProoferId = new HashSet<VoiceFilesAssignmentData>(
 			0);
+	private Set<TranscriberDoctorPriority> transcriberDoctorPriorities = new HashSet<TranscriberDoctorPriority>(
+			0);
 	private Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForQaid = new HashSet<VoiceFilesAssignmentData>(
 			0);
 
@@ -63,6 +65,7 @@ public class TranscriberData implements java.io.Serializable {
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForEditorId,
 			Set<FileTransactionData> fileTransactionDatas,
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForProoferId,
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities,
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForQaid) {
 		this.transcriberTypeData = transcriberTypeData;
 		this.userName = userName;
@@ -82,6 +85,7 @@ public class TranscriberData implements java.io.Serializable {
 		this.voicefilesassignmentdatasForEditorId = voicefilesassignmentdatasForEditorId;
 		this.fileTransactionDatas = fileTransactionDatas;
 		this.voicefilesassignmentdatasForProoferId = voicefilesassignmentdatasForProoferId;
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
 		this.voicefilesassignmentdatasForQaid = voicefilesassignmentdatasForQaid;
 	}
 
@@ -102,7 +106,7 @@ public class TranscriberData implements java.io.Serializable {
 	}
 
 	public String getUserName() {
-		return userName;
+		return this.userName;
 	}
 
 	public void setUserName(String userName) {
@@ -241,7 +245,16 @@ public class TranscriberData implements java.io.Serializable {
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForProoferId) {
 		this.voicefilesassignmentdatasForProoferId = voicefilesassignmentdatasForProoferId;
 	}
+	
+	public Set<TranscriberDoctorPriority> getTranscriberdoctorpriorities() {
+		return this.transcriberDoctorPriorities;
+	}
 
+	public void setTranscriberdoctorpriorities(
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities) {
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
+	}
+	
 	public Set<VoiceFilesAssignmentData> getVoicefilesassignmentdatasForQaid() {
 		return this.voicefilesassignmentdatasForQaid;
 	}

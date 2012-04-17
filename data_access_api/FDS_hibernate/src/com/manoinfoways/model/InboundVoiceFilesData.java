@@ -1,6 +1,6 @@
 package com.manoinfoways.model;
 
-// Generated Mar 30, 2012 7:20:30 PM by Hibernate Tools 3.4.0.CR1
+// Generated Apr 13, 2012 2:07:43 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.Date;

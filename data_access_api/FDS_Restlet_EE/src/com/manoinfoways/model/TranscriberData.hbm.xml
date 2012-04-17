@@ -12,7 +12,7 @@
             <column name="TranscriberTypeId" />
         </many-to-one>
         <property name="userName" type="string">
-            <column name="UserName" length="45" />
+            <column name="UserName" length="45" unique="true" />
         </property>
         <property name="password" type="string">
             <column name="Password" length="45" />
@@ -73,6 +73,12 @@
                 <column name="ProoferId" />
             </key>
             <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
+        </set>
+        <set name="transcriberdoctorpriorities" table="transcriberdoctorpriority" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TranscriberId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.TranscriberDoctorPriority" />
         </set>
         <set name="voicefilesassignmentdatasForQaid" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
             <key>

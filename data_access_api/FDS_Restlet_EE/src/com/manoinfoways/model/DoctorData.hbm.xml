@@ -26,6 +26,12 @@
         <property name="doctorComputerTagsIp" type="string">
             <column name="DoctorComputerTagsIP" length="45" />
         </property>
+        <set name="transcriberdoctorpriorities" table="transcriberdoctorpriority" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DoctorId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.TranscriberDoctorPriority" />
+        </set>
         <set name="voicefilesassignmentdatas" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="DoctorId" />

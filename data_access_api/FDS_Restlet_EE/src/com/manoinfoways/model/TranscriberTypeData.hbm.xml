@@ -23,5 +23,11 @@
             </key>
             <one-to-many class="com.manoinfoways.model.TranscriberData" />
         </set>
+         <set name="transcriberdoctorpriorities" table="transcriberdoctorpriority" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TranscriberTypeId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.TranscriberDoctorPriority" />
+        </set>
     </class>
 </hibernate-mapping>

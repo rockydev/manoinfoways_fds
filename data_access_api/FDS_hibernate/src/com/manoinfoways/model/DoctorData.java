@@ -1,6 +1,6 @@
 package com.manoinfoways.model;
 
-// Generated Mar 30, 2012 7:20:30 PM by Hibernate Tools 3.4.0.CR1
+// Generated Apr 13, 2012 2:07:43 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +13,7 @@ public class DoctorData implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3366007130093128534L;
+	private static final long serialVersionUID = -8889589954061182966L;
 	private Integer doctorId;
 	private ClinicData clinicData;
 	private String doctorAbbr;
@@ -21,6 +21,8 @@ public class DoctorData implements java.io.Serializable {
 	private String doctorTollFreeId;
 	private String doctorResourceId;
 	private String doctorComputerTagsIp;
+	private Set<TranscriberDoctorPriority> transcriberDoctorPriorities = new HashSet<TranscriberDoctorPriority>(
+			0);
 	private Set<VoiceFilesAssignmentData> voiceFilesAssignmentDatas = new HashSet<VoiceFilesAssignmentData>(
 			0);
 	private Set<InboundVoiceFilesData> inboundVoiceFilesDatas = new HashSet<InboundVoiceFilesData>(
@@ -36,6 +38,7 @@ public class DoctorData implements java.io.Serializable {
 	public DoctorData(ClinicData clinicData, String doctorAbbr,
 			String doctorName, String doctorTollFreeId,
 			String doctorResourceId, String doctorComputerTagsIp,
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities,
 			Set<VoiceFilesAssignmentData> voiceFilesAssignmentDatas,
 			Set<InboundVoiceFilesData> inboundVoiceFilesDatas) {
 		this.clinicData = clinicData;
@@ -44,6 +47,7 @@ public class DoctorData implements java.io.Serializable {
 		this.doctorTollFreeId = doctorTollFreeId;
 		this.doctorResourceId = doctorResourceId;
 		this.doctorComputerTagsIp = doctorComputerTagsIp;
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
 		this.voiceFilesAssignmentDatas = voiceFilesAssignmentDatas;
 		this.inboundVoiceFilesDatas = inboundVoiceFilesDatas;
 	}
@@ -102,6 +106,15 @@ public class DoctorData implements java.io.Serializable {
 
 	public void setDoctorComputerTagsIp(String doctorComputerTagsIp) {
 		this.doctorComputerTagsIp = doctorComputerTagsIp;
+	}
+
+	public Set<TranscriberDoctorPriority> getTranscriberdoctorpriorities() {
+		return this.transcriberDoctorPriorities;
+	}
+
+	public void setTranscriberdoctorpriorities(
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities) {
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
 	}
 
 	public Set<VoiceFilesAssignmentData> getVoicefilesassignmentdatas() {

@@ -7,6 +7,7 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.manoinfoways.model.VoiceFilesAssignmentData;
@@ -58,6 +59,7 @@ public class VoiceFilesAssignmentDataBean {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void attachClean(VoiceFilesAssignmentData instance) {
 		log.debug("attaching clean VoiceFilesAssignmentData instance");
 		try {
@@ -113,21 +115,26 @@ public class VoiceFilesAssignmentDataBean {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<VoiceFilesAssignmentData> findByExample(
 			VoiceFilesAssignmentData instance) {
 		log.debug("finding VoiceFilesAssignmentData instance by example");
+		Session session = sessionFactory.getCurrentSession();
 		try {
-			List<VoiceFilesAssignmentData> results = (List<VoiceFilesAssignmentData>) sessionFactory
-					.getCurrentSession()
+			session.beginTransaction();
+			List<VoiceFilesAssignmentData> results = (List<VoiceFilesAssignmentData>) session
 					.createCriteria(
 							"com.manoinfoways.model.VoiceFilesAssignmentData")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
+			session.getTransaction().commit();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			session.getTransaction().rollback();
 			throw re;
 		}
 	}
+	
 }

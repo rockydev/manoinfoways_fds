@@ -15,7 +15,8 @@
         <mapping resource="com/manoinfoways/model/ClinicData.hbm.xml" />
         <mapping resource="com/manoinfoways/model/TranscriberData.hbm.xml" />
         <mapping resource="com/manoinfoways/model/FileTransactionData.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/InbounVoiceFilesData.hbm.xml" />
+        <mapping resource="com/manoinfoways/model/InboundVoiceFilesData.hbm.xml" />
+        <mapping resource="com/manoinfoways/model/TranscriberDoctorPriority.hbm.xml" />
         <mapping resource="com/manoinfoways/model/DoctorData.hbm.xml" />
         <mapping resource="com/manoinfoways/model/VoiceFilesAssignmentData.hbm.xml" />
         <mapping resource="com/manoinfoways/model/TranscriberTypeData.hbm.xml" />

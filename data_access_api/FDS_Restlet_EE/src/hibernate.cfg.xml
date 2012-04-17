@@ -21,5 +21,6 @@
   <mapping resource="com/manoinfoways/model/ClinicRequirements.hbm.xml" />
   <mapping resource="com/manoinfoways/model/ClinicConnectionDetails.hbm.xml" />
   <mapping resource="com/manoinfoways/model/ClinicMetadata.hbm.xml" />
+  <mapping resource="com/manoinfoways/model/TranscriberDoctorPriority.hbm.xml" />
  </session-factory>
 </hibernate-configuration>

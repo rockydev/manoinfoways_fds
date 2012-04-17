@@ -1,6 +1,6 @@
 package com.manoinfoways.model;
 
-// Generated Mar 30, 2012 7:20:30 PM by Hibernate Tools 3.4.0.CR1
+// Generated Apr 13, 2012 2:07:43 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -14,9 +14,10 @@ public class TranscriberData implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7978038622762435809L;
+	private static final long serialVersionUID = -1252461692157324890L;
 	private Integer transcriberId;
 	private TranscriberTypeData transcriberTypeData;
+	private String userName;
 	private String password;
 	private String transcriberName;
 	private Date dateofJoining;
@@ -37,6 +38,8 @@ public class TranscriberData implements java.io.Serializable {
 			0);
 	private Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForProoferId = new HashSet<VoiceFilesAssignmentData>(
 			0);
+	private Set<TranscriberDoctorPriority> transcriberDoctorPriorities = new HashSet<TranscriberDoctorPriority>(
+			0);
 	private Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForQaid = new HashSet<VoiceFilesAssignmentData>(
 			0);
 
@@ -45,6 +48,7 @@ public class TranscriberData implements java.io.Serializable {
 
 	public TranscriberData(
 			TranscriberTypeData transcriberTypeData,
+			String userName,
 			String password,
 			String transcriberName,
 			Date dateofJoining,
@@ -61,8 +65,10 @@ public class TranscriberData implements java.io.Serializable {
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForEditorId,
 			Set<FileTransactionData> fileTransactionDatas,
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForProoferId,
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities,
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForQaid) {
 		this.transcriberTypeData = transcriberTypeData;
+		this.userName = userName;
 		this.password = password;
 		this.transcriberName = transcriberName;
 		this.dateofJoining = dateofJoining;
@@ -79,6 +85,7 @@ public class TranscriberData implements java.io.Serializable {
 		this.voicefilesassignmentdatasForEditorId = voicefilesassignmentdatasForEditorId;
 		this.fileTransactionDatas = fileTransactionDatas;
 		this.voicefilesassignmentdatasForProoferId = voicefilesassignmentdatasForProoferId;
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
 		this.voicefilesassignmentdatasForQaid = voicefilesassignmentdatasForQaid;
 	}
 
@@ -96,6 +103,14 @@ public class TranscriberData implements java.io.Serializable {
 
 	public void setTranscribertypedata(TranscriberTypeData transcriberTypeData) {
 		this.transcriberTypeData = transcriberTypeData;
+	}
+
+	public String getUserName() {
+		return this.userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getPassword() {
@@ -229,6 +244,15 @@ public class TranscriberData implements java.io.Serializable {
 	public void setVoicefilesassignmentdatasForProoferId(
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForProoferId) {
 		this.voicefilesassignmentdatasForProoferId = voicefilesassignmentdatasForProoferId;
+	}
+
+	public Set<TranscriberDoctorPriority> getTranscriberdoctorpriorities() {
+		return this.transcriberDoctorPriorities;
+	}
+
+	public void setTranscriberdoctorpriorities(
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities) {
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
 	}
 
 	public Set<VoiceFilesAssignmentData> getVoicefilesassignmentdatasForQaid() {

@@ -26,6 +26,10 @@ public class TranscriberTypeData implements java.io.Serializable {
 	@XStreamOmitField
 	private Set<TranscriberData> transcriberDatas = new HashSet<TranscriberData>(
 			0);
+	
+	@XStreamOmitField
+	private Set<TranscriberDoctorPriority> transcriberDoctorPriorities = new HashSet<TranscriberDoctorPriority>(
+			0);
 
 	public TranscriberTypeData() {
 	}
@@ -37,11 +41,13 @@ public class TranscriberTypeData implements java.io.Serializable {
 	public TranscriberTypeData(int transcriberTypeId,
 			String transcriberTypeName,
 			Set<FileTransactionData> fileTransactionDatas,
-			Set<TranscriberData> transcriberDatas) {
+			Set<TranscriberData> transcriberDatas,
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities) {
 		this.transcriberTypeId = transcriberTypeId;
 		this.transcriberTypeName = transcriberTypeName;
 		this.fileTransactionDatas = fileTransactionDatas;
 		this.transcriberDatas = transcriberDatas;
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
 	}
 
 	public int getTranscriberTypeId() {
@@ -76,5 +82,13 @@ public class TranscriberTypeData implements java.io.Serializable {
 	public void setTranscriberdatas(Set<TranscriberData> transcriberDatas) {
 		this.transcriberDatas = transcriberDatas;
 	}
-
+	
+	public Set<TranscriberDoctorPriority> getTranscriberdoctorpriorities() {
+		return this.transcriberDoctorPriorities;
+	}
+	
+	public void setTranscriberdoctorpriorities(
+			Set<TranscriberDoctorPriority> transcriberDoctorPriorities) {
+		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
+	}
 }
