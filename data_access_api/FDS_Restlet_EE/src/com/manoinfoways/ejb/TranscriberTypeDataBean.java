@@ -4,6 +4,7 @@ import static org.hibernate.criterion.Example.create;
 
 import java.util.Collection;
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
@@ -11,7 +12,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 
-import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.HibernateUtil;
 import com.manoinfoways.model.TranscriberTypeData;
 

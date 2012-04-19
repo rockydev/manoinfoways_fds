@@ -6,7 +6,6 @@ package com.manoinfoways.restlet;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.StringWriter;
-import java.util.List;
 
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.ext.xml.XmlWriter;

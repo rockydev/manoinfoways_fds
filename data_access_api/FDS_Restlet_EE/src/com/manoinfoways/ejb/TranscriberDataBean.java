@@ -34,7 +34,7 @@ public class TranscriberDataBean {
 		}
 	}
 
-	public void persist(TranscriberData transientInstance) {
+	public TranscriberData persist(TranscriberData transientInstance) {
 		log.debug("persisting TranscriberData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -42,6 +42,7 @@ public class TranscriberDataBean {
 			session.persist(transientInstance);
 			log.debug("persist successful");
 			session.getTransaction().commit();
+			return transientInstance;
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
 			throw re;
@@ -77,7 +78,7 @@ public class TranscriberDataBean {
 		}
 	}
 
-	public void delete(TranscriberData persistentInstance) {
+	public TranscriberData delete(TranscriberData persistentInstance) {
 		log.debug("deleting TranscriberData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -85,6 +86,7 @@ public class TranscriberDataBean {
 			session.delete(persistentInstance);
 			log.debug("delete successful");
 			session.getTransaction().commit();
+			return persistentInstance;
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
@@ -146,13 +148,46 @@ public class TranscriberDataBean {
 		}
 	}
 
-	public void update(TranscriberData transcriberData) {
-		merge(transcriberData);
+	public TranscriberData update(TranscriberData transcriberData) {
+		log.debug("Updating DoctorData instance");
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			session.saveOrUpdate(transcriberData);
+			log.debug("Update successful");
+			session.getTransaction().commit();
+			return transcriberData;
+		} catch (RuntimeException re) {
+			log.error("merge failed", re);
+			session.getTransaction().rollback();
+			throw re;
+		}
 	}
 
-	public void deleteClinicDataById(int transcriberId) {
-		TranscriberData transcriberData = new TranscriberData();
-		transcriberData.setTranscriberId(transcriberId);
-		delete(transcriberData);
+	public TranscriberData deleteTranscriberDataById(int transcriberId) {
+		return delete(findById(transcriberId));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TranscriberData> getAllTranscribers()
+	{
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			session.beginTransaction();
+			List<TranscriberData> results = (List<TranscriberData>) session
+					.createCriteria(TranscriberData.class)
+					.list();
+			
+//			for (TranscriberData transcriber : results)
+//			{
+//				Hibernate.initialize(transcriber.getTranscribertypedata());
+//			}
+			
+			session.getTransaction().commit();
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}
 	}
 }

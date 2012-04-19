@@ -4,11 +4,9 @@ import static org.hibernate.criterion.Example.create;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
@@ -19,7 +17,6 @@ import org.hibernate.criterion.Restrictions;
 
 import com.manoinfoways.model.ClinicConnectionDetails;
 import com.manoinfoways.model.ClinicData;
-import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
 
 /**
@@ -60,14 +57,17 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void attachDirty(ClinicData instance) {
+	public ClinicData attachDirty(ClinicData instance) {
 		log.debug("attaching dirty ClinicData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
+			session.saveOrUpdate(instance.getClinicconnectiondetails());
+			session.saveOrUpdate(instance.getClinicmetadata());
 			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 			session.getTransaction().commit();
+			return instance;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
@@ -193,6 +193,7 @@ public class ClinicDataBean {
 		return clinicAbbrs;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public ClinicConnectionDetails getClinicConnectionDetails(int clinicId)
 	{
 		Session session = sessionFactory.getCurrentSession();

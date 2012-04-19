@@ -13,6 +13,7 @@ import org.restlet.routing.Template;
 
 import com.manoinfoways.restlet.ClinicDataResource;
 import com.manoinfoways.restlet.DoctorDataResource;
+import com.manoinfoways.restlet.TranscriberDataResource;
 import com.manoinfoways.restlet.TranscriberTypeDataResource;
 
 /**
@@ -90,6 +91,7 @@ public class FDSRestletApplication extends Application {
 		router.attach("/clinics/{clinicId}",getClinicData);
 		router.attach("/clinics", ClinicDataResource.class);
 		router.attach("/transcribers/types",TranscriberTypeDataResource.class);
+		router.attach("/transcribers",TranscriberDataResource.class);
 
 		return router;
 	}

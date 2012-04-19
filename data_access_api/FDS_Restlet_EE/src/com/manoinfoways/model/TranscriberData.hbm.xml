@@ -8,9 +8,12 @@
             <column name="TranscriberId" />
             <generator class="identity" />
         </id>
-        <many-to-one name="transcribertypedata" class="com.manoinfoways.model.TranscriberTypeData" fetch="select">
+        <!--<many-to-one name="transcribertypedata" class="com.manoinfoways.model.TranscriberTypeData" fetch="select">
             <column name="TranscriberTypeId" />
-        </many-to-one>
+        </many-to-one>-->
+         <property name="transcriberTypeId" type="java.lang.Integer">
+            <column name="TranscriberTypeId" />
+        </property>
         <property name="userName" type="string">
             <column name="UserName" length="45" unique="true" />
         </property>
@@ -29,8 +32,8 @@
         <property name="transcriberPermanentAddress" type="string">
             <column name="TranscriberPermanentAddress" />
         </property>
-        <property name="transcriberPhnNuber" type="string">
-            <column name="TranscriberPhnNuber" length="45" />
+        <property name="transcriberPhoneNumber" type="string">
+            <column name="TranscriberPhoneNumber" length="45" />
         </property>
         <property name="transcriberMobile" type="string">
             <column name="TranscriberMobile" length="45" />

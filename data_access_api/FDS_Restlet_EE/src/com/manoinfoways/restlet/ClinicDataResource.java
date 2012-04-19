@@ -184,7 +184,7 @@ public class ClinicDataResource extends ServerResource {
 				// Ensuring that the clinicAbbr is always upper case
 				clinic.setClinicAbbr(clinic.getClinicAbbr().toUpperCase());
 
-				detachedInstance = clinicDataBean.persist(clinic);
+				detachedInstance = clinicDataBean.attachDirty(clinic);
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicData.class);
 				out = xmlConverter.createObjectOutputStream(
