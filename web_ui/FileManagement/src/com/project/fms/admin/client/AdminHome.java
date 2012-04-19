@@ -1,5 +1,6 @@
 package com.project.fms.admin.client;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.project.fms.admin.widgets.AdminUI;
 import com.project.fms.admin.widgets.LoginForm;
@@ -13,6 +14,9 @@ public class AdminHome implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
+		
+		Log.setUncaughtExceptionHandler();
+		
 		final VLayout vLayoutDefaultLayoutAlign = new VLayout();  
         vLayoutDefaultLayoutAlign.setWidth("100%");  
         vLayoutDefaultLayoutAlign.setHeight100();  

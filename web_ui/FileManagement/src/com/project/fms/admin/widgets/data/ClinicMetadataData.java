@@ -12,39 +12,6 @@ import com.smartgwt.client.data.Record;
 public class ClinicMetadataData extends Record {
 	public ClinicMetadataData() {
 	}
-	
-	
-//	public ClinicMetadataData(ClinicData clinicData,
-//			String transcriptionsInchargeName,
-//			String transcriptionsInchargeEmail,
-//			String transcriptionInchargePhnNo,
-//			String trancriptionInchargeFaxNo,
-//			String transcriptionInchargeAddress, String technicalPersonName,
-//			String technicalPersonEmail, String technicalPersonPhnNo,
-//			String technicalPersonFaxNo, String technicalPersonAddress,
-//			String softwarePersonName, String softwarePersonEmail,
-//			String softwarePersonPhnNo, String softwarePersonCellNo,
-//			String softwarePersonAddress, String emailForPatientList,
-//			String emailForInvoices) {
-//		setClinicdata(clinicData);
-//		setTranscriptionsInchargeName(transcriptionsInchargeName);
-//		setTranscriptionsInchargeEmail(transcriptionsInchargeEmail);
-//		setTranscriptionInchargePhnNo(transcriptionInchargePhnNo);
-//		setTrancriptionInchargeFaxNo(trancriptionInchargeFaxNo);
-//		setTranscriptionInchargeAddress(transcriptionInchargeAddress);
-//		setTechnicalPersonName(technicalPersonName);
-//		setTechnicalPersonEmail(technicalPersonEmail);
-//		setTechnicalPersonPhnNo(technicalPersonPhnNo);
-//		setTechnicalPersonFaxNo(technicalPersonFaxNo);
-//		setTechnicalPersonAddress(technicalPersonAddress);
-//		setSoftwarePersonName(softwarePersonName);
-//		setSoftwarePersonEmail(softwarePersonEmail);
-//		setSoftwarePersonPhnNo(softwarePersonPhnNo);
-//		setSoftwarePersonCellNo(softwarePersonCellNo);
-//		setSoftwarePersonAddress(softwarePersonAddress);
-//		setEmailForPatientList(emailForPatientList);
-//		setEmailForInvoices(emailForInvoices);
-//	}
 
 	public ClinicMetadataData(
 			String transcriptionsInchargeName,
@@ -81,7 +48,7 @@ public class ClinicMetadataData extends Record {
 		return getAttributeAsString("metaDataId");
 	}
 
-	public void setMetaDataId(Integer metaDataId) {
+	public void setMetaDataId(String metaDataId) {
 		setAttribute("metaDataId",metaDataId);
 	}
 

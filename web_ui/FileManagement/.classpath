@@ -5,5 +5,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/smartgwt-skins.jar"/>
 	<classpathentry kind="lib" path="lib/smartgwt.jar"/>
+	<classpathentry kind="lib" path="lib/gwt-log-3.1.8.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/rdevinen/Documents/Software/lib/gwt-log/gwt-log-3.1.8-javadoc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

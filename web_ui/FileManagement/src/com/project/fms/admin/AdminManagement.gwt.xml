@@ -2,10 +2,26 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.4.0/distro-source/core/src/gwt-module.dtd">
 <module>
 	<inherits name="com.google.gwt.user.User" />
-	<inherits name="com.smartgwt.SmartGwt"/>
+	<inherits name="com.smartgwt.SmartGwt" />
+	<inherits name="com.smartgwt.tools.SmartGwtTools" />
+
+	<!-- For production, most teams prefer to set the default log level to `OFF` -->
+	<!-- inherits name="com.allen_sauer.gwt.log.gwt-log-OFF" / -->
+
+	<!-- For development, a default of `DEBUG` is recommended -->
+	<inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
+
+	<set-property name="log_ConsoleLogger" value="ENABLED" />
+
+	<!-- You'll probably want to disable the default `DivLogger` as well: -->
+	<set-property name="log_DivLogger" value="DISABLED" />
+
 	<source path="client" />
 	<source path="commons" />
 	<source path="widgets" />
 	<source path="properties" />
 	<entry-point class="com.project.fms.admin.client.AdminHome" />
+	
+	<!-- User Agent (currently set to compile only for chrome, remove when deploying to prod)-->
+    <set-property name="user.agent" value="safari"></set-property>
 </module>

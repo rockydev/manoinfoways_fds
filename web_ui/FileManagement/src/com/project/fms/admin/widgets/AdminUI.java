@@ -1,8 +1,12 @@
 package com.project.fms.admin.widgets;
 
+import com.allen_sauer.gwt.log.client.DivLogger;
+import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Side;
 import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.widgets.WidgetCanvas;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
@@ -41,9 +45,9 @@ public class AdminUI extends Canvas {
 		tTab5.setPane(editClinicObj);
 		
 		Tab tTab6 = new Tab("Transcriber Information Screen");
-		TranscriberInformationUI transcriberInformationWidget = new TranscriberInformationUI();
+//		TranscriberInformationUI transcriberInformationWidget = new TranscriberInformationUI();
+		TranscriberInformationWidget transcriberInformationWidget = new TranscriberInformationWidget();
 		tTab6.setPane(transcriberInformationWidget);
-		
 		
 		tabSet.addTab(tTab0);
 //		tabSet.addTab(tTab1);
@@ -59,7 +63,10 @@ public class AdminUI extends Canvas {
 		vLayout.setDefaultLayoutAlign(Alignment.CENTER);
 		vLayout.setMembersMargin(15);
 		vLayout.addMember(tabSet);
+		
 		addChild(vLayout);
+		
+		
 	}
 
 }

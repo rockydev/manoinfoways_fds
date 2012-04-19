@@ -2,7 +2,6 @@ package com.project.fms.admin.widgets.data;
 
 import com.smartgwt.client.data.Record;
   
-@SuppressWarnings("unused")
 public class ClinicData extends Record {  
   
     public ClinicData() {  
@@ -26,21 +25,21 @@ public class ClinicData extends Record {
 		setClinicId(clinicId);
 	}
     
-	private void setClinicConnectionDetailsData(
+	public void setClinicConnectionDetailsData(
 			ClinicConnectionDetailsData connDetails) {
     	setAttribute("clinicConnectionDetails",connDetails);
 	}
 	
-	private ClinicConnectionDetailsData getClinicConnectionDetailsData()
+	public ClinicConnectionDetailsData getClinicConnectionDetailsData()
 	{
 		return (ClinicConnectionDetailsData) getAttributeAsObject("clinicConnectionDetails");
 	}
 	
-	private void setClinicMetadataData(ClinicMetadataData metadata) {
+	public void setClinicMetadataData(ClinicMetadataData metadata) {
 		setAttribute("clinicMetadata", metadata);
 	}
 	
-	private ClinicMetadataData getClinicMetadataData()
+	public ClinicMetadataData getClinicMetadataData()
 	{
 		return (ClinicMetadataData) getAttributeAsObject("clinicMetadata");
 	}

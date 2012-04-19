@@ -13,6 +13,8 @@ public class SessionData {
 	
 	private int status;
 	
+	private String clinicUIState;
+	
 	public SessionData()
 	{
 		
@@ -40,6 +42,20 @@ public class SessionData {
 	 */
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	/**
+	 * @return the clinicUIState
+	 */
+	public String getClinicUIState() {
+		return clinicUIState;
+	}
+
+	/**
+	 * @param clinicUIState the clinicUIState to set
+	 */
+	public void setClinicUIState(String clinicUIState) {
+		this.clinicUIState = clinicUIState;
 	}
 	
 	

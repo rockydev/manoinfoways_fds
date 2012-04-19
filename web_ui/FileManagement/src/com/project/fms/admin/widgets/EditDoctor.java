@@ -1,10 +1,5 @@
 package com.project.fms.admin.widgets;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.project.fms.admin.widgets.data.DoctorData;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.OperationBinding;
@@ -14,7 +9,6 @@ import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.types.DSProtocol;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
@@ -26,10 +20,6 @@ import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.events.EditCompleteEvent;
-import com.smartgwt.client.widgets.grid.events.EditCompleteHandler;
-import com.smartgwt.client.widgets.grid.events.EditFailedEvent;
-import com.smartgwt.client.widgets.grid.events.EditFailedHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -51,7 +41,7 @@ public class EditDoctor extends Canvas {
 		clinicDataDs.setFetchDataURL("/fds/clinics/allabbrs");
 
 		doctorGrid = new ListGrid();
-		
+
 		ListGridField docAbbrField = new ListGridField("doctorAbbr");
 		ListGridField docNameField = new ListGridField("doctorName");
 		ListGridField doctorTollFreeIdField = new ListGridField(
@@ -60,7 +50,7 @@ public class EditDoctor extends Canvas {
 				"doctorResourceId");
 		ListGridField doctorTagAndIPField = new ListGridField(
 				"doctorComputerTagsIp");
-		
+
 		SelectItem clinicAbbrSelect = new SelectItem("clinicAbbr",
 				"Select Clinic");
 		clinicAbbrSelect.setDisplayField("clinicAbbr");
@@ -81,7 +71,7 @@ public class EditDoctor extends Canvas {
 
 		doctorGrid.setWidth100();
 		doctorGrid.setHeight100();
-		
+
 		doctorGrid.setShowFilterEditor(true);
 		doctorGrid.setFilterOnKeypress(true);
 		doctorGrid.setCanRemoveRecords(true);
@@ -89,37 +79,38 @@ public class EditDoctor extends Canvas {
 
 		doctorGrid.setFields(docAbbrField, docNameField, doctorTollFreeIdField,
 				doctorResourceIdField, doctorTagAndIPField);
-			
-//		doctorGrid.addEditCompleteHandler(new EditCompleteHandler() {
-//			
-//			@Override
-//			public void onEditComplete(EditCompleteEvent event) {
-//				SC.say("All changes added to the db!");
-//				doctorGrid.fetchData();
-//			}
-//		});
-//		
-//		doctorGrid.addEditFailedHandler(new EditFailedHandler() {
-//			
-//			@SuppressWarnings("rawtypes")
-//			@Override
-//			public void onEditFailed(EditFailedEvent event) {
-//			 System.out.println("in edit failed!");
-//			 String errorMsg = "Failed to persist the change into db!\n";
-//			 errorMsg += "Reason:";
-//			 Iterator setIter = ((Map)event.getDsResponse().getErrors()).entrySet().iterator();
-//			 while (setIter.hasNext())
-//			 {
-//				 errorMsg += ((Entry) setIter.next()).getKey().toString() + "::" 
-//						 	+ ((Entry) setIter.next()).getValue().toString() + "\n";
-//			 }
-//			 errorMsg += "Discarding changes made to that row!";
-//			 doctorGrid.discardEdits(event.getRowNum(), event.getColNum(), true);
-//			 SC.say(errorMsg);
-//			 
-//			}
-//		});
-		
+
+		// doctorGrid.addEditCompleteHandler(new EditCompleteHandler() {
+		//
+		// @Override
+		// public void onEditComplete(EditCompleteEvent event) {
+		// SC.say("All changes added to the db!");
+		// doctorGrid.fetchData();
+		// }
+		// });
+		//
+		// doctorGrid.addEditFailedHandler(new EditFailedHandler() {
+		//
+		// @SuppressWarnings("rawtypes")
+		// @Override
+		// public void onEditFailed(EditFailedEvent event) {
+		// System.out.println("in edit failed!");
+		// String errorMsg = "Failed to persist the change into db!\n";
+		// errorMsg += "Reason:";
+		// Iterator setIter =
+		// ((Map)event.getDsResponse().getErrors()).entrySet().iterator();
+		// while (setIter.hasNext())
+		// {
+		// errorMsg += ((Entry) setIter.next()).getKey().toString() + "::"
+		// + ((Entry) setIter.next()).getValue().toString() + "\n";
+		// }
+		// errorMsg += "Discarding changes made to that row!";
+		// doctorGrid.discardEdits(event.getRowNum(), event.getColNum(), true);
+		// SC.say(errorMsg);
+		//
+		// }
+		// });
+
 		Label titleLabel = new Label("Welcome to Edit Doctor Screen");
 		titleLabel.setWidth100();
 		titleLabel.setBorder("1px solid #808080");
@@ -155,8 +146,7 @@ public class EditDoctor extends Canvas {
 		IButton submitButton = new IButton("Submit");
 		submitButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				if (doctorGrid.hasChanges())
-				{
+				if (doctorGrid.hasChanges()) {
 					doctorGrid.saveAllEdits();
 				}
 			}
@@ -186,6 +176,7 @@ public class EditDoctor extends Canvas {
 
 	private RestDataSource createDynamicDataSource(String clinicId) {
 		RestDataSource doctorDataDs = new RestDataSource();
+
 		OperationBinding fetch = new OperationBinding();
 		fetch.setOperationType(DSOperationType.FETCH);
 		fetch.setDataProtocol(DSProtocol.GETPARAMS);
@@ -216,10 +207,10 @@ public class EditDoctor extends Canvas {
 		doctorDataDs.setOperationBindings(fetch, add, update, delete);
 		doctorDataDs.setSendMetaData(false);
 
-		 DataSourceTextField docId = new DataSourceTextField("doctorId",
-		 "Doctor Id");
-		 docId.setPrimaryKey(true);
-		 docId.setCanEdit(false);
+		DataSourceTextField docId = new DataSourceTextField("doctorId",
+				"Doctor Id");
+		docId.setPrimaryKey(true);
+		docId.setCanEdit(false);
 
 		DataSourceTextField docAbbr = new DataSourceTextField("doctorAbbr",
 				"Doctor Abbr");
@@ -232,11 +223,11 @@ public class EditDoctor extends Canvas {
 		DataSourceTextField doctorTagAndIP = new DataSourceTextField(
 				"doctorComputerTagsIp", "DoctorComputerTag & IP");
 
-		 doctorDataDs.setFields(docId, docAbbr, docName, doctorTollFreeId,
-		 doctorResourceId, doctorTagAndIP);
+		doctorDataDs.setFields(docId, docAbbr, docName, doctorTollFreeId,
+				doctorResourceId, doctorTagAndIP);
 
-//		doctorDataDs.setFields(docAbbr, docName, doctorTollFreeId,
-//				doctorResourceId, doctorTagAndIP);
+		// doctorDataDs.setFields(docAbbr, docName, doctorTollFreeId,
+		// doctorResourceId, doctorTagAndIP);
 
 		String dataUrl = "/fds/clinics/" + clinicId + "/doctors";
 
