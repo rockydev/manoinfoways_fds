@@ -22,9 +22,7 @@ public class InboundVoiceFilesData implements java.io.Serializable {
 	private ClinicData clinicData;
 	private String filePath;
 	private Date inboundDate;
-	private BigDecimal lengthOfDictation;
-	private Set<VoiceFilesAssignmentData> voiceFilesAssignmentDatas = new HashSet<VoiceFilesAssignmentData>(
-			0);
+	private long lengthOfDictation;
 
 	public InboundVoiceFilesData() {
 	}
@@ -37,14 +35,12 @@ public class InboundVoiceFilesData implements java.io.Serializable {
 	}
 
 	public InboundVoiceFilesData(DoctorData doctorData, ClinicData clinicData,
-			String filePath, Date inboundDate, BigDecimal lengthOfDictation,
-			Set<VoiceFilesAssignmentData> voiceFilesAssignmentDatas) {
+			String filePath, Date inboundDate, long lengthOfDictation) {
 		this.doctorData = doctorData;
 		this.clinicData = clinicData;
 		this.filePath = filePath;
 		this.inboundDate = inboundDate;
 		this.lengthOfDictation = lengthOfDictation;
-		this.voiceFilesAssignmentDatas = voiceFilesAssignmentDatas;
 	}
 
 	public Integer getFileId() {
@@ -95,21 +91,12 @@ public class InboundVoiceFilesData implements java.io.Serializable {
 		this.inboundDate = inboundDate;
 	}
 
-	public BigDecimal getLengthOfDictation() {
+	public long getLengthOfDictation() {
 		return this.lengthOfDictation;
 	}
 
-	public void setLengthOfDictation(BigDecimal lengthOfDictation) {
+	public void setLengthOfDictation(long lengthOfDictation) {
 		this.lengthOfDictation = lengthOfDictation;
-	}
-
-	public Set<VoiceFilesAssignmentData> getVoicefilesassignmentdatas() {
-		return this.voiceFilesAssignmentDatas;
-	}
-
-	public void setVoicefilesassignmentdatas(
-			Set<VoiceFilesAssignmentData> voiceFilesAssignmentDatas) {
-		this.voiceFilesAssignmentDatas = voiceFilesAssignmentDatas;
 	}
 
 }
