@@ -163,7 +163,7 @@ public class TranscriberInformationWidget extends Canvas {
 		typeMap.put("2","Editor");
 		typeMap.put("3","Editor/Transcriber");
 		typeMap.put("4","Proofer");
-		typeMap.put("4","Proofer/Transcriber");
+		typeMap.put("5","Proofer/Transcriber");
 		typeMap.put("6","Proofer/Editor");
 		typeMap.put("7","Proofer/Editor/Transcriber");
 		typeMap.put("8","QA");
@@ -249,7 +249,10 @@ public class TranscriberInformationWidget extends Canvas {
         };
         lastLoginField.setCellFormatter(timeFormatter);
 		
-		transcriberGrid.setDataSource(transcriberDataDs);
+		transcriberGrid.setDataSource(transcriberDataDs,transcriberId, userName, password, type, transcriberNameField,
+				dateofjoiningField, addressField, permanentAddressField,
+				phnumField, mobileField, emailField, qualificationField,
+				experienceField, dobField, lastLoginField);
 		transcriberGrid.setCanRemoveRecords(true);
 
 		Label titleLabel = new Label(

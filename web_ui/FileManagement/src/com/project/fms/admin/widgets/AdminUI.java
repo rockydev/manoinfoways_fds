@@ -40,22 +40,32 @@ public class AdminUI extends Canvas {
 //		EditTranscriberUI editTranscriber = new EditTranscriberUI();
 //		tTab4.setPane(editTranscriber);
 		
-		Tab tTab5 = new Tab("Edit Clinic Info");
-		EditClinic editClinicObj = new EditClinic();
-		tTab5.setPane(editClinicObj);
+//		Tab tTab5 = new Tab("Edit Clinic Info");
+//		EditClinic editClinicObj = new EditClinic();
+//		tTab5.setPane(editClinicObj);
 		
 		Tab tTab6 = new Tab("Transcriber Information Screen");
 //		TranscriberInformationUI transcriberInformationWidget = new TranscriberInformationUI();
 		TranscriberInformationWidget transcriberInformationWidget = new TranscriberInformationWidget();
 		tTab6.setPane(transcriberInformationWidget);
 		
+		Tab tTab7 = new Tab("Transcriber Doctor Priority Screen");
+		TranscriberDoctorPriorityWidget transcriberDoctorWidget = new TranscriberDoctorPriorityWidget();
+		tTab7.setPane(transcriberDoctorWidget);
+		
+		Tab tTab8 = new Tab("File Distribution List Screen");
+		FileDistributionListWidget fileDistributionWidget = new FileDistributionListWidget();
+		tTab8.setPane(fileDistributionWidget);
+		
 		tabSet.addTab(tTab0);
 //		tabSet.addTab(tTab1);
 		tabSet.addTab(tTab2);
 //		tabSet.addTab(tTab3);
 //		tabSet.addTab(tTab4);
-		tabSet.addTab(tTab5);
+//		tabSet.addTab(tTab5);
 		tabSet.addTab(tTab6);
+		tabSet.addTab(tTab7);
+		tabSet.addTab(tTab8);
 		
 		VLayout vLayout = new VLayout();
 		vLayout.setWidth100();  
