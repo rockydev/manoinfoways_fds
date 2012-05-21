@@ -1,0 +1,36 @@
+<List>  
+  
+<requirement>  
+    <requirementData>Requirement 1</requirementData>  
+    <isRequirementSelected>false</isRequirementSelected>  
+</requirement>  
+<requirement>  
+    <requirementData>Requirement 2</requirementData>  
+    <isRequirementSelected>false</isRequirementSelected>  
+</requirement>  
+<requirement>  
+    <requirementData>Requirement 3</requirementData>  
+    <isRequirementSelected>false</isRequirementSelected>  
+</requirement>  
+<requirement>  
+    <requirementData>Requirement 4</requirementData>  
+    <isRequirementSelected>false</isRequirementSelected>  
+</requirement>  
+<requirement>  
+    <requirementData>Requirement 5</requirementData>  
+    <isRequirementSelected>false</isRequirementSelected>  
+</requirement>  
+<requirement>  
+    <requirementData>Requirement 6</requirementData>  
+    <isRequirementSelected>false</isRequirementSelected>  
+</requirement>  
+<requirement>  
+    <requirementData>Requirement 7</requirementData>  
+    <isRequirementSelected>false</isRequirementSelected>  
+</requirement>  
+<requirement>  
+    <requirementData>Requirement 8</requirementData>  
+    <isRequirementSelected>false</isRequirementSelected>  
+</requirement>  
+  
+</List>  
