@@ -22,6 +22,10 @@ import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
+import com.smartgwt.client.widgets.events.DrawEvent;
+import com.smartgwt.client.widgets.events.DrawHandler;
+import com.smartgwt.client.widgets.events.FocusChangedEvent;
+import com.smartgwt.client.widgets.events.FocusChangedHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -35,6 +39,9 @@ public class FileDistributionListWidget extends Canvas {
 	ListGridField editorField;
 	ListGridField prooferField;
 	ListGridField qaField;
+	
+	RestDataSource transcriberAbbrDs;
+	RestDataSource fileAssignmentDataGridDs;
 
 	public FileDistributionListWidget() {
 
@@ -59,7 +66,7 @@ public class FileDistributionListWidget extends Canvas {
 		fileDistributionGrid.setFields(fileNameField, transcriberField,
 				editorField, prooferField, qaField);
 
-		RestDataSource transcriberAbbrDs = new RestDataSource();
+		transcriberAbbrDs = new RestDataSource();
 
 		OperationBinding transcriberFetch = new OperationBinding();
 		transcriberFetch.setOperationType(DSOperationType.FETCH);
@@ -69,32 +76,8 @@ public class FileDistributionListWidget extends Canvas {
 		transcriberAbbrDs.setOperationBindings(transcriberFetch);
 		transcriberAbbrDs.setSendMetaData(false);
 		transcriberAbbrDs.setFetchDataURL("/fds/transcribers/usernames");
-
-		transcriberAbbrDs.fetchData(null, new DSCallback() {
-
-			@Override
-			public void execute(DSResponse response, Object rawData,
-					DSRequest request) {
-				Record[] records = response.getData();
-
-				transcriberMap = new HashMap<String, String>();
-
-				for (Record record : records) {
-					Log.debug(record.getAttributeAsString("transcriberId")
-							+ "::" + record.getAttributeAsString("userName"));
-					transcriberMap.put(record.getAttribute("transcriberId"),
-							record.getAttribute("userName"));
-				}
-
-				transcriberField.setValueMap(transcriberMap);
-				editorField.setValueMap(transcriberMap);
-				prooferField.setValueMap(transcriberMap);
-				qaField.setValueMap(transcriberMap);
-
-			}
-		});
-
-		RestDataSource fileAssignmentDataGridDs = new RestDataSource();
+		
+		fileAssignmentDataGridDs = new RestDataSource();
 
 		OperationBinding fetch = new OperationBinding();
 		fetch.setOperationType(DSOperationType.FETCH);
@@ -139,8 +122,43 @@ public class FileDistributionListWidget extends Canvas {
 		fileDistributionGrid.setDataSource(fileAssignmentDataGridDs,
 				fileNameField, transcriberField, editorField, prooferField,
 				qaField);
+			
+		
+		addFocusChangedHandler(new FocusChangedHandler() {
+			
+			@Override
+			public void onFocusChanged(FocusChangedEvent event) {
+				if (event.getHasFocus())
+				{
+					Log.debug("Recieved focus!");
+					transcriberAbbrDs.fetchData(null, new DSCallback() {
 
-		fileDistributionGrid.fetchData();
+						@Override
+						public void execute(DSResponse response, Object rawData,
+								DSRequest request) {
+							Record[] records = response.getData();
+
+							transcriberMap = new HashMap<String, String>();
+
+							for (Record record : records) {
+								Log.debug(record.getAttributeAsString("transcriberId")
+										+ "::" + record.getAttributeAsString("userName"));
+								transcriberMap.put(record.getAttribute("transcriberId"),
+										record.getAttribute("userName"));
+							}
+
+							transcriberField.setValueMap(transcriberMap);
+							editorField.setValueMap(transcriberMap);
+							prooferField.setValueMap(transcriberMap);
+							qaField.setValueMap(transcriberMap);
+
+						}
+					});
+					fileDistributionGrid.fetchData();
+				}
+			}
+		});
+		
 
 		Label titleLabel = new Label("Welcome to File Distribution List Screen");
 		titleLabel.setWidth100();

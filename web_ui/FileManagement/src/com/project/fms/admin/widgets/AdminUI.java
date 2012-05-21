@@ -53,9 +53,15 @@ public class AdminUI extends Canvas {
 		TranscriberDoctorPriorityWidget transcriberDoctorWidget = new TranscriberDoctorPriorityWidget();
 		tTab7.setPane(transcriberDoctorWidget);
 		
-		Tab tTab8 = new Tab("File Distribution List Screen");
+		Tab tTab8 = new Tab("Transcriber Dictation Lengths Screeen");
+		TranscriberDictationLengthsWidget transcriberDictationLengthsWidget = new TranscriberDictationLengthsWidget();
+		tTab8.setPane(transcriberDictationLengthsWidget);
+		
+		Tab tTab9 = new Tab("File Distribution List Screen");
 		FileDistributionListWidget fileDistributionWidget = new FileDistributionListWidget();
-		tTab8.setPane(fileDistributionWidget);
+		tTab9.setPane(fileDistributionWidget);
+		
+		
 		
 		tabSet.addTab(tTab0);
 //		tabSet.addTab(tTab1);
@@ -66,6 +72,7 @@ public class AdminUI extends Canvas {
 		tabSet.addTab(tTab6);
 		tabSet.addTab(tTab7);
 		tabSet.addTab(tTab8);
+		tabSet.addTab(tTab9);
 		
 		VLayout vLayout = new VLayout();
 		vLayout.setWidth100();  

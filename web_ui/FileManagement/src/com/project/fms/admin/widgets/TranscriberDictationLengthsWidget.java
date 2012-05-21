@@ -32,15 +32,14 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
-public class TranscriberDoctorPriorityWidget extends Canvas {
+public class TranscriberDictationLengthsWidget extends Canvas {
 
-	ListGridField doctorIdField, transcriberTypeField, priorityIdField,
-			priorityField;
-	RestDataSource doctorAbbrDs, transcriberGridDs;
-	HashMap<String, String> doctorAbbrValueMap;
+	ListGridField transcriberDicationLengthIdField,transcriberTypeField, dictationLengthField;			
+	RestDataSource transcriberGridDs;
+	HashMap<String, String> transcriberValueMap;
 	ListGrid transcriberGrid;
 
-	public TranscriberDoctorPriorityWidget() {
+	public TranscriberDictationLengthsWidget() {
 
 		RestDataSource transcriberAbbrDs = new RestDataSource();
 
@@ -52,17 +51,6 @@ public class TranscriberDoctorPriorityWidget extends Canvas {
 		transcriberAbbrDs.setOperationBindings(transcriberFetch);
 		transcriberAbbrDs.setSendMetaData(false);
 		transcriberAbbrDs.setFetchDataURL("/fds/transcribers/usernames");
-
-		doctorAbbrDs = new RestDataSource();
-
-		OperationBinding doctorAbbrFetch = new OperationBinding();
-		doctorAbbrFetch.setOperationType(DSOperationType.FETCH);
-		doctorAbbrFetch.setDataProtocol(DSProtocol.GETPARAMS);
-		doctorAbbrFetch.setDataFormat(DSDataFormat.XML);
-
-		doctorAbbrDs.setOperationBindings(doctorAbbrFetch);
-		doctorAbbrDs.setSendMetaData(false);
-		doctorAbbrDs.setFetchDataURL("/fds/doctors/allabbrs");
 
 		transcriberTypeField = new ListGridField("transcriberTypeId",
 				"TranscriberType");
@@ -165,36 +153,16 @@ public class TranscriberDoctorPriorityWidget extends Canvas {
 
 				transcriberTypeField.setValueMap(transcriberTypeMap);
 
-				doctorAbbrDs.fetchData(null, new DSCallback() {
-
-					@Override
-					public void execute(DSResponse response, Object rawData,
-							DSRequest request) {
-						Record[] data = response.getData();
-						doctorAbbrValueMap = new HashMap<String, String>();
-						for (Record record : data) {
-							doctorAbbrValueMap.put(
-									record.getAttribute("doctorId"),
-									record.getAttribute("doctorAbbr"));
-							// Log.debug(record.getAttribute("doctorId") + "=>"
-							// + record.getAttribute("doctorAbbr"));
-						}
-						doctorIdField.setValueMap(doctorAbbrValueMap);
-					}
-				});
-
 				// TranscriberGrid DS
 				transcriberGridDs = createDynamicRestDS(((SelectItem) event
 						.getItem()).getSelectedRecord().getAttribute(
 						"transcriberId"));
 
 				transcriberGrid.setDataSource(transcriberGridDs,
-						priorityIdField, doctorIdField, transcriberTypeField,
-						priorityField);
+						transcriberDicationLengthIdField, transcriberTypeField,
+						dictationLengthField);
 
 				transcriberGrid.fetchData();
-
-				transcriberGrid.groupBy("transcriberTypeId", "priority");
 
 			}
 		});
@@ -203,16 +171,14 @@ public class TranscriberDoctorPriorityWidget extends Canvas {
 //		transcriberTypeField.setSummaryFunction(SummaryFunctionType.COUNT);
 //		transcriberTypeField.setSummaryTitle("Total:");
 
-		doctorIdField = new ListGridField("doctorId", "DoctorId");
-
-		priorityField = new ListGridField("priority", "Priority");
+		dictationLengthField = new ListGridField("dictationLength", "Dictation Length");
 //		priorityField.setShowGridSummary(false);
 //		priorityField.setSummaryFunction(SummaryFunctionType.COUNT);
 //		priorityField.setSummaryTitle("Total:");
 
-		priorityIdField = new ListGridField("priorityId", "DoctorPriorityId");
-		priorityIdField.setCanEdit(false);
-		priorityIdField.setHidden(true);
+		transcriberDicationLengthIdField = new ListGridField("transcriberLengthTimesId", "Id");
+		transcriberDicationLengthIdField.setCanEdit(false);
+		transcriberDicationLengthIdField.setHidden(true);
 
 		transcriberGrid = new ListGrid();
 
@@ -228,8 +194,7 @@ public class TranscriberDoctorPriorityWidget extends Canvas {
 		transcriberGrid.setAutoSaveEdits(false);
 		transcriberGrid.setCanRemoveRecords(true);
 
-		transcriberGrid.setFields(priorityIdField, doctorIdField,
-				transcriberTypeField, priorityField);
+		transcriberGrid.setFields(transcriberDicationLengthIdField, transcriberTypeField, dictationLengthField);
 
 		Label titleLabel = new Label(
 				"Welcome to Transcribers Doctor Priority Screen");
@@ -326,23 +291,20 @@ public class TranscriberDoctorPriorityWidget extends Canvas {
 		transcriberIdDataField.setCanEdit(false);
 		transcriberIdDataField.setHidden(true);
 
-		DataSourceTextField priorityIdDataField = new DataSourceTextField(
-				"priorityId", "Priority Id");
-		priorityIdDataField.setHidden(true);
-
-		DataSourceTextField doctorIdDataField = new DataSourceTextField(
-				"doctorId", "Doctor Id");
+		DataSourceTextField transcriberDictationLengthsIdDataField = new DataSourceTextField(
+				"transcriberLengthTimesId", "Id");
+		transcriberDictationLengthsIdDataField.setHidden(true);
 
 		DataSourceTextField transcriberTypeDataField = new DataSourceTextField(
 				"transcriberTypeId", "Transcriber Type");
 
-		DataSourceTextField priorityDataField = new DataSourceTextField(
-				"priority", "Priority");
+		DataSourceTextField dictationLengthDataField = new DataSourceTextField(
+				"dictationLength", "Dictation Length");
 
-		transcriberPriorityGridDs.setFields(priorityIdDataField,
-				doctorIdDataField, transcriberTypeDataField, priorityDataField);
+		transcriberPriorityGridDs.setFields(transcriberDictationLengthsIdDataField, transcriberIdDataField,
+				transcriberTypeDataField, dictationLengthDataField);
 
-		String dataUrl = "/fds/transcribers/" + transcriberId + "/priorities";
+		String dataUrl = "/fds/transcribers/" + transcriberId + "/lengths";
 
 		transcriberPriorityGridDs.setDataURL(dataUrl);
 
