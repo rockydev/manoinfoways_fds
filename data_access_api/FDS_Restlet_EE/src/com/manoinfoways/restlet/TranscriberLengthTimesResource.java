@@ -26,11 +26,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import com.manoinfoways.ejb.TranscriberDataBean;
+import com.manoinfoways.ejb.TranscriberLengthTimesBean;
 import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.TranscriberData;
+import com.manoinfoways.model.TranscriberLengthTimes;
+import com.manoinfoways.model.TranscriberTypeData;
 import com.manoinfoways.util.DateConverter;
 import com.manoinfoways.util.TimeConverter;
+import com.manoinfoways.util.TranscriberLengthTimesConverter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.DomReader;
@@ -39,9 +42,9 @@ import com.thoughtworks.xstream.io.xml.DomReader;
  * @author rockydev
  * 
  */
-public class TranscriberDataResource extends ServerResource {
+public class TranscriberLengthTimesResource extends ServerResource {
 
-	private static TranscriberDataBean transcriberDataBean;
+	private static TranscriberLengthTimesBean transcriberLengthTimesBean;
 	private static XStream xmlConverter;
 
 	private XmlWriter globalWriter = null;
@@ -50,12 +53,11 @@ public class TranscriberDataResource extends ServerResource {
 	/**
 	 * 
 	 */
-	public TranscriberDataResource() {
-		transcriberDataBean = new TranscriberDataBean();
+	public TranscriberLengthTimesResource() {
+		transcriberLengthTimesBean = new TranscriberLengthTimesBean();
 		xmlConverter = new XStream(new DomDriver());
-		xmlConverter.processAnnotations(TranscriberData.class);
-		xmlConverter.registerConverter(new DateConverter());
-		xmlConverter.registerConverter(new TimeConverter());
+		xmlConverter.processAnnotations(TranscriberLengthTimes.class);
+		xmlConverter.registerConverter(new TranscriberLengthTimesConverter());
 	}
 
 	@Get("xml")
@@ -75,13 +77,17 @@ public class TranscriberDataResource extends ServerResource {
 		xmlWriter.startElement("response");
 
 		xmlWriter.dataElement("status", "0");
-		xmlConverter.alias("record", TranscriberData.class);
+		xmlConverter.alias("record", TranscriberLengthTimes.class);
 		xmlWriter.startElement("data");
 		xmlConverter.aliasSystemAttribute(null, "class");
 		xmlConverter.aliasSystemAttribute(null, "resolves-to");
-		for (TranscriberData transcriber : transcriberDataBean
-				.getAllTranscribers()) {
-			xmlConverter.toXML(transcriber, xmlWriter.getWriter());
+
+		Integer transcriberId = Integer.parseInt((String) getRequest()
+				.getAttributes().get("transcriberId"));
+
+		for (TranscriberLengthTimes transcriberLength : transcriberLengthTimesBean
+				.getTranscriberLengths(transcriberId)) {
+			xmlConverter.toXML(transcriberLength, xmlWriter.getWriter());
 		}
 		xmlWriter.endElement("data");
 		xmlWriter.endElement("response");
@@ -91,8 +97,8 @@ public class TranscriberDataResource extends ServerResource {
 	}
 
 	@Post("xml")
-	public String addTranscriber(DomRepresentation rep) throws IOException,
-			SAXException, ParserConfigurationException {
+	public String addTranscriberLength(DomRepresentation rep)
+			throws IOException, SAXException, ParserConfigurationException {
 
 		if (rep.getNode("//transaction") != null) {
 			return handleMultipleRequests(rep);
@@ -102,7 +108,7 @@ public class TranscriberDataResource extends ServerResource {
 		// POST)
 		if (rep.getNode("//request/operationType").getTextContent()
 				.equalsIgnoreCase("remove")) {
-			return deleteTranscriber(rep);
+			return deleteTranscriberLength(rep);
 		}
 
 		StringWriter xml = new StringWriter();
@@ -120,14 +126,19 @@ public class TranscriberDataResource extends ServerResource {
 		xmlWriter.startElement("response");
 
 		Element dataNode = (Element) rep.getNode("//request/data");
-		TranscriberData persistedInstance = null;
+		TranscriberLengthTimes persistedInstance = null;
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", TranscriberData.class);
-				TranscriberData transcriber = (TranscriberData) xmlConverter
+				TranscriberLengthTimes transcriber = (TranscriberLengthTimes) xmlConverter
 						.unmarshal(new DomReader(dataNode));
 
-				persistedInstance = transcriberDataBean.persist(transcriber);
+				transcriber.setTranscriberdata(new TranscriberData(
+						Integer.parseInt((String) getRequest().getAttributes()
+								.get("transcriberId"))));
+
+				persistedInstance = transcriberLengthTimesBean
+						.persist(transcriber);
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", TranscriberData.class);
 				xmlWriter.startElement("data");
@@ -155,8 +166,8 @@ public class TranscriberDataResource extends ServerResource {
 	}
 
 	@Put("xml")
-	public String updateTranscriber(DomRepresentation rep) throws IOException,
-			SAXException, ParserConfigurationException {
+	public String updateTranscriberLength(DomRepresentation rep)
+			throws IOException, SAXException, ParserConfigurationException {
 		if (rep.getNode("//transaction") != null) {
 			return handleMultipleRequests(rep);
 		}
@@ -177,15 +188,16 @@ public class TranscriberDataResource extends ServerResource {
 
 		Element oldData = (Element) rep.getNode("//request/oldValues");
 
-		TranscriberData detachedInstance = null;
+		TranscriberLengthTimes detachedInstance = null;
 		try {
 			if (oldData != null) {
 				xmlConverter.alias("oldValues", TranscriberData.class);
-				TranscriberData transcriber = (TranscriberData) xmlConverter
+				TranscriberLengthTimes transcriber = (TranscriberLengthTimes) xmlConverter
 						.unmarshal(new DomReader(oldData));
 				transcriber = updateTranscriberData(transcriber, rep);
 
-				detachedInstance = transcriberDataBean.update(transcriber);
+				detachedInstance = transcriberLengthTimesBean
+						.update(transcriber);
 				xmlWriter.dataElement("status", "0");
 
 				if (this.globalWriter != null) {
@@ -256,13 +268,16 @@ public class TranscriberDataResource extends ServerResource {
 			doc.appendChild(doc.importNode(rep.getNode(baseXpath), true));
 			if (rep.getNode(baseXpath + "/operationType").getTextContent()
 					.equalsIgnoreCase("add")) {
-				addTranscriber(new DomRepresentation(MediaType.TEXT_XML, doc));
+				addTranscriberLength(new DomRepresentation(MediaType.TEXT_XML,
+						doc));
 			} else if (rep.getNode(baseXpath + "/operationType")
 					.getTextContent().equalsIgnoreCase("update")) {
-				updateTranscriber(new DomRepresentation(MediaType.TEXT_XML, doc));
+				updateTranscriberLength(new DomRepresentation(
+						MediaType.TEXT_XML, doc));
 			} else if (rep.getNode(baseXpath + "/operationType")
 					.getTextContent().equalsIgnoreCase("remove")) {
-				deleteTranscriber(new DomRepresentation(MediaType.TEXT_XML, doc));
+				deleteTranscriberLength(new DomRepresentation(
+						MediaType.TEXT_XML, doc));
 			}
 		}
 
@@ -286,90 +301,25 @@ public class TranscriberDataResource extends ServerResource {
 	 * @throws ParseException
 	 * @throws DOMException
 	 */
-	private TranscriberData updateTranscriberData(TranscriberData transcriber,
-			DomRepresentation rep) throws DOMException, ParseException {
-		if (rep.getNode("//request/data/transcriberTypeId") != null) {
-			transcriber.setTranscriberTypeId(new Integer(rep.getNode(
-					"//request/data/transcriberTypeId").getTextContent()));
-		}
-
-		if (rep.getNode("//request/data/userName") != null) {
-			transcriber.setUserName(rep.getNode("//request/data/userName")
-					.getTextContent());
-		}
-
-		if (rep.getNode("//request/data/password") != null) {
-			transcriber.setPassword(rep.getNode("//request/data/password")
-					.getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberName") != null) {
-			transcriber.setTranscriberName(rep.getNode(
-					"//request/data/transcriberName").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/dateofJoining") != null) {
-			transcriber.setDateofJoining(new SimpleDateFormat("yyyy-MM-dd")
-					.parse(rep.getNode("//request/data/dateofJoining")
-							.getTextContent()));
-		}
-
-		if (rep.getNode("//request/data/transcriberAddress") != null) {
-			transcriber.setTranscriberAddress(rep.getNode(
-					"//request/data/transcriberAddress").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberPermanentAddress") != null) {
-			transcriber.setTranscriberPermanentAddress(rep.getNode(
-					"//request/data/transcriberPermanentAddress")
-					.getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberPhoneNumber") != null) {
-			transcriber.setTranscriberPhoneNumber(rep.getNode(
-					"//request/data/transcriberPhoneNumber").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberMobile") != null) {
-			transcriber.setTranscriberMobile(rep.getNode(
-					"//request/data/transcriberMobile").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberEmail") != null) {
-			transcriber.setTranscriberEmail(rep.getNode(
-					"//request/data/transcriberEmail").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberQualification") != null) {
-			transcriber
-					.setTranscriberQualification(rep.getNode(
-							"//request/data/transcriberQualification")
-							.getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberExperience") != null) {
-			transcriber.setTranscriberExperience(rep.getNode(
-					"//request/data/transcriberExperience").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberDob") != null) {
-			transcriber.setTranscriberDob(new SimpleDateFormat("yyyy-MM-dd")
-					.parse(rep.getNode("//request/data/transcriberDob")
-							.getTextContent()));
-		}
-
-		if (rep.getNode("//request/data/transcriberLoginTime") != null) {
-			transcriber.setTranscriberLoginTime(new Time(new SimpleDateFormat(
-					"HH:mm").parse(
-					rep.getNode("//request/data/transcriberLoginTime")
-							.getTextContent()).getTime()));
-		}
-		return transcriber;
+	private TranscriberLengthTimes updateTranscriberData(
+			TranscriberLengthTimes transcriber, DomRepresentation rep)
+			throws DOMException, ParseException {
+		 if (rep.getNode("//request/data/transcriberTypeId") != null) {
+		 transcriber.setTranscribertypedata(new TranscriberTypeData(Integer.parseInt(rep.getNode(
+		 "//request/data/transcriberTypeId").getTextContent())));
+		 }
+		
+		 if (rep.getNode("//request/data/dictationLength") != null) {
+		 transcriber.setDictationLength(Double.parseDouble((rep.getNode(
+				 "//request/data/dictationLength").getTextContent())));
+		 }
+		
+		return null;
 	}
 
 	@Delete("xml")
-	public String deleteTranscriber(DomRepresentation rep) throws IOException,
-			SAXException {
+	public String deleteTranscriberLength(DomRepresentation rep)
+			throws IOException, SAXException {
 
 		StringWriter xml = new StringWriter();
 		XmlWriter xmlWriter = null;
@@ -387,21 +337,21 @@ public class TranscriberDataResource extends ServerResource {
 
 		Element dataNode = (Element) rep.getNode("//request/data");
 
-		TranscriberData deletedInstance = null;
+		TranscriberLengthTimes deletedInstance = null;
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", TranscriberData.class);
 
-				deletedInstance = transcriberDataBean
-						.deleteTranscriberDataById(new Integer(rep.getNode(
-								"//request/data/transcriberId")
+				deletedInstance = transcriberLengthTimesBean
+						.deleteTranscriberLengthTimesById(new Integer(rep
+								.getNode("//request/data/transcriberId")
 								.getTextContent()));
 
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", TranscriberData.class);
 				xmlWriter.startElement("data");
 				xmlWriter.dataElement("transcriberId", deletedInstance
-						.getTranscriberId().toString());
+						.getTranscriberdata().toString());
 				// xmlConverter.toXML(deletedInstance, xmlWriter.getWriter());
 				xmlWriter.endElement("data");
 			} else // Sending error message
@@ -422,39 +372,6 @@ public class TranscriberDataResource extends ServerResource {
 			xmlWriter.endDocument();
 			return xml.toString();
 		} else {
-			return "";
-		}
-	}
-
-	public String getAllUserNames() {
-		StringWriter xml = new StringWriter();
-		XmlWriter xmlWriter = new XmlWriter(xml);
-
-		try {
-			xmlWriter.startDocument();
-
-			xmlWriter.setDataFormat(true);
-
-			xmlWriter.startElement("response");
-			try {
-				xmlWriter.dataElement("status", "0");
-				xmlConverter.alias("record", TranscriberData.class);
-				xmlWriter.startElement("data");
-
-				for (TranscriberData transcriberData : (List<TranscriberData>) transcriberDataBean
-						.getAllUserNames()) {
-					xmlConverter.toXML(transcriberData, xmlWriter.getWriter());
-				}
-				xmlWriter.endElement("data");
-			} catch (Exception e) {
-				xmlWriter.dataElement("status", "-1");
-				xmlWriter.dataElement("data", e.getLocalizedMessage());
-			}
-			xmlWriter.endElement("response");
-			xmlWriter.endDocument();
-
-			return xml.toString();
-		} catch (SAXException e1) {
 			return "";
 		}
 	}

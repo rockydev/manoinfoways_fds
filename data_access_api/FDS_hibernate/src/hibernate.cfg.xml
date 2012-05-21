@@ -11,17 +11,8 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.search.autoregister_listeners">false</property>
-        <property name="hibernate.current_session_context_class">thread</property>
-        <mapping resource="com/manoinfoways/model/ClinicData.hbm.xml" />
         <mapping resource="com/manoinfoways/model/TranscriberData.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/FileTransactionData.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/InboundVoiceFilesData.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/TranscriberDoctorPriority.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/DoctorData.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/VoiceFilesAssignmentData.hbm.xml" />
+        <mapping resource="com/manoinfoways/model/TranscriberLengthTimes.hbm.xml" />
         <mapping resource="com/manoinfoways/model/TranscriberTypeData.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/ClinicRequirements.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/ClinicConnectionDetails.hbm.xml" />
-        <mapping resource="com/manoinfoways/model/ClinicMetadata.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

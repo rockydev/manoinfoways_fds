@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 13, 2012 2:07:43 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated May 16, 2012 12:58:09 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.manoinfoways.model.TranscriberData" table="transcriberdata" catalog="manoinfowaysdb">
+    <class name="com.manoinfoways.model.Transcriberdata" table="transcriberdata" catalog="manoinfowaysdb">
         <id name="transcriberId" type="java.lang.Integer">
             <column name="TranscriberId" />
             <generator class="identity" />
         </id>
-        <many-to-one name="transcribertypedata" class="com.manoinfoways.model.TranscriberTypeData" fetch="select">
+        <many-to-one name="transcribertypedata" class="com.manoinfoways.model.Transcribertypedata" fetch="select">
             <column name="TranscriberTypeId" />
         </many-to-one>
         <property name="userName" type="string">
@@ -29,8 +29,8 @@
         <property name="transcriberPermanentAddress" type="string">
             <column name="TranscriberPermanentAddress" />
         </property>
-        <property name="transcriberPhnNuber" type="string">
-            <column name="TranscriberPhnNuber" length="45" />
+        <property name="transcriberPhoneNumber" type="string">
+            <column name="TranscriberPhoneNumber" length="45" />
         </property>
         <property name="transcriberMobile" type="string">
             <column name="TranscriberMobile" length="45" />
@@ -50,41 +50,11 @@
         <property name="transcriberLoginTime" type="time">
             <column name="TranscriberLoginTime" length="8" />
         </property>
-        <set name="voicefilesassignmentdatasForTranscriberId" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
+        <set name="transcriberlengthtimeses" table="transcriberlengthtimes" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="TranscriberId" />
             </key>
-            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
-        </set>
-        <set name="voicefilesassignmentdatasForEditorId" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="EditorId" />
-            </key>
-            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
-        </set>
-        <set name="filetransactiondatas" table="filetransactiondata" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="TranscriberId" />
-            </key>
-            <one-to-many class="com.manoinfoways.model.FileTransactionData" />
-        </set>
-        <set name="voicefilesassignmentdatasForProoferId" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="ProoferId" />
-            </key>
-            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
-        </set>
-        <set name="transcriberdoctorpriorities" table="transcriberdoctorpriority" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="TranscriberId" />
-            </key>
-            <one-to-many class="com.manoinfoways.model.TranscriberDoctorPriority" />
-        </set>
-        <set name="voicefilesassignmentdatasForQaid" table="voicefilesassignmentdata" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="QAId" />
-            </key>
-            <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
+            <one-to-many class="com.manoinfoways.model.TranscriberLengthTimes" />
         </set>
     </class>
 </hibernate-mapping>

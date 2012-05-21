@@ -16,9 +16,13 @@ public class TranscriberTypeData implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -806914259161969426L;
-	private int transcriberTypeId;
+	private Integer transcriberTypeId;
 	private String transcriberTypeName;
-
+	
+	@XStreamOmitField
+	private Set<TranscriberLengthTimes> transcriberlengthtimeses = new HashSet<TranscriberLengthTimes>(
+			0);
+	
 	@XStreamOmitField
 	private Set<FileTransactionData> fileTransactionDatas = new HashSet<FileTransactionData>(
 			0);
@@ -34,11 +38,11 @@ public class TranscriberTypeData implements java.io.Serializable {
 	public TranscriberTypeData() {
 	}
 
-	public TranscriberTypeData(int transcriberTypeId) {
+	public TranscriberTypeData(Integer transcriberTypeId) {
 		this.transcriberTypeId = transcriberTypeId;
 	}
 
-	public TranscriberTypeData(int transcriberTypeId,
+	public TranscriberTypeData(Integer transcriberTypeId,
 			String transcriberTypeName,
 			Set<FileTransactionData> fileTransactionDatas,
 			Set<TranscriberData> transcriberDatas,
@@ -50,16 +54,16 @@ public class TranscriberTypeData implements java.io.Serializable {
 		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
 	}
 
-	public TranscriberTypeData(int transcriberTypeId, String transcriberTypeName) {
+	public TranscriberTypeData(Integer transcriberTypeId, String transcriberTypeName) {
 		this.transcriberTypeId = transcriberTypeId;
 		this.transcriberTypeName = transcriberTypeName;
 	}
 
-	public int getTranscriberTypeId() {
+	public Integer getTranscriberTypeId() {
 		return this.transcriberTypeId;
 	}
 
-	public void setTranscriberTypeId(int transcriberTypeId) {
+	public void setTranscriberTypeId(Integer transcriberTypeId) {
 		this.transcriberTypeId = transcriberTypeId;
 	}
 
@@ -95,5 +99,14 @@ public class TranscriberTypeData implements java.io.Serializable {
 	public void setTranscriberdoctorpriorities(
 			Set<TranscriberDoctorPriority> transcriberDoctorPriorities) {
 		this.transcriberDoctorPriorities = transcriberDoctorPriorities;
+	}
+	
+	public Set<TranscriberLengthTimes> getTranscriberlengthtimeses() {
+		return this.transcriberlengthtimeses;
+	}
+
+	public void setTranscriberlengthtimeses(
+			Set<TranscriberLengthTimes> transcriberlengthtimeses) {
+		this.transcriberlengthtimeses = transcriberlengthtimeses;
 	}
 }

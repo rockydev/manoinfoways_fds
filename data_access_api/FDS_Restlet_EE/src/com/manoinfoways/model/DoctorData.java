@@ -42,7 +42,11 @@ public class DoctorData implements java.io.Serializable {
 	public DoctorData() {
 	}
 	
-	public DoctorData(int doctorId, String doctorAbbr) {
+	public DoctorData(Integer doctorId) {
+		this.doctorId = doctorId;
+	}
+	
+	public DoctorData(Integer doctorId, String doctorAbbr) {
 		this.doctorId = doctorId;
 		this.doctorAbbr = doctorAbbr;
 	}
@@ -170,4 +174,10 @@ public class DoctorData implements java.io.Serializable {
 		this.inboundVoiceFilesDatas = inboundVoiceFilesDatas;
 	}
 
+	@Override
+	public String toString() {
+		return doctorAbbr;
+	}
+	
+	
 }

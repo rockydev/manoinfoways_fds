@@ -8,22 +8,22 @@
             <column name="FileAssignmentId" />
             <generator class="identity" />
         </id>
-        <many-to-one name="transcriberdataByTranscriberId" class="com.manoinfoways.model.TranscriberData" fetch="select">
+        <many-to-one name="transcriberdataByTranscriberId" class="com.manoinfoways.model.TranscriberData" fetch="join">
             <column name="TranscriberId" />
         </many-to-one>
-        <many-to-one name="inboundvoicefilesdata" class="com.manoinfoways.model.InboundVoiceFilesData" fetch="select">
+        <many-to-one name="inboundvoicefilesdata" class="com.manoinfoways.model.InboundVoiceFilesData" fetch="join">
             <column name="FileId" not-null="true" />
         </many-to-one>
-        <many-to-one name="transcriberdataByEditorId" class="com.manoinfoways.model.TranscriberData" fetch="select">
+        <many-to-one name="transcriberdataByEditorId" class="com.manoinfoways.model.TranscriberData" fetch="join">
             <column name="EditorId" />
         </many-to-one>
-        <many-to-one name="transcriberdataByProoferId" class="com.manoinfoways.model.TranscriberData" fetch="select">
+        <many-to-one name="transcriberdataByProoferId" class="com.manoinfoways.model.TranscriberData" fetch="join">
             <column name="ProoferId" />
         </many-to-one>
-        <many-to-one name="doctordata" class="com.manoinfoways.model.DoctorData" fetch="select">
+        <many-to-one name="doctordata" class="com.manoinfoways.model.DoctorData" fetch="join">
             <column name="DoctorId" />
         </many-to-one>
-        <many-to-one name="transcriberdataByQaid" class="com.manoinfoways.model.TranscriberData" fetch="select">
+        <many-to-one name="transcriberdataByQaid" class="com.manoinfoways.model.TranscriberData" fetch="join">
             <column name="QAId" />
         </many-to-one>
         <set name="filetransactiondatas" table="filetransactiondata" inverse="true" lazy="true" fetch="select">

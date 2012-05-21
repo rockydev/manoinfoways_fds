@@ -11,7 +11,11 @@ import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 
 import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
@@ -190,19 +194,50 @@ public class DoctorDataBean {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<DoctorData> getDoctorAbbrs(int clinicId)
+	public Collection<DoctorData> getDoctorAbbrs(Integer clinicId)
 	{
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		
-		Collection<DoctorData> doctorAbbrs = session
-				.createQuery(
-						"select new DoctorData(doctorId, doctorAbbr) " +
-						"from DoctorData as doctorData " +
-						"order by doctorData.doctorAbbr")
+
+		List<DoctorData> doctorAbbrs = session.createCriteria(DoctorData.class)
+				.setProjection(Projections.projectionList()
+				.add(Projections.alias(Projections.property("doctorId"),"doctorId"))
+				.add(Projections.alias(Projections.property("doctorAbbr"),"doctorAbbr")))
+				.add(Restrictions.eq("clinicdata.clinicId", clinicId))
+				.setResultTransformer(Transformers.aliasToBean(DoctorData.class))
 				.list();
 		
 		session.getTransaction().commit();
 		return doctorAbbrs;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<DoctorData> getDoctorAbbrs()
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		
+		List<DoctorData> doctorAbbrs = session.createCriteria(DoctorData.class)
+				.setProjection(Projections.projectionList()
+				.add(Projections.alias(Projections.property("doctorId"),"doctorId"))
+				.add(Projections.alias(Projections.property("doctorAbbr"),"doctorAbbr")))
+				.setResultTransformer(Transformers.aliasToBean(DoctorData.class))
+				.list();
+		
+		session.getTransaction().commit();
+		return doctorAbbrs;
+	}
+	
+	public Integer getDoctorIdByAbbr(String doctorAbbr)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Integer doctorId =  (Integer) session.createCriteria(DoctorData.class)
+		.setProjection(Projections.projectionList()
+				.add(Projections.property("doctorId")))
+		.add(Restrictions.eq("doctorAbbr", doctorAbbr))
+		.uniqueResult();
+		session.getTransaction().commit();
+		return doctorId;
 	}
 }

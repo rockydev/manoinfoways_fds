@@ -89,5 +89,11 @@
             </key>
             <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData" />
         </set>
+        <set name="transcriberlengthtimeses" table="transcriberlengthtimes" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TranscriberId" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.TranscriberLengthTimes" />
+        </set>
     </class>
 </hibernate-mapping>

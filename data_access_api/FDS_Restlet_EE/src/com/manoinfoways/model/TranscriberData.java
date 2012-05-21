@@ -36,6 +36,10 @@ public class TranscriberData implements java.io.Serializable {
 	private Time transcriberLoginTime;
 	
 	@XStreamOmitField
+	private Set<TranscriberLengthTimes> transcriberlengthtimeses = new HashSet<TranscriberLengthTimes>(
+			0);
+	
+	@XStreamOmitField
 	private Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForTranscriberId = new HashSet<VoiceFilesAssignmentData>(
 			0);
 	@XStreamOmitField
@@ -55,6 +59,11 @@ public class TranscriberData implements java.io.Serializable {
 			0);
 
 	public TranscriberData() {
+	}
+	
+	public TranscriberData(Integer transcriberId)
+	{
+		this.transcriberId = transcriberId;
 	}
 
 	public TranscriberData(
@@ -323,5 +332,20 @@ public class TranscriberData implements java.io.Serializable {
 			Set<VoiceFilesAssignmentData> voicefilesassignmentdatasForQaid) {
 		this.voicefilesassignmentdatasForQaid = voicefilesassignmentdatasForQaid;
 	}
+	
+	public Set<TranscriberLengthTimes> getTranscriberlengthtimeses() {
+		return this.transcriberlengthtimeses;
+	}
 
+	public void setTranscriberlengthtimeses(
+			Set<TranscriberLengthTimes> transcriberlengthtimeses) {
+		this.transcriberlengthtimeses = transcriberlengthtimeses;
+	}
+
+	@Override
+	public String toString() {
+		return transcriberId.toString();
+	}
+	
+	
 }

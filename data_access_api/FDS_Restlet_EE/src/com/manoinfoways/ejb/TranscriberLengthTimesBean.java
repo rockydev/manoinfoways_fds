@@ -2,11 +2,13 @@ package com.manoinfoways.ejb;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
@@ -16,17 +18,18 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 
-import com.manoinfoways.model.ClinicData;
+import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
+import com.manoinfoways.model.TranscriberLengthTimes;
 
 /**
- * Bean for handling clinicdata table operations
+ * Bean to handle TranscriberLengthTimes table operations.
  * 
- * @see com.manoinfoways.model.ClinicData
+ * @see com.manoinfoways.model.TranscriberLengthTimes
  */
-public class ClinicDataBean {
+public class TranscriberLengthTimesBean {
 
-	private static final Log log = LogFactory.getLog(ClinicDataBean.class);
+	private static final Log log = LogFactory.getLog(TranscriberLengthTimesBean.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -40,13 +43,11 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData persist(ClinicData transientInstance) {
-		log.debug("persisting ClinicData instance");
+	public TranscriberLengthTimes persist(TranscriberLengthTimes transientInstance) {
+		log.debug("persisting TranscriberLengthTimes instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			session.persist(transientInstance.getClinicconnectiondetails());
-			session.persist(transientInstance.getClinicmetadata());
 			session.persist(transientInstance);
 			log.debug("persist successful");
 			session.getTransaction().commit();
@@ -57,17 +58,14 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData attachDirty(ClinicData instance) {
-		log.debug("attaching dirty ClinicData instance");
+	public void attachDirty(TranscriberLengthTimes instance) {
+		log.debug("attaching dirty TranscriberLengthTimes instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			session.saveOrUpdate(instance.getClinicconnectiondetails());
-			session.saveOrUpdate(instance.getClinicmetadata());
 			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 			session.getTransaction().commit();
-			return instance;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
@@ -75,8 +73,8 @@ public class ClinicDataBean {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void attachClean(ClinicData instance) {
-		log.debug("attaching clean ClinicData instance");
+	public void attachClean(TranscriberLengthTimes instance) {
+		log.debug("attaching clean TranscriberLengthTimes instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
@@ -89,10 +87,10 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData delete(ClinicData persistentInstance) {
-		log.debug("deleting ClinicData instance");
-		Session session = sessionFactory.getCurrentSession();
+	public TranscriberLengthTimes delete(TranscriberLengthTimes persistentInstance) {
+		log.debug("deleting TranscriberLengthTimes instance");
 		try {
+			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.delete(persistentInstance);
 			log.debug("delete successful");
@@ -100,17 +98,17 @@ public class ClinicDataBean {
 			return persistentInstance;
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
-			session.getTransaction().rollback();
 			throw re;
 		}
 	}
 
-	public ClinicData merge(ClinicData detachedInstance) {
-		log.debug("merging ClinicData instance");
+	public TranscriberLengthTimes merge(TranscriberLengthTimes detachedInstance) {
+		log.debug("merging TranscriberLengthTimes instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			ClinicData result = (ClinicData) session.merge(detachedInstance);
+			TranscriberLengthTimes result = (TranscriberLengthTimes) session
+					.merge(detachedInstance);
 			log.debug("merge successful");
 			session.getTransaction().commit();
 			return result;
@@ -120,19 +118,17 @@ public class ClinicDataBean {
 		}
 	}
 
-	public ClinicData findById(java.lang.Integer id) {
-		log.debug("getting ClinicData instance with id: " + id);
+	public TranscriberLengthTimes findById(java.lang.Integer id) {
+		log.debug("getting TranscriberLengthTimes instance with id: " + id);
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			ClinicData instance = (ClinicData) session.get(
-					"com.manoinfoways.model.ClinicData", id);
+			TranscriberLengthTimes instance = (TranscriberLengthTimes) session.get(
+					"com.manoinfoways.model.TranscriberLengthTimes", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
-				Hibernate.initialize(instance.getClinicconnectiondetails());
-				Hibernate.initialize(instance.getClinicmetadata());
 			}
 			session.getTransaction().commit();
 			return instance;
@@ -143,13 +139,13 @@ public class ClinicDataBean {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ClinicData> findByExample(ClinicData instance) {
-		log.debug("finding ClinicData instance by example");
+	public List<TranscriberLengthTimes> findByExample(TranscriberLengthTimes instance) {
+		log.debug("finding TranscriberLengthTimes instance by example");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			List<ClinicData> results = (List<ClinicData>) session
-					.createCriteria("com.manoinfoways.model.ClinicData")
+			List<TranscriberLengthTimes> results = (List<TranscriberLengthTimes>) session
+					.createCriteria("com.manoinfoways.model.TranscriberLengthTimes")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -161,50 +157,48 @@ public class ClinicDataBean {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Collection<ClinicData> getAllClinicData() {
+	public TranscriberLengthTimes update(TranscriberLengthTimes transcriberData) {
+		log.debug("Updating DoctorData instance");
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		Collection<ClinicData> list = session.createCriteria(ClinicData.class)
-				.addOrder(Order.asc("clinicAbbr")).list();
-		session.getTransaction().commit();
-		return list;
+		try {
+			session.beginTransaction();
+			session.saveOrUpdate(transcriberData);
+			log.debug("Update successful");
+			session.getTransaction().commit();
+			return transcriberData;
+		} catch (RuntimeException re) {
+			log.error("merge failed", re);
+			session.getTransaction().rollback();
+			throw re;
+		}
 	}
 
-	public void update(ClinicData clinicData) {
-		merge(clinicData);
+	public TranscriberLengthTimes deleteTranscriberLengthTimesById(int transcriberId) {
+		return delete(findById(transcriberId));
 	}
 
-	public ClinicData deleteClinicDataById(int clinicId) {
-		return delete(findById(clinicId));
-	}
-	
 	@SuppressWarnings("unchecked")
-	public Collection<ClinicData> getClinicAbbrs() {
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		List<ClinicData> clinicAbbrs = session.createCriteria(ClinicData.class)
-				.setProjection(Projections.projectionList()
-				.add(Projections.alias(Projections.property("clinicId"),"clinicId"))
-				.add(Projections.alias(Projections.property("clinicAbbr"),"clinicAbbr")))
-				.setResultTransformer(Transformers.aliasToBean(ClinicData.class))
-				.list();
-		session.getTransaction().commit();
-		return clinicAbbrs;
+	public List<TranscriberLengthTimes> getTranscriberLengths(int transcriberId) {
+		try {
+			Session session = sessionFactory.getCurrentSession();
+			session.beginTransaction();
+			List<TranscriberLengthTimes> results = (List<TranscriberLengthTimes>) session
+					.createCriteria(TranscriberLengthTimes.class)
+					.add(Restrictions.eq("transcriberdata.transcriberId", transcriberId))
+					.list();
+			
+			for (TranscriberLengthTimes transcriberLengths : results)
+			{
+				Hibernate.initialize(transcriberLengths.getTranscriberdata());
+				Hibernate.initialize(transcriberLengths.getTranscribertypedata());
+			}
+			
+			session.getTransaction().commit();
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}
 	}
 	
-	public Integer getClinicIdByAbbr(String clinicAbbr)
-	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		Integer clinicId = (Integer) session.createCriteria(ClinicData.class)
-		.setProjection(Projections.projectionList()
-				.add(Projections.property("clinicId")))
-		.add(Restrictions.eq("clinicAbbr", clinicAbbr))
-		.uniqueResult();
-		
-		session.getTransaction().commit();
-		return clinicId;
-		
-	}
 }

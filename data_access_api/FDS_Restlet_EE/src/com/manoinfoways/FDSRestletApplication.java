@@ -11,10 +11,14 @@ import org.restlet.data.MediaType;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 
+import com.manoinfoways.model.TranscriberLengthTimes;
 import com.manoinfoways.restlet.ClinicDataResource;
 import com.manoinfoways.restlet.DoctorDataResource;
 import com.manoinfoways.restlet.TranscriberDataResource;
+import com.manoinfoways.restlet.TranscriberDoctorPriorityResource;
+import com.manoinfoways.restlet.TranscriberLengthTimesResource;
 import com.manoinfoways.restlet.TranscriberTypeDataResource;
+import com.manoinfoways.restlet.VoiceFileAssignmentDataResource;
 
 /**
  * @author rockydev
@@ -45,6 +49,34 @@ public class FDSRestletApplication extends Application {
 				response.setEntity(message, MediaType.APPLICATION_XML);
 			}
 		};
+		
+		/*
+		 * Restlet to handle "/doctors/allabbrs" route which returns all the
+		 * Doctor Abbrs within the db as a list of DoctorData objects which
+		 * contain only the doctorId and doctorAbbr fields
+		 */
+		Restlet allDoctorAbbrs = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response) {
+				String message = new DoctorDataResource().getDoctorAbbrs();
+				response.setEntity(message, MediaType.APPLICATION_XML);
+			}
+		};
+		
+		/*
+		 * Restlet to handle "/transcribers/usernames" route which returns all the
+		 * Transcriber usernames within the db as a list of DoctorData objects which
+		 * contain only the doctorId and doctorAbbr fields
+		 */
+		Restlet allTranscriberUserNames = new Restlet(getContext()) {
+
+			@Override
+			public void handle(Request request, Response response){
+				String message = new TranscriberDataResource().getAllUserNames();
+				response.setEntity(message, MediaType.APPLICATION_XML);
+			}
+		};
 
 		/*
 		 * Restlet to handle "/clinics/{clinicId}/doctors/allabbrs" route which
@@ -52,7 +84,7 @@ public class FDSRestletApplication extends Application {
 		 * list of DcotorData objects which contain only the doctorId and
 		 * doctorAbbr fields
 		 */
-		Restlet allDoctorAbbrs = new Restlet(getContext()) {
+		Restlet allClinicDoctorAbbrs = new Restlet(getContext()) {
 
 			@Override
 			public void handle(Request request, Response response) {
@@ -86,12 +118,17 @@ public class FDSRestletApplication extends Application {
 		// ClinicMetadataResource.class);
 		// router.attach("/clinics/{clinicId}/reqs",
 		// ClinicRequirementsResource.class);
-		router.attach("/clinics/{clinicId}/doctors/allabbrs", allDoctorAbbrs);
+		router.attach("/clinics/{clinicId}/doctors/allabbrs", allClinicDoctorAbbrs);
 		router.attach("/clinics/{clinicId}/doctors", DoctorDataResource.class);
 		router.attach("/clinics/{clinicId}",getClinicData);
 		router.attach("/clinics", ClinicDataResource.class);
+		router.attach("/transcribers/{transcriberId}/priorities",TranscriberDoctorPriorityResource.class);
+		router.attach("/transcribers/{transcriberId}/lengths",TranscriberLengthTimesResource.class);
 		router.attach("/transcribers/types",TranscriberTypeDataResource.class);
+		router.attach("/transcribers/usernames",allTranscriberUserNames);
 		router.attach("/transcribers",TranscriberDataResource.class);
+		router.attach("/doctors/allabbrs",allDoctorAbbrs);
+		router.attach("/voicefileassignments",VoiceFileAssignmentDataResource.class);
 
 		return router;
 	}

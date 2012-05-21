@@ -4,11 +4,8 @@
 package com.manoinfoways.restlet;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.StringWriter;
-import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,16 +18,19 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import com.manoinfoways.ejb.TranscriberDataBean;
+import sun.security.krb5.internal.UDPClient;
+
+import com.manoinfoways.ejb.TranscriberDoctorPriorityBean;
+import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.TranscriberData;
-import com.manoinfoways.util.DateConverter;
-import com.manoinfoways.util.TimeConverter;
+import com.manoinfoways.model.TranscriberDoctorPriority;
+import com.manoinfoways.model.TranscriberTypeData;
+import com.manoinfoways.util.TranscriberDoctorPriorityConverter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.DomReader;
@@ -39,9 +39,9 @@ import com.thoughtworks.xstream.io.xml.DomReader;
  * @author rockydev
  * 
  */
-public class TranscriberDataResource extends ServerResource {
+public class TranscriberDoctorPriorityResource extends ServerResource {
 
-	private static TranscriberDataBean transcriberDataBean;
+	private static TranscriberDoctorPriorityBean transcriberDoctorPriorityBean;
 	private static XStream xmlConverter;
 
 	private XmlWriter globalWriter = null;
@@ -50,12 +50,12 @@ public class TranscriberDataResource extends ServerResource {
 	/**
 	 * 
 	 */
-	public TranscriberDataResource() {
-		transcriberDataBean = new TranscriberDataBean();
+	public TranscriberDoctorPriorityResource() {
+		transcriberDoctorPriorityBean = new TranscriberDoctorPriorityBean();
 		xmlConverter = new XStream(new DomDriver());
-		xmlConverter.processAnnotations(TranscriberData.class);
-		xmlConverter.registerConverter(new DateConverter());
-		xmlConverter.registerConverter(new TimeConverter());
+		xmlConverter.processAnnotations(TranscriberDoctorPriority.class);
+		xmlConverter
+				.registerConverter(new TranscriberDoctorPriorityConverter());
 	}
 
 	@Get("xml")
@@ -74,16 +74,30 @@ public class TranscriberDataResource extends ServerResource {
 
 		xmlWriter.startElement("response");
 
-		xmlWriter.dataElement("status", "0");
-		xmlConverter.alias("record", TranscriberData.class);
-		xmlWriter.startElement("data");
-		xmlConverter.aliasSystemAttribute(null, "class");
-		xmlConverter.aliasSystemAttribute(null, "resolves-to");
-		for (TranscriberData transcriber : transcriberDataBean
-				.getAllTranscribers()) {
-			xmlConverter.toXML(transcriber, xmlWriter.getWriter());
+		String transcriberId = (String) getRequest().getAttributes().get(
+				"transcriberId");
+
+		String transcriberTypeId = (String) getRequest().getAttributes().get(
+				"transcriberTypeId");
+
+		String priority = (String) getRequest().getAttributes().get("priority");
+
+		if (transcriberId != null && transcriberId != "") {
+			xmlWriter.dataElement("status", "0");
+			xmlConverter.alias("record", TranscriberDoctorPriority.class);
+			xmlWriter.startElement("data");
+			for (TranscriberDoctorPriority transcriberPriority : transcriberDoctorPriorityBean
+					.getTranscriberPriorities(new Integer(transcriberId),
+							(transcriberTypeId != null) ? new Integer(
+									transcriberTypeId) : null,
+							(priority != null) ? new Integer(priority) : null)) {
+				xmlConverter.toXML(transcriberPriority, xmlWriter.getWriter());
+			}
+			xmlWriter.endElement("data");
+		} else {
+			xmlWriter.dataElement("status", "-1");
+			xmlWriter.dataElement("data", "Clinic Id cannot be empty!");
 		}
-		xmlWriter.endElement("data");
 		xmlWriter.endElement("response");
 		xmlWriter.endDocument();
 
@@ -91,8 +105,8 @@ public class TranscriberDataResource extends ServerResource {
 	}
 
 	@Post("xml")
-	public String addTranscriber(DomRepresentation rep) throws IOException,
-			SAXException, ParserConfigurationException {
+	public String addTranscriberPriority(DomRepresentation rep)
+			throws IOException, SAXException, ParserConfigurationException {
 
 		if (rep.getNode("//transaction") != null) {
 			return handleMultipleRequests(rep);
@@ -102,7 +116,7 @@ public class TranscriberDataResource extends ServerResource {
 		// POST)
 		if (rep.getNode("//request/operationType").getTextContent()
 				.equalsIgnoreCase("remove")) {
-			return deleteTranscriber(rep);
+			return deleteTranscriberPriority(rep);
 		}
 
 		StringWriter xml = new StringWriter();
@@ -120,24 +134,28 @@ public class TranscriberDataResource extends ServerResource {
 		xmlWriter.startElement("response");
 
 		Element dataNode = (Element) rep.getNode("//request/data");
-		TranscriberData persistedInstance = null;
+		TranscriberDoctorPriority persistedInstance = null;
 		try {
 			if (dataNode != null) {
-				xmlConverter.alias("data", TranscriberData.class);
-				TranscriberData transcriber = (TranscriberData) xmlConverter
+				xmlConverter.alias("data", TranscriberDoctorPriority.class);
+				TranscriberDoctorPriority transcriberPriority = (TranscriberDoctorPriority) xmlConverter
 						.unmarshal(new DomReader(dataNode));
-
-				persistedInstance = transcriberDataBean.persist(transcriber);
+				transcriberPriority.setTranscriberdata(new TranscriberData(
+						Integer.parseInt((String) getRequest().getAttributes()
+								.get("transcriberId"))));
+				persistedInstance = transcriberDoctorPriorityBean
+						.persist(transcriberPriority);
 				xmlWriter.dataElement("status", "0");
-				xmlConverter.alias("record", TranscriberData.class);
+				xmlConverter.alias("record", TranscriberDoctorPriority.class);
 				xmlWriter.startElement("data");
 				xmlConverter.toXML(persistedInstance, xmlWriter.getWriter());
 				xmlWriter.endElement("data");
+
 			} else // Sending error message
 			{
 				xmlWriter.dataElement("status", "-1");
 				xmlWriter.dataElement("data",
-						"Unable to add the Transcriber data! Please retry!");
+						"Unable to add the Clinic data! Please retry!");
 			}
 		} catch (Exception ex) {
 			xmlWriter.dataElement("status", "-1");
@@ -155,8 +173,8 @@ public class TranscriberDataResource extends ServerResource {
 	}
 
 	@Put("xml")
-	public String updateTranscriber(DomRepresentation rep) throws IOException,
-			SAXException, ParserConfigurationException {
+	public String updateTranscriberPriority(DomRepresentation rep)
+			throws IOException, SAXException, ParserConfigurationException {
 		if (rep.getNode("//transaction") != null) {
 			return handleMultipleRequests(rep);
 		}
@@ -177,22 +195,28 @@ public class TranscriberDataResource extends ServerResource {
 
 		Element oldData = (Element) rep.getNode("//request/oldValues");
 
-		TranscriberData detachedInstance = null;
+		TranscriberDoctorPriority detachedInstance = null;
 		try {
 			if (oldData != null) {
-				xmlConverter.alias("oldValues", TranscriberData.class);
-				TranscriberData transcriber = (TranscriberData) xmlConverter
+				xmlConverter
+						.alias("oldValues", TranscriberDoctorPriority.class);
+				TranscriberDoctorPriority transcriberPriority = (TranscriberDoctorPriority) xmlConverter
 						.unmarshal(new DomReader(oldData));
-				transcriber = updateTranscriberData(transcriber, rep);
 
-				detachedInstance = transcriberDataBean.update(transcriber);
+				transcriberPriority = updateTranscriberPriorityData(
+						transcriberPriority, rep);
+				transcriberPriority.setTranscriberdata(new TranscriberData(
+						Integer.parseInt((String) getRequest().getAttributes()
+								.get("transcriberId"))));
+				detachedInstance = transcriberDoctorPriorityBean
+						.attachDirty(transcriberPriority);
 				xmlWriter.dataElement("status", "0");
 
 				if (this.globalWriter != null) {
 					xmlWriter.dataElement("queueStatus", queueStatus);
 				}
 
-				xmlConverter.alias("record", TranscriberData.class);
+				xmlConverter.alias("record", TranscriberDoctorPriority.class);
 				xmlWriter.startElement("data");
 				xmlConverter.toXML(detachedInstance, xmlWriter.getWriter());
 				xmlWriter.endElement("data");
@@ -206,7 +230,7 @@ public class TranscriberDataResource extends ServerResource {
 				}
 
 				xmlWriter.dataElement("data",
-						"Unable to update the Transcriber data! Please retry!");
+						"Unable to update the Clinic data! Please retry!");
 			}
 		} catch (Exception ex) {
 			xmlWriter.dataElement("status", "-2");
@@ -256,13 +280,16 @@ public class TranscriberDataResource extends ServerResource {
 			doc.appendChild(doc.importNode(rep.getNode(baseXpath), true));
 			if (rep.getNode(baseXpath + "/operationType").getTextContent()
 					.equalsIgnoreCase("add")) {
-				addTranscriber(new DomRepresentation(MediaType.TEXT_XML, doc));
+				addTranscriberPriority(new DomRepresentation(
+						MediaType.TEXT_XML, doc));
 			} else if (rep.getNode(baseXpath + "/operationType")
 					.getTextContent().equalsIgnoreCase("update")) {
-				updateTranscriber(new DomRepresentation(MediaType.TEXT_XML, doc));
+				updateTranscriberPriority(new DomRepresentation(
+						MediaType.TEXT_XML, doc));
 			} else if (rep.getNode(baseXpath + "/operationType")
 					.getTextContent().equalsIgnoreCase("remove")) {
-				deleteTranscriber(new DomRepresentation(MediaType.TEXT_XML, doc));
+				deleteTranscriberPriority(new DomRepresentation(
+						MediaType.TEXT_XML, doc));
 			}
 		}
 
@@ -277,99 +304,46 @@ public class TranscriberDataResource extends ServerResource {
 	}
 
 	/**
-	 * Method to update the given {@link TranscriberData} object with the given
-	 * values in the xml
+	 * Method to update the given TranscriberDoctorPriority object with the
+	 * given values in the xml
 	 * 
-	 * @param transcriber
+	 * @param doctor
 	 * @param rep
 	 * @return
-	 * @throws ParseException
-	 * @throws DOMException
 	 */
-	private TranscriberData updateTranscriberData(TranscriberData transcriber,
-			DomRepresentation rep) throws DOMException, ParseException {
+	private TranscriberDoctorPriority updateTranscriberPriorityData(
+			TranscriberDoctorPriority transcriberPriority, DomRepresentation rep) {
+
+		if (rep.getNode("//request/data/transcriberId") != null) {
+			transcriberPriority.setTranscriberdata(new TranscriberData(Integer
+					.parseInt(rep.getNode("//request/data/transcriberId")
+							.getTextContent())));
+		}
+
 		if (rep.getNode("//request/data/transcriberTypeId") != null) {
-			transcriber.setTranscriberTypeId(new Integer(rep.getNode(
-					"//request/data/transcriberTypeId").getTextContent()));
+			transcriberPriority.setTranscribertypedata(new TranscriberTypeData(
+					Integer.parseInt(rep.getNode(
+							"//request/data/transcriberTypeId")
+							.getTextContent())));
 		}
 
-		if (rep.getNode("//request/data/userName") != null) {
-			transcriber.setUserName(rep.getNode("//request/data/userName")
-					.getTextContent());
+		if (rep.getNode("//request/data/doctorId") != null) {
+			transcriberPriority.setDoctordata(new DoctorData(Integer
+					.parseInt(rep.getNode("//request/data/doctorId")
+							.getTextContent())));
 		}
 
-		if (rep.getNode("//request/data/password") != null) {
-			transcriber.setPassword(rep.getNode("//request/data/password")
-					.getTextContent());
+		if (rep.getNode("//request/data/priority") != null) {
+			transcriberPriority.setPriority(Integer.parseInt(rep.getNode(
+					"//request/data/priority").getTextContent()));
 		}
 
-		if (rep.getNode("//request/data/transcriberName") != null) {
-			transcriber.setTranscriberName(rep.getNode(
-					"//request/data/transcriberName").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/dateofJoining") != null) {
-			transcriber.setDateofJoining(new SimpleDateFormat("yyyy-MM-dd")
-					.parse(rep.getNode("//request/data/dateofJoining")
-							.getTextContent()));
-		}
-
-		if (rep.getNode("//request/data/transcriberAddress") != null) {
-			transcriber.setTranscriberAddress(rep.getNode(
-					"//request/data/transcriberAddress").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberPermanentAddress") != null) {
-			transcriber.setTranscriberPermanentAddress(rep.getNode(
-					"//request/data/transcriberPermanentAddress")
-					.getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberPhoneNumber") != null) {
-			transcriber.setTranscriberPhoneNumber(rep.getNode(
-					"//request/data/transcriberPhoneNumber").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberMobile") != null) {
-			transcriber.setTranscriberMobile(rep.getNode(
-					"//request/data/transcriberMobile").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberEmail") != null) {
-			transcriber.setTranscriberEmail(rep.getNode(
-					"//request/data/transcriberEmail").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberQualification") != null) {
-			transcriber
-					.setTranscriberQualification(rep.getNode(
-							"//request/data/transcriberQualification")
-							.getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberExperience") != null) {
-			transcriber.setTranscriberExperience(rep.getNode(
-					"//request/data/transcriberExperience").getTextContent());
-		}
-
-		if (rep.getNode("//request/data/transcriberDob") != null) {
-			transcriber.setTranscriberDob(new SimpleDateFormat("yyyy-MM-dd")
-					.parse(rep.getNode("//request/data/transcriberDob")
-							.getTextContent()));
-		}
-
-		if (rep.getNode("//request/data/transcriberLoginTime") != null) {
-			transcriber.setTranscriberLoginTime(new Time(new SimpleDateFormat(
-					"HH:mm").parse(
-					rep.getNode("//request/data/transcriberLoginTime")
-							.getTextContent()).getTime()));
-		}
-		return transcriber;
+		return transcriberPriority;
 	}
 
 	@Delete("xml")
-	public String deleteTranscriber(DomRepresentation rep) throws IOException,
-			SAXException {
+	public String deleteTranscriberPriority(DomRepresentation rep)
+			throws IOException, SAXException {
 
 		StringWriter xml = new StringWriter();
 		XmlWriter xmlWriter = null;
@@ -387,28 +361,25 @@ public class TranscriberDataResource extends ServerResource {
 
 		Element dataNode = (Element) rep.getNode("//request/data");
 
-		TranscriberData deletedInstance = null;
+		TranscriberDoctorPriority deletedInstance = null;
 		try {
 			if (dataNode != null) {
-				xmlConverter.alias("data", TranscriberData.class);
+				xmlConverter.alias("data", TranscriberDoctorPriority.class);
 
-				deletedInstance = transcriberDataBean
-						.deleteTranscriberDataById(new Integer(rep.getNode(
-								"//request/data/transcriberId")
-								.getTextContent()));
+				deletedInstance = transcriberDoctorPriorityBean
+						.deleteByPriorityId(new Integer(rep.getNode(
+								"//request/data/priorityId").getTextContent()));
 
 				xmlWriter.dataElement("status", "0");
-				xmlConverter.alias("record", TranscriberData.class);
+				xmlConverter.alias("record", TranscriberDoctorPriority.class);
 				xmlWriter.startElement("data");
-				xmlWriter.dataElement("transcriberId", deletedInstance
-						.getTranscriberId().toString());
-				// xmlConverter.toXML(deletedInstance, xmlWriter.getWriter());
+				xmlConverter.toXML(deletedInstance, xmlWriter.getWriter());
 				xmlWriter.endElement("data");
 			} else // Sending error message
 			{
 				xmlWriter.dataElement("status", "-1");
 				xmlWriter.dataElement("data",
-						"Unable to delete the Transcriber data! Please retry!");
+						"Unable to delete the Priority data! Please retry!");
 			}
 		} catch (Exception ex) {
 			xmlWriter.dataElement("status", "-1");
@@ -422,39 +393,6 @@ public class TranscriberDataResource extends ServerResource {
 			xmlWriter.endDocument();
 			return xml.toString();
 		} else {
-			return "";
-		}
-	}
-
-	public String getAllUserNames() {
-		StringWriter xml = new StringWriter();
-		XmlWriter xmlWriter = new XmlWriter(xml);
-
-		try {
-			xmlWriter.startDocument();
-
-			xmlWriter.setDataFormat(true);
-
-			xmlWriter.startElement("response");
-			try {
-				xmlWriter.dataElement("status", "0");
-				xmlConverter.alias("record", TranscriberData.class);
-				xmlWriter.startElement("data");
-
-				for (TranscriberData transcriberData : (List<TranscriberData>) transcriberDataBean
-						.getAllUserNames()) {
-					xmlConverter.toXML(transcriberData, xmlWriter.getWriter());
-				}
-				xmlWriter.endElement("data");
-			} catch (Exception e) {
-				xmlWriter.dataElement("status", "-1");
-				xmlWriter.dataElement("data", e.getLocalizedMessage());
-			}
-			xmlWriter.endElement("response");
-			xmlWriter.endDocument();
-
-			return xml.toString();
-		} catch (SAXException e1) {
 			return "";
 		}
 	}

@@ -2,13 +2,16 @@ package com.manoinfoways.ejb;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import com.manoinfoways.model.HibernateUtil;
 import com.manoinfoways.model.InboundVoiceFilesData;
@@ -41,6 +44,7 @@ public class InboundVoiceFilesDataBean {
 			session.beginTransaction();
 			session.persist(transientInstance);
 			log.debug("persist successful");
+			session.getTransaction().commit();
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
 			throw re;
@@ -147,5 +151,24 @@ public class InboundVoiceFilesDataBean {
 		InboundVoiceFilesData voiceFilesData = new InboundVoiceFilesData();
 		voiceFilesData.setFileId(fileId);
 		delete(voiceFilesData);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<InboundVoiceFilesData> getTodaysVoiceFiles()
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<InboundVoiceFilesData> results = (List<InboundVoiceFilesData>) session
+				.createCriteria(InboundVoiceFilesData.class)
+				.add(Restrictions.eq("inboundDate", Calendar.getInstance().getTime()))
+				.list();
+		
+		for (InboundVoiceFilesData file : results)
+		{
+			Hibernate.initialize(file.getDoctordata());
+		}
+		
+		session.getTransaction().commit();
+		return results;
 	}
 }

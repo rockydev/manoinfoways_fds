@@ -414,8 +414,6 @@ public class DoctorDataResource extends ServerResource {
 		StringWriter xml = new StringWriter();
 		XmlWriter xmlWriter = new XmlWriter(xml);
 
-		ObjectOutputStream out;
-
 		try {
 			xmlWriter.startDocument();
 
@@ -426,14 +424,13 @@ public class DoctorDataResource extends ServerResource {
 				try {
 					xmlWriter.dataElement("status", "0");
 					xmlConverter.alias("record", DoctorData.class);
-					out = xmlConverter.createObjectOutputStream(
-							xmlWriter.getWriter(), "data");
+					xmlWriter.startElement("data");
 
 					for (DoctorData clinicData : (List<DoctorData>) doctorDataBean
 							.getDoctorAbbrs(Integer.parseInt(clinicId))) {
-						out.writeObject(clinicData);
+						xmlConverter.toXML(clinicData,xmlWriter.getWriter());
 					}
-					out.close();
+					xmlWriter.endElement("data");
 				} catch (Exception e) {
 					xmlWriter.dataElement("status", "-1");
 					xmlWriter.dataElement("data", e.getLocalizedMessage());
@@ -442,6 +439,39 @@ public class DoctorDataResource extends ServerResource {
 				xmlWriter.dataElement("status", "-1");
 				xmlWriter.dataElement("data", "Clinic Id cannot be empty!");
 			}
+			xmlWriter.endElement("response");
+			xmlWriter.endDocument();
+
+			return xml.toString();
+		} catch (SAXException e1) {
+			return "";
+		}
+	}
+	
+	public String getDoctorAbbrs() {
+		StringWriter xml = new StringWriter();
+		XmlWriter xmlWriter = new XmlWriter(xml);
+
+		try {
+			xmlWriter.startDocument();
+
+			xmlWriter.setDataFormat(true);
+
+			xmlWriter.startElement("response");
+				try {
+					xmlWriter.dataElement("status", "0");
+					xmlConverter.alias("record", DoctorData.class);
+					xmlWriter.startElement("data");
+
+					for (DoctorData doctor : (List<DoctorData>) doctorDataBean
+							.getDoctorAbbrs()) {
+						xmlConverter.toXML(doctor,xmlWriter.getWriter());
+					}
+					xmlWriter.endElement("data");
+				} catch (Exception e) {
+					xmlWriter.dataElement("status", "-1");
+					xmlWriter.dataElement("data", e.getLocalizedMessage());
+				}
 			xmlWriter.endElement("response");
 			xmlWriter.endDocument();
 
