@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 30, 2012 7:20:31 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+ <class catalog="manoinfowaysdb"
+  name="com.manoinfoways.model.InboundVoiceFilesData" table="inboundvoicefilesdata">
+  <id name="fileId" type="java.lang.Integer">
+   <column name="FileId"/>
+   <generator class="identity"/>
+  </id>
+  <timestamp column="TimeStamp" generated="never" name="timeStamp"
+   source="vm" unsaved-value="null"/>
+  <many-to-one class="com.manoinfoways.model.DoctorData" fetch="select" name="doctordata">
+   <column name="DoctorId" not-null="true"/>
+  </many-to-one>
+  <many-to-one class="com.manoinfoways.model.ClinicData" fetch="select" name="clinicdata">
+   <column name="ClinicId" not-null="true"/>
+  </many-to-one>
+  <property generated="never" lazy="false" name="filePath" type="string">
+   <column name="FilePath" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="inboundDate" type="date">
+   <column length="10" name="InboundDate"/>
+  </property>
+  <property generated="never" lazy="false" name="lengthOfDictation" type="double">
+   <column name="LengthOfDictation" precision="3"/>
+  </property>
+  <set fetch="select" inverse="true" lazy="true"
+   name="voicefilesassignmentdatas" sort="unsorted" table="voicefilesassignmentdata">
+   <key>
+    <column name="FileId" not-null="true"/>
+   </key>
+   <one-to-many class="com.manoinfoways.model.VoiceFilesAssignmentData"/>
+  </set>
+ </class>
+</hibernate-mapping>

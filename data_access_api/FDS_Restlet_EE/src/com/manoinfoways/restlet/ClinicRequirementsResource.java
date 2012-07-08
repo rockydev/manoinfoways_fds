@@ -71,12 +71,12 @@ public class ClinicRequirementsResource extends ServerResource {
 					out = xmlConverter.createObjectOutputStream(
 							xmlWriter.getWriter(), "data");
 
-					List<ClinicRequirements> connDetailsList = clinicRequirementsBean
-							.findByClinicId(Integer.parseInt(clinicId));
-
-					for (ClinicRequirements connDetails : connDetailsList) {
-						out.writeObject(connDetails);
-					}
+//					List<ClinicRequirements> connDetailsList = clinicRequirementsBean
+//							.findByClinicId(Integer.parseInt(clinicId));
+//
+//					for (ClinicRequirements connDetails : connDetailsList) {
+//						out.writeObject(connDetails);
+//					}
 					out.close();
 				} catch (IOException e) {
 					System.out.println("Error: " + e.getLocalizedMessage());
@@ -119,15 +119,15 @@ public class ClinicRequirementsResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicRequirements.class);
-				persistedInstance = clinicRequirementsBean
-						.persist((ClinicRequirements) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+//				persistedInstance = clinicRequirementsBean
+//						.persist((ClinicRequirements) xmlConverter
+//								.unmarshal(new DomReader(dataNode)));
 
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicRequirements.class);
 				out = xmlConverter.createObjectOutputStream(
 						xmlWriter.getWriter(), "data");
-				out.writeObject(persistedInstance);
+//				out.writeObject(persistedInstance);
 				out.close();
 
 			} else // Sending error message
@@ -210,15 +210,15 @@ public class ClinicRequirementsResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicRequirements.class);
-				deletedInstance = clinicRequirementsBean
-						.delete((ClinicRequirements) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+//				deletedInstance = clinicRequirementsBean
+//						.delete((ClinicRequirements) xmlConverter
+//								.unmarshal(new DomReader(dataNode)));
 
 				xmlWriter.dataElement("status", "0");
 				xmlWriter.startElement("data");
 				xmlWriter.startElement("record");
-				xmlWriter.dataElement("clinicRequireMentId", new Integer(
-						deletedInstance.getClinicRequirementId()).toString());
+//				xmlWriter.dataElement("clinicRequireMentId", new Integer(
+//						deletedInstance.getClinicRequirementId()).toString());
 				xmlWriter.endElement("record");
 				xmlWriter.endElement("data");
 

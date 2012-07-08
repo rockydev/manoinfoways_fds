@@ -2,6 +2,7 @@ package com.manoinfoways.ejb;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -9,6 +10,12 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 
 import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
@@ -34,16 +41,18 @@ public class DoctorDataBean {
 		}
 	}
 
-	public void persist(DoctorData transientInstance) {
+	public DoctorData persist(DoctorData transientInstance) {
 		log.debug("persisting DoctorData instance");
+		Session session = sessionFactory.getCurrentSession();
 		try {
-			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.persist(transientInstance);
 			log.debug("persist successful");
 			session.getTransaction().commit();
+			return transientInstance;
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
+			session.getTransaction().rollback();
 			throw re;
 		}
 	}
@@ -77,7 +86,7 @@ public class DoctorDataBean {
 		}
 	}
 
-	public void delete(DoctorData persistentInstance) {
+	public DoctorData delete(DoctorData persistentInstance) {
 		log.debug("deleting DoctorData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -85,6 +94,7 @@ public class DoctorDataBean {
 			session.delete(persistentInstance);
 			log.debug("delete successful");
 			session.getTransaction().commit();
+			return persistentInstance;
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
@@ -108,8 +118,8 @@ public class DoctorDataBean {
 
 	public DoctorData findById(java.lang.Integer id) {
 		log.debug("getting DoctorData instance with id: " + id);
+		Session session = sessionFactory.getCurrentSession();
 		try {
-			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			DoctorData instance = (DoctorData) session.get(
 					"com.manoinfoways.model.DoctorData", id);
@@ -122,6 +132,7 @@ public class DoctorDataBean {
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
+			session.getTransaction().rollback();
 			throw re;
 		}
 	}
@@ -129,8 +140,9 @@ public class DoctorDataBean {
 	@SuppressWarnings("unchecked")
 	public List<DoctorData> findByExample(DoctorData instance) {
 		log.debug("finding DoctorData instance by example");
+		Session session = sessionFactory.getCurrentSession();
 		try {
-			Session session = sessionFactory.getCurrentSession();
+			session.beginTransaction(); session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			List<DoctorData> results = (List<DoctorData>) session
 					.createCriteria("com.manoinfoways.model.DoctorData")
@@ -141,17 +153,91 @@ public class DoctorDataBean {
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			session.getTransaction().rollback();
 			throw re;
 		}
 	}
 
-	public void update(DoctorData doctorData) {
-		merge(doctorData);
+	public DoctorData update(DoctorData doctorData) {
+		log.debug("Updating DoctorData instance");
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			session.update(doctorData);
+			log.debug("Update successful");
+			session.getTransaction().commit();
+			return doctorData;
+		} catch (RuntimeException re) {
+			log.error("merge failed", re);
+			session.getTransaction().rollback();
+			throw re;
+		}
 	}
 
-	public void deleteDoctorDataById(int doctorId) {
-		DoctorData doctorData = new DoctorData();
-		doctorData.setDoctorId(doctorId);
-		delete(doctorData);
+	public DoctorData deleteDoctorDataById(int doctorId) {
+		return delete(findById(doctorId));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<DoctorData> getClinicDoctors(int clinicId)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		
+		Collection<DoctorData> doctorAbbrs = session.createCriteria(DoctorData.class)
+				.add(Restrictions.eq("clinicdata.clinicId", clinicId))
+				.addOrder(Order.asc("doctorAbbr"))
+				.list();
+		
+		session.getTransaction().commit();
+		return doctorAbbrs;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<DoctorData> getDoctorAbbrs(Integer clinicId)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+
+		List<DoctorData> doctorAbbrs = session.createCriteria(DoctorData.class)
+				.setProjection(Projections.projectionList()
+				.add(Projections.alias(Projections.property("doctorId"),"doctorId"))
+				.add(Projections.alias(Projections.property("doctorAbbr"),"doctorAbbr")))
+				.add(Restrictions.eq("clinicdata.clinicId", clinicId))
+				.setResultTransformer(Transformers.aliasToBean(DoctorData.class))
+				.list();
+		
+		session.getTransaction().commit();
+		return doctorAbbrs;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<DoctorData> getDoctorAbbrs()
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		
+		List<DoctorData> doctorAbbrs = session.createCriteria(DoctorData.class)
+				.setProjection(Projections.projectionList()
+				.add(Projections.alias(Projections.property("doctorId"),"doctorId"))
+				.add(Projections.alias(Projections.property("doctorAbbr"),"doctorAbbr")))
+				.setResultTransformer(Transformers.aliasToBean(DoctorData.class))
+				.list();
+		
+		session.getTransaction().commit();
+		return doctorAbbrs;
+	}
+	
+	public Integer getDoctorIdByAbbr(String doctorAbbr)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Integer doctorId =  (Integer) session.createCriteria(DoctorData.class)
+		.setProjection(Projections.projectionList()
+				.add(Projections.property("doctorId")))
+		.add(Restrictions.eq("doctorAbbr", doctorAbbr))
+		.uniqueResult();
+		session.getTransaction().commit();
+		return doctorId;
 	}
 }

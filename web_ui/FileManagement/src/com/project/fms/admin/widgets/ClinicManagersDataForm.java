@@ -6,6 +6,7 @@ import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSOperationType;
 import com.smartgwt.client.types.DSProtocol;
 import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.HiddenItem;
 
 public class ClinicManagersDataForm extends DynamicForm {
 
@@ -29,6 +30,7 @@ public class ClinicManagersDataForm extends DynamicForm {
 		setMargin(25);
 		setCellPadding(10);
 		
+		HiddenItem metadataId = new HiddenItem("metaDataId");
 		MyTextItem transIncharge = new MyTextItem("transcriptionsInchargeName",
 				"Transcriptions Incharge Name");
 		EmailTextItem transInchargeEmail = new EmailTextItem(
@@ -66,7 +68,7 @@ public class ClinicManagersDataForm extends DynamicForm {
 		EmailTextItem invoicesEmail = new EmailTextItem("emailForInvoices",
 				"Email for Invoices");
 
-		setFields(transIncharge, transInchargeEmail, transInchargePhone,
+		setFields(metadataId,transIncharge, transInchargeEmail, transInchargePhone,
 				transInchargeFax, transInchargeAddr, technicalPersonName,
 				technicalPersonEmail, technicalPersonPhone, technicalPersonFax,
 				technicalPersonAddr, softwarePersonName, softwarePersonEmail,

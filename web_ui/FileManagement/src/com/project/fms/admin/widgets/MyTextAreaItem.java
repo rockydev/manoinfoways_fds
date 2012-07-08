@@ -9,21 +9,25 @@ public class MyTextAreaItem extends TextAreaItem{
 		super();
 		super.setWidth(250);
 		super.setRequired(true);
+		super.setValue("");
 	}
 	
 	public MyTextAreaItem(JavaScriptObject jsObj){
 		super(jsObj);
 		super.setWidth(250);
 		super.setRequired(true);
+		super.setValue("");
 	}
 	public MyTextAreaItem(String name, String title){
 		super(name, title);
 		super.setWidth(250);
 		super.setRequired(true);
+		super.setValue("");
 	}
 	public MyTextAreaItem(String name){
 		super(name);
 		super.setWidth(250);
 		super.setRequired(true);
+		super.setValue("");
 	}
 }

@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 22, 2012 6:27:47 PM by Hibernate Tools 3.4.0.CR1 -->
+<!-- Generated Mar 30, 2012 7:20:31 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.manoinfoways.model.ClinicMetadata" table="clinicmetadata" catalog="manoinfowaysdb">
         <id name="metaDataId" type="java.lang.Integer">
             <column name="MetaDataId" />
             <generator class="identity" />
         </id>
-        <many-to-one name="clinicdata" class="com.manoinfoways.model.ClinicData" fetch="select">
-            <column name="ClinicId" />
-        </many-to-one>
         <property name="transcriptionsInchargeName" type="string">
             <column name="TranscriptionsInchargeName" length="45" />
         </property>
@@ -24,7 +21,7 @@
             <column name="TrancriptionInchargeFaxNo" length="20" />
         </property>
         <property name="transcriptionInchargeAddress" type="string">
-            <column name="TranscriptionInchargeAddress" length="65535" />
+            <column name="TranscriptionInchargeAddress" />
         </property>
         <property name="technicalPersonName" type="string">
             <column name="TechnicalPersonName" length="45" />
@@ -39,7 +36,7 @@
             <column name="TechnicalPersonFaxNo" length="20" />
         </property>
         <property name="technicalPersonAddress" type="string">
-            <column name="TechnicalPersonAddress" length="65535" />
+            <column name="TechnicalPersonAddress" />
         </property>
         <property name="softwarePersonName" type="string">
             <column name="SoftwarePersonName" length="45" />
@@ -54,7 +51,7 @@
             <column name="SoftwarePersonCellNo" length="20" />
         </property>
         <property name="softwarePersonAddress" type="string">
-            <column name="SoftwarePersonAddress" length="65535" />
+            <column name="SoftwarePersonAddress" />
         </property>
         <property name="emailForPatientList" type="string">
             <column name="EmailForPatientList" length="45" />
@@ -62,5 +59,11 @@
         <property name="emailForInvoices" type="string">
             <column name="EmailForInvoices" length="45" />
         </property>
+        <set name="clinicdatas" table="clinicdata" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ClinicMetaDataId" unique="true" />
+            </key>
+            <one-to-many class="com.manoinfoways.model.ClinicData" />
+        </set>
     </class>
 </hibernate-mapping>

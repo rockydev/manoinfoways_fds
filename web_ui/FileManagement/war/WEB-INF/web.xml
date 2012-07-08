@@ -5,6 +5,6 @@ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<welcome-file-list> 
-                <welcome-file>admin.html</welcome-file> 
+                <welcome-file>home.html</welcome-file> 
         </welcome-file-list> 
 </web-app>

@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 import java.io.StringWriter;
 import java.util.List;
 
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.ext.xml.XmlWriter;
 import org.restlet.resource.Delete;
@@ -19,7 +21,9 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 import com.manoinfoways.ejb.ClinicDataBean;
+import com.manoinfoways.model.ClinicConnectionDetails;
 import com.manoinfoways.model.ClinicData;
+import com.manoinfoways.model.ClinicMetadata;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.DomReader;
@@ -29,6 +33,10 @@ import com.thoughtworks.xstream.io.xml.DomReader;
  * 
  */
 public class ClinicDataResource extends ServerResource {
+
+	private static final int CLINIC_DATA = 0;
+	private static final int CONNECTION_DETAILS = 1;
+	private static final int METADATA = 2;
 
 	private static ClinicDataBean clinicDataBean;
 	private static XStream xmlConverter;
@@ -49,7 +57,33 @@ public class ClinicDataResource extends ServerResource {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public String represent() throws SAXException, IOException {
+	public String getHandler() throws SAXException, IOException {
+		if (getQuery().getFirstValue("dataType") != null) {
+			int requestedDataType = Integer.parseInt(getQuery().getFirstValue(
+					"dataType"));
+			String clinicId = getQuery().getFirstValue("clinicId");
+			if (clinicId != null) {
+				switch (requestedDataType) {
+				case CLINIC_DATA:
+					return getClinicData(Integer.parseInt(clinicId));
+				case CONNECTION_DETAILS:
+					return getClinicConnectionDetails(Integer
+							.parseInt(clinicId));
+				case METADATA:
+					return getClinicMetadata(Integer.parseInt(clinicId));
+				default:
+					return "<response><status>-1</status><data>Invalid requested data type!</data></response>";
+				}
+			} else {
+				return "<response><status>-1</status><data>Parameter clinicId required!</data></response>";
+			}
+		} else {
+			return represent();
+		}
+	}
+
+	private String represent() throws SAXException, IOException {
+
 		StringWriter xml = new StringWriter();
 		XmlWriter xmlWriter = new XmlWriter(xml);
 
@@ -95,10 +129,13 @@ public class ClinicDataResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicData.class);
-				persistedInstance = clinicDataBean
-						.persist((ClinicData) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+				ClinicData clinic = (ClinicData) xmlConverter
+						.unmarshal(new DomReader(dataNode));
 
+				// Ensuring that the clinicAbbr is always upper case
+				clinic.setClinicAbbr(clinic.getClinicAbbr().toUpperCase());
+
+				persistedInstance = clinicDataBean.persist(clinic);
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicData.class);
 				out = xmlConverter.createObjectOutputStream(
@@ -141,10 +178,13 @@ public class ClinicDataResource extends ServerResource {
 		try {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicData.class);
-				detachedInstance = clinicDataBean
-						.merge((ClinicData) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+				ClinicData clinic = (ClinicData) xmlConverter
+						.unmarshal(new DomReader(dataNode));
 
+				// Ensuring that the clinicAbbr is always upper case
+				clinic.setClinicAbbr(clinic.getClinicAbbr().toUpperCase());
+
+				detachedInstance = clinicDataBean.attachDirty(clinic);
 				xmlWriter.dataElement("status", "0");
 				xmlConverter.alias("record", ClinicData.class);
 				out = xmlConverter.createObjectOutputStream(
@@ -185,14 +225,16 @@ public class ClinicDataResource extends ServerResource {
 			if (dataNode != null) {
 				xmlConverter.alias("data", ClinicData.class);
 				deletedInstance = clinicDataBean
-						.delete((ClinicData) xmlConverter
-								.unmarshal(new DomReader(dataNode)));
+						.deleteClinicDataById(new Integer(rep.getNode(
+								"//request/data/clinicId").getTextContent()));
 
 				xmlWriter.dataElement("status", "0");
 				xmlWriter.startElement("data");
 				xmlWriter.startElement("record");
-				xmlWriter.dataElement("clinicId",
-						new Integer(deletedInstance.getClinicId()).toString());
+				xmlWriter
+						.dataElement("clinicAbbr",
+								new Integer(deletedInstance.getClinicAbbr())
+										.toString());
 				xmlWriter.endElement("record");
 				xmlWriter.endElement("data");
 
@@ -248,6 +290,118 @@ public class ClinicDataResource extends ServerResource {
 		} catch (SAXException e1) {
 			// TODO Auto-generated catch block
 			return null;
+		}
+	}
+
+	public String getClinicData(int clinicId) {
+		StringWriter xml = new StringWriter();
+		XmlWriter xmlWriter = new XmlWriter(xml);
+
+		try {
+			xmlWriter.startDocument();
+
+			xmlWriter.setDataFormat(true);
+
+			xmlWriter.startElement("response");
+
+			ClinicData clinicData = clinicDataBean.findById(clinicId);
+
+			if (clinicData != null) {
+				xmlWriter.dataElement("status", "0");
+				xmlWriter.startElement("data");
+				xmlConverter.alias("record", ClinicData.class);
+				xmlConverter.omitField(ClinicData.class,
+						"clinicConnectionDetails");
+				xmlConverter.omitField(ClinicData.class, "clinicMetadata");
+				xmlConverter.toXML(clinicData, xmlWriter.getWriter());
+				xmlWriter.endElement("data");
+			} else {
+				xmlWriter.dataElement("status", "-1");
+				xmlWriter.dataElement("data",
+						"Unable to retrieve clinic data for "
+								+ new Integer(clinicId).toString());
+			}
+
+			xmlWriter.endElement("response");
+			xmlWriter.endDocument();
+			return xml.toString();
+		} catch (SAXException e) {
+			e.printStackTrace();
+			return "<response><status>-1</status><data>Server side error! Please contact admin.</data></response>";
+		}
+	}
+
+	public String getClinicConnectionDetails(int clinicId) {
+		StringWriter xml = new StringWriter();
+		XmlWriter xmlWriter = new XmlWriter(xml);
+
+		try {
+			xmlWriter.startDocument();
+
+			xmlWriter.setDataFormat(true);
+
+			xmlWriter.startElement("response");
+
+			ClinicConnectionDetails connDetails = (ClinicConnectionDetails) ((HibernateProxy) clinicDataBean
+					.findById(clinicId).getClinicconnectiondetails())
+					.getHibernateLazyInitializer().getImplementation();
+
+			if (connDetails != null) {
+				xmlWriter.dataElement("status", "0");
+				xmlWriter.startElement("data");
+				xmlConverter.alias("record", ClinicConnectionDetails.class);
+				xmlConverter.aliasSystemAttribute(null, "class");
+				xmlConverter.toXML(connDetails, xmlWriter.getWriter());
+				xmlWriter.startElement("data");
+			} else {
+				xmlWriter.dataElement("status", "-1");
+				xmlWriter.dataElement("data",
+						"Unable to retrieve clinic connection details for "
+								+ new Integer(clinicId).toString());
+			}
+
+			xmlWriter.endElement("response");
+			xmlWriter.endDocument();
+			return xml.toString();
+		} catch (SAXException e) {
+			e.printStackTrace();
+			return "<response><status>-1</status><data>Server side error! Please contact admin.</data></response>";
+		}
+	}
+
+	private String getClinicMetadata(int clinicId) {
+		StringWriter xml = new StringWriter();
+		XmlWriter xmlWriter = new XmlWriter(xml);
+
+		try {
+			xmlWriter.startDocument();
+
+			xmlWriter.setDataFormat(true);
+
+			xmlWriter.startElement("response");
+
+			ClinicMetadata metadata = (ClinicMetadata) ((HibernateProxy) clinicDataBean
+					.findById(clinicId).getClinicmetadata())
+					.getHibernateLazyInitializer().getImplementation();
+			if (metadata != null) {
+				xmlWriter.dataElement("status", "0");
+				xmlWriter.startElement("data");
+				xmlConverter.alias("record", ClinicMetadata.class);
+				xmlConverter.toXML(metadata, xmlWriter.getWriter());
+				xmlWriter.startElement("data");
+			} else {
+				xmlWriter.dataElement("status", "-1");
+				xmlWriter.dataElement("data",
+						"Unable to retrieve clinic metadata for "
+								+ new Integer(clinicId).toString());
+			}
+
+			xmlWriter.endElement("response");
+			xmlWriter.endDocument();
+			return xml.toString();
+		} catch (SAXException e) {
+			e.printStackTrace();
+			return "<response><status>-1</status><data>Server side error! Please contact admin.</data></response>";
 		}
 	}
 }

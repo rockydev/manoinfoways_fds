@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 30, 2012 7:20:31 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.manoinfoways.model.FileTransactionData" table="filetransactiondata" catalog="manoinfowaysdb">
+        <id name="fileTransactionId" type="java.lang.Integer">
+            <column name="FileTransactionId" />
+            <generator class="identity" />
+        </id>
+        <timestamp name="timeStamp" column="TimeStamp" />
+        <many-to-one name="transcriberdata" class="com.manoinfoways.model.TranscriberData" fetch="select">
+            <column name="TranscriberId" />
+        </many-to-one>
+        <many-to-one name="transcribertypedata" class="com.manoinfoways.model.TranscriberTypeData" fetch="select">
+            <column name="TranscriberTypeId" />
+        </many-to-one>
+        <many-to-one name="voicefilesassignmentdata" class="com.manoinfoways.model.VoiceFilesAssignmentData" fetch="select">
+            <column name="FileAssignmentId" />
+        </many-to-one>
+        <property name="status" type="java.lang.Byte">
+            <column name="Status" />
+        </property>
+    </class>
+</hibernate-mapping>

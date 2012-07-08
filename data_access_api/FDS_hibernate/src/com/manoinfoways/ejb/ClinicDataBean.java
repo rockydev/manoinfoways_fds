@@ -8,8 +8,11 @@ import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.manoinfoways.model.ClinicData;
+import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
 
 import static org.hibernate.criterion.Example.create;
@@ -176,5 +179,20 @@ public class ClinicDataBean {
 		
 		session.getTransaction().commit();
 		return clinicAbbrs;
+	}
+	
+	public Integer getClinicIdByAbbr(String clinicAbbr)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Integer clinicId = (Integer) session.createCriteria(ClinicData.class)
+		.setProjection(Projections.projectionList()
+				.add(Projections.property("clinicId")))
+		.add(Restrictions.eq("clinicAbbr", clinicAbbr))
+		.uniqueResult();
+		
+		session.getTransaction().commit();
+		return clinicId;
+		
 	}
 }

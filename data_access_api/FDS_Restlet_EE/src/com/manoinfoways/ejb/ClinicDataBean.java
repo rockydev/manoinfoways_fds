@@ -7,10 +7,14 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 
 import com.manoinfoways.model.ClinicData;
 import com.manoinfoways.model.HibernateUtil;
@@ -41,6 +45,8 @@ public class ClinicDataBean {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
+			session.persist(transientInstance.getClinicconnectiondetails());
+			session.persist(transientInstance.getClinicmetadata());
 			session.persist(transientInstance);
 			log.debug("persist successful");
 			session.getTransaction().commit();
@@ -51,14 +57,17 @@ public class ClinicDataBean {
 		}
 	}
 
-	public void attachDirty(ClinicData instance) {
+	public ClinicData attachDirty(ClinicData instance) {
 		log.debug("attaching dirty ClinicData instance");
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
+			session.saveOrUpdate(instance.getClinicconnectiondetails());
+			session.saveOrUpdate(instance.getClinicmetadata());
 			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 			session.getTransaction().commit();
+			return instance;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
@@ -82,8 +91,8 @@ public class ClinicDataBean {
 
 	public ClinicData delete(ClinicData persistentInstance) {
 		log.debug("deleting ClinicData instance");
+		Session session = sessionFactory.getCurrentSession();
 		try {
-			Session session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			session.delete(persistentInstance);
 			log.debug("delete successful");
@@ -91,6 +100,7 @@ public class ClinicDataBean {
 			return persistentInstance;
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
+			session.getTransaction().rollback();
 			throw re;
 		}
 	}
@@ -121,6 +131,8 @@ public class ClinicDataBean {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
+				Hibernate.initialize(instance.getClinicconnectiondetails());
+				Hibernate.initialize(instance.getClinicmetadata());
 			}
 			session.getTransaction().commit();
 			return instance;
@@ -153,8 +165,8 @@ public class ClinicDataBean {
 	public Collection<ClinicData> getAllClinicData() {
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		Query query = session.createQuery("from ClinicData");
-		Collection<ClinicData> list = query.list();
+		Collection<ClinicData> list = session.createCriteria(ClinicData.class)
+				.addOrder(Order.asc("clinicAbbr")).list();
 		session.getTransaction().commit();
 		return list;
 	}
@@ -163,26 +175,36 @@ public class ClinicDataBean {
 		merge(clinicData);
 	}
 
-	public void deleteClinicDataById(String clinicId) {
-		ClinicData clinicData = new ClinicData(clinicId);
-		delete(clinicData);
+	public ClinicData deleteClinicDataById(int clinicId) {
+		return delete(findById(clinicId));
 	}
 	
-	/**
-	 * Method to return all the cliniAbbrs as a List of ClinicData objects 
-	 * containing only the clinicId and clinicAbbr
-	 * @return
-	 */
-	public Collection<ClinicData> getClinicAbbrs()
+	@SuppressWarnings("unchecked")
+	public Collection<ClinicData> getClinicAbbrs() {
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<ClinicData> clinicAbbrs = session.createCriteria(ClinicData.class)
+				.setProjection(Projections.projectionList()
+				.add(Projections.alias(Projections.property("clinicId"),"clinicId"))
+				.add(Projections.alias(Projections.property("clinicAbbr"),"clinicAbbr")))
+				.setResultTransformer(Transformers.aliasToBean(ClinicData.class))
+				.list();
+		session.getTransaction().commit();
+		return clinicAbbrs;
+	}
+	
+	public Integer getClinicIdByAbbr(String clinicAbbr)
 	{
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		@SuppressWarnings("unchecked")
-		Collection<ClinicData> clinicAbbrs = session.createQuery( 
-				"select new ClinicData(clinicId, clinicAbbr) from ClinicData as clinicData order by clinicData.clinicAbbr")
-				.list();
+		Integer clinicId = (Integer) session.createCriteria(ClinicData.class)
+		.setProjection(Projections.projectionList()
+				.add(Projections.property("clinicId")))
+		.add(Restrictions.eq("clinicAbbr", clinicAbbr))
+		.uniqueResult();
 		
 		session.getTransaction().commit();
-		return clinicAbbrs;
+		return clinicId;
+		
 	}
 }

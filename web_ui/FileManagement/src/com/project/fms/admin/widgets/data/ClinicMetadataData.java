@@ -12,13 +12,8 @@ import com.smartgwt.client.data.Record;
 public class ClinicMetadataData extends Record {
 	public ClinicMetadataData() {
 	}
-	
-	public ClinicMetadataData(ClinicData clinicData)
-	{
-		setClinicdata(clinicData);
-	}
-	
-	public ClinicMetadataData(ClinicData clinicData,
+
+	public ClinicMetadataData(
 			String transcriptionsInchargeName,
 			String transcriptionsInchargeEmail,
 			String transcriptionInchargePhnNo,
@@ -30,7 +25,6 @@ public class ClinicMetadataData extends Record {
 			String softwarePersonPhnNo, String softwarePersonCellNo,
 			String softwarePersonAddress, String emailForPatientList,
 			String emailForInvoices) {
-		setClinicdata(clinicData);
 		setTranscriptionsInchargeName(transcriptionsInchargeName);
 		setTranscriptionsInchargeEmail(transcriptionsInchargeEmail);
 		setTranscriptionInchargePhnNo(transcriptionInchargePhnNo);
@@ -49,21 +43,13 @@ public class ClinicMetadataData extends Record {
 		setEmailForPatientList(emailForPatientList);
 		setEmailForInvoices(emailForInvoices);
 	}
-
+	
 	public String getMetaDataId() {
 		return getAttributeAsString("metaDataId");
 	}
 
-	public void setMetaDataId(Integer metaDataId) {
+	public void setMetaDataId(String metaDataId) {
 		setAttribute("metaDataId",metaDataId);
-	}
-
-	public ClinicData getClinicdata() {
-		return (ClinicData) getAttributeAsObject("clinicData");
-	}
-
-	public void setClinicdata(ClinicData clinicData) {
-		setAttribute("clinicData",clinicData);
 	}
 
 	public String getTranscriptionsInchargeName() {

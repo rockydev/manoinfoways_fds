@@ -9,6 +9,9 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.manoinfoways.model.DoctorData;
 import com.manoinfoways.model.HibernateUtil;
@@ -153,5 +156,18 @@ public class DoctorDataBean {
 		DoctorData doctorData = new DoctorData();
 		doctorData.setDoctorId(doctorId);
 		delete(doctorData);
+	}
+	
+	public Integer getDoctorIdByAbbr(String doctorAbbr)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Integer doctorId =  (Integer) session.createCriteria(DoctorData.class)
+		.setProjection(Projections.projectionList()
+				.add(Projections.property("doctorId")))
+		.add(Restrictions.eq("doctorAbbr", doctorAbbr))
+		.uniqueResult();
+		session.getTransaction().commit();
+		return doctorId;
 	}
 }

@@ -1,0 +1,16 @@
+<List>
+
+<filedata>
+	<fileId>FILE001</fileId>
+    <fName>requirement.data.xml</fName>
+    <fileStatus>0</fileStatus>
+    <uploadButton>upload.png</uploadButton>
+</filedata>
+<filedata>
+	<fileId>FILE002</fileId>
+    <fName>transcriber.data.xml</fName>
+    <fileStatus>0</fileStatus>
+    <uploadButton>upload.png</uploadButton>
+</filedata>
+
+</List>

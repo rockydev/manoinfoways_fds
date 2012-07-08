@@ -10,6 +10,8 @@ import com.smartgwt.client.types.DSProtocol;
 import com.smartgwt.client.types.ExportFormat;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.DateItem;
+import com.smartgwt.client.widgets.form.fields.HiddenItem;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
 
 public class ClinicConnectionDetailsForm extends DynamicForm{
 	
@@ -46,52 +48,28 @@ public class ClinicConnectionDetailsForm extends DynamicForm{
 		
 //		setDataSource(connDetailsDs);
 		
+		HiddenItem clinicConnectionId = new HiddenItem("clinicConnectionId");
 		MyTextItem clinicConnectionType = new MyTextItem("clinicConnectionType", "Clinic Connection Type");
 		MyTextItem userName = new MyTextItem("userName", "Username");
 		MyTextItem password = new MyTextItem("password", "Password");
 		MyTextItem sysUserName = new MyTextItem("systemLoginUserName", "System Username");
 		MyTextItem sysPassword = new MyTextItem("systemLoginPassword", "System Password");
 		MyTextItem sysType = new MyTextItem("typeOfSoftware", "Type of Software");
-		MyTextItem mailFtpVoiceFilesType = new MyTextItem("mailOrFtpforVoiceFiles", "Mail or FTP for Voice Files");
+		SelectItem mailOrFtpforVoiceFiles = new SelectItem("mailOrFtpforVoiceFiles", "Mail/FTP for Voice Files");
+		mailOrFtpforVoiceFiles.setValueMap("Mail", "FTP");
+		mailOrFtpforVoiceFiles.setRequired(true);
 		MyTextItem recorder = new MyTextItem("recorderUsed", "Recorder Used");
 		MyTextItem voiceFilesType = new MyTextItem("typeOfVoiceFiles", "Type of Voice Files");
 		MyTextItem voiceFilesPath = new MyTextItem("voiceFilesPath", "Voice Files Path");
 		MyTextItem transcriptsPath = new MyTextItem("transcriptsPath", "Transcripts Path");
-		DateItem folderDate = new DateItem();  
-		folderDate.setName("folderDate");  
-		folderDate.setTitle("Folder Date"); 
+		DateItem folderDate = new DateItem("folderDate", "Folder Date"); 
 		folderDate.setUseTextField(true);
-		
 		folderDate.setRequired(true);
-		setFields(clinicConnectionType, userName, password, sysUserName, sysPassword, sysType, mailFtpVoiceFilesType, recorder, 
+		
+		setFields(clinicConnectionId,clinicConnectionType, userName, password, sysUserName, sysPassword, sysType, mailOrFtpforVoiceFiles, recorder, 
 				voiceFilesType, voiceFilesPath, transcriptsPath, folderDate);
 		
 		
 	}
 
 }
-
-//<clinicConnectionId>4</clinicConnectionId>
-//<clinicData>
-//  <clinicId>1</clinicId>
-//  <clinicAbbr>ABC</clinicAbbr>
-//  <clinicName>clinic1</clinicName>
-//  <addressLine1>qweqwr</addressLine1>
-//  <addressLine2>wqeqrw</addressLine2>
-//  <country>India</country>
-//  <location>Hyderabad</location>
-//  <zipcode>500089</zipcode>
-//</clinicData>
-//<clinicConnectionType>Test3</clinicConnectionType>
-//<userName>modified</userName>
-//<password>modified</password>
-//<systemLoginUserName>fdkjsk</systemLoginUserName>
-//<systemLoginPassword>fssdf</systemLoginPassword>
-//<typeOfSoftware>sdfs</typeOfSoftware>
-//<mailOrFtpforVoiceFiles>fs</mailOrFtpforVoiceFiles>
-//<recorderUsed>sff</recorderUsed>
-//<typeOfVoiceFiles>fs</typeOfVoiceFiles>
-//<voiceFilesPath>/DEF/</voiceFilesPath>
-//<transcriptsPath>/DEF/</transcriptsPath>
-//<folderDate class="sql-timestamp">2012-10-09 00:00:00.0</folderDate>
-//</record>
